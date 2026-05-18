@@ -1,6 +1,8 @@
 package com.smartwallet.service;
 
 import com.smartwallet.dto.TransactionRequest;
+import com.smartwallet.exception.BadRequestException;
+import com.smartwallet.exception.ResourceNotFoundException;
 import com.smartwallet.model.Transaction;
 import com.smartwallet.model.User;
 import com.smartwallet.model.Wallet;
@@ -36,7 +38,7 @@ public class TransactionService {
                 userRepository.findByEmail(request.getReceiverEmail());
 
         if (sender == null || receiver == null) {
-            return "Sender or Receiver not found";
+           throw new ResourceNotFoundException("Sender or Receiver not found");
         }
 
         Wallet senderWallet =
@@ -46,7 +48,7 @@ public class TransactionService {
                 walletRepository.findByUserId(receiver.getUserId());
 
         if (senderWallet.getBalance() < request.getAmount()) {
-            return "Insufficient balance";
+          throw new BadRequestException("Insufficient balance");
         }
 
         senderWallet.setBalance(

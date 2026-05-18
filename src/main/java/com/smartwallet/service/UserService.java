@@ -2,6 +2,7 @@ package com.smartwallet.service;
 
 import java.util.List;
 import com.smartwallet.dto.RegisterRequest;
+import com.smartwallet.exception.ResourceNotFoundException;
 import com.smartwallet.model.User;
 import com.smartwallet.model.Wallet;
 import com.smartwallet.repository.UserRepository;
@@ -62,9 +63,11 @@ public class UserService {
 
         User user = userRepository.findByEmail(email);
 
-        if (user == null) {
-            return null;
-        }
+      if(user==null){
+          throw new ResourceNotFoundException(
+               "User not found with email: "+email
+          );
+      }
 
         return walletRepository.findByUserId(user.getUserId());
     }
