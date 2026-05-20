@@ -5,6 +5,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -12,9 +15,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    private final CustomUserDetailsService userDetailsService;
 
-    public JwtFilter(JwtUtil jwtUtil) {
+    public JwtFilter(JwtUtil jwtUtil,
+                     CustomUserDetailsService userDetailsService) {
+
         this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -44,6 +51,22 @@ public class JwtFilter extends OncePerRequestFilter {
                 response.getWriter().write("Invalid JWT Token");
                 return;
             }
+
+            String email = jwtUtil.extractEmail(token);//extract email from token
+            //suppose token payload sub:"ary@gmail.com"
+           //jwt contains header.payload.signature
+            UserDetails userDetails =
+                    userDetailsService.loadUserByUsername(email);
+          //check this user Authenticated
+            UsernamePasswordAuthenticationToken authToken =
+                    new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+           //This stores authenticated user inside
+            SecurityContextHolder.getContext()
+                    .setAuthentication(authToken);
         }
 
         filterChain.doFilter(request, response);

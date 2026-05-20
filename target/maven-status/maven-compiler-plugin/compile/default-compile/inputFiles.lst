@@ -18,6 +18,8 @@ C:\Users\ABC\Downloads\demo\springboot1\demo\smartwalletRestApi\src\main\java\co
 C:\Users\ABC\Downloads\demo\springboot1\demo\smartwalletRestApi\src\main\java\com\smartwallet\repository\TransactionRepository.java
 C:\Users\ABC\Downloads\demo\springboot1\demo\smartwalletRestApi\src\main\java\com\smartwallet\repository\UserRepository.java
 C:\Users\ABC\Downloads\demo\springboot1\demo\smartwalletRestApi\src\main\java\com\smartwallet\repository\WalletRepository.java
+C:\Users\ABC\Downloads\demo\springboot1\demo\smartwalletRestApi\src\main\java\com\smartwallet\security\CustomUserDetails.java
+C:\Users\ABC\Downloads\demo\springboot1\demo\smartwalletRestApi\src\main\java\com\smartwallet\security\CustomUserDetailsService.java
 C:\Users\ABC\Downloads\demo\springboot1\demo\smartwalletRestApi\src\main\java\com\smartwallet\security\JwtFilter.java
 C:\Users\ABC\Downloads\demo\springboot1\demo\smartwalletRestApi\src\main\java\com\smartwallet\security\JwtUtil.java
 C:\Users\ABC\Downloads\demo\springboot1\demo\smartwalletRestApi\src\main\java\com\smartwallet\security\SecurityConfig.java

@@ -1,6 +1,7 @@
 com\smartwallet\repository\TransactionRepository.class
 com\smartwallet\controller\TransactionController.class
 com\smartwallet\model\Transaction.class
+com\smartwallet\security\CustomUserDetailsService.class
 com\smartwallet\SmartwalletRestApiApplication.class
 com\smartwallet\dto\RegisterRequest.class
 com\smartwallet\exception\GlobalExceptionHandler.class
@@ -25,4 +26,5 @@ com\smartwallet\service\AuthService.class
 com\smartwallet\exception\ErrorResponse.class
 com\smartwallet\dto\LoginRequest.class
 com\smartwallet\controller\jwtUtil.class
+com\smartwallet\security\CustomUserDetails.class
 com\smartwallet\config\BcryptPasswordEncoder.class
