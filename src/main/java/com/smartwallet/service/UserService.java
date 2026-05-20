@@ -9,7 +9,7 @@ import com.smartwallet.repository.UserRepository;
 import com.smartwallet.repository.WalletRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 @Service
 public class UserService {
 
@@ -71,6 +71,7 @@ public class UserService {
 
         return walletRepository.findByUserId(user.getUserId());
     }
+    @PreAuthorize("hasRole('ADMIN')")
     public List<User>getAllUsers(){
         return userRepository.findAll();
     }

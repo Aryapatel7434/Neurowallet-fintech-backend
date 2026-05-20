@@ -3,9 +3,9 @@ package com.smartwallet.controller;
 import com.smartwallet.dto.RegisterRequest;
 import com.smartwallet.model.User;
 import com.smartwallet.model.Wallet;
-import com.smartwallet.security.JwtUtil;
 import com.smartwallet.service.UserService;
 import java.util.List;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,11 +13,9 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService service;
-    private final JwtUtil jwtUtil;
 
-    public UserController(UserService service, JwtUtil jwtUtil) {
+    public UserController(UserService service) {
         this.service = service;
-        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/users/register")
@@ -30,15 +28,9 @@ public class UserController {
         return service.getWalletByEmail(email);
     }
 
+    
     @GetMapping("/users")
-    public List<User> getAllUsers(@RequestHeader("Authorization") String authHeader) {
-
-        String token = authHeader.substring(7);
-        String role = jwtUtil.extractRole(token);
-
-        if (!role.equals("ADMIN")) {
-            throw new RuntimeException("Access denied: ADMIN only");
-        }
+    public List<User> getAllUsers() {
 
         return service.getAllUsers();
     }
