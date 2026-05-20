@@ -1,119 +1,297 @@
-# 💳 NeuroWallet-AI-Fintech-Platform
+# 🚀 NeuroWallet AI Fintech Platform
 
-A secure FinTech backend system built using **Java, Spring Boot, MySQL, Spring Data JPA, Hibernate, REST APIs, and JWT Authentication**.
-
-This project is part of my journey to build an **AI-powered Smart Wallet and future Decentralized Payment System**.
+> AI-Powered Secure FinTech Backend Ecosystem built using Spring Boot, Spring Security, JWT, BCrypt, MySQL, and Enterprise Backend Architecture.
 
 ---
 
-## 🚀 Project Progress
+# 🌟 Project Vision
 
-### ✅ Day 2: REST API Foundation
-- Created Spring Boot backend
-- Built user registration API
-- Integrated MySQL database
-- Created wallet automatically after user registration
-- Tested APIs using Postman
+NeuroWallet AI is a next-generation intelligent fintech backend platform designed to simulate real-world digital payment and wallet systems.
 
-### ✅ Day 3: Transaction System
-- Added money transfer API
-- Implemented sender/receiver validation
-- Added wallet balance update logic
-- Added transaction history table
-- Built transaction history API
+The project focuses on:
 
-### ✅ Day 4: JWT Authentication
-- Added login API
-- Verified user credentials from database
-- Generated JWT token after successful login
-- Added JWT utility class
-- Integrated JWT dependency using Maven
-
----
-# 🔐 Day 5 — JWT Authentication & Protected APIs
-
-## 🚀 Smart Wallet REST API
-
-Day 5 focused on implementing **JWT Authentication** and securing transaction APIs using **Spring Security**.
-
-This transformed the project from a basic REST backend into a **secure FinTech backend system**.
+- Secure authentication & authorization
+- Wallet management
+- Transaction processing
+- Enterprise-grade backend security
+- AI-ready scalable architecture
+- Real-world Spring Security internals
+- Production-style REST APIs
 
 ---
 
-# ✅ Features Implemented
+# 🧠 Tech Stack
 
-## 🔑 JWT Authentication
-- User login API
+## Backend
+- Java 17
+- Spring Boot
+- Spring Security
+- Spring Data JPA
+- Hibernate
+
+## Security
+- JWT Authentication
+- BCrypt Password Encryption
+- Role-Based Authorization
+- Method-Level Security
+
+## Database
+- MySQL
+
+## Tools
+- Maven
+- Postman
+- Git & GitHub
+- NetBeans / IntelliJ
+
+---
+
+# 🚀 PHASE 1 COMPLETED (Day 1 → Day 10)
+
+---
+
+# ✅ Day 1 — Project Setup & JDBC Basics
+
+### Implemented
+- Java + Maven setup
+- MySQL database connection
+- JDBC fundamentals
+- Basic project structure
+
+### Concepts Learned
+- JDBC workflow
+- DriverManager
+- SQL connection handling
+- Maven dependency management
+
+---
+
+# ✅ Day 2 — Spring Boot REST APIs
+
+### Implemented
+- Spring Boot setup
+- REST Controllers
+- API endpoints
+- JSON request/response handling
+
+### Concepts Learned
+- @RestController
+- @RequestMapping
+- @PostMapping
+- @GetMapping
+- Dependency Injection
+
+---
+
+# ✅ Day 3 — Wallet System & Transactions
+
+### Implemented
+- Wallet entity
+- Transaction entity
+- Send money functionality
+- Wallet balance updates
+- Transaction history
+
+### Concepts Learned
+- JPA/Hibernate
+- Entity relationships
+- Service layer architecture
+- Repository pattern
+
+---
+
+# ✅ Day 4 — JWT Authentication
+
+### Implemented
 - JWT token generation
-- Token validation
-- Secure authentication flow
+- JWT validation
+- Secure login API
+- Protected APIs
+
+### Concepts Learned
+- Stateless authentication
+- JWT internals
+- Authentication flow
+- Token-based security
 
 ---
 
-## 🛡️ Spring Security Integration
-- Added Spring Security dependency
-- Configured security filter chain
-- Added JWT filter
-- Protected transaction APIs
+# ✅ Day 5 — Protected APIs & Transaction History
+
+### Implemented
+- Transaction history APIs
+- Protected transaction routes
+- JWT filter integration
+
+### Concepts Learned
+- Request filtering
+- Authorization headers
+- Protected endpoint architecture
 
 ---
 
-## 💸 Protected Transaction APIs
-Only authenticated users with valid JWT tokens can:
+# ✅ Day 6 — BCrypt Password Encryption
 
-- Send money
-- Access transaction history
+### Implemented
+- BCrypt password hashing
+- Secure password storage
+- Encrypted login verification
+
+### Concepts Learned
+- Password hashing
+- BCryptPasswordEncoder
+- Secure authentication systems
 
 ---
 
-# 🧠 Authentication Flow
+# ✅ Day 7 — Role-Based Authorization
+
+### Implemented
+- USER / ADMIN roles
+- Admin-only APIs
+- Role-based API protection
+
+### Concepts Learned
+- Authorization vs Authentication
+- Role-based access control
+- Secure admin architecture
+
+---
+
+# ✅ Day 8 — Global Exception Handling
+
+### Implemented
+- Custom exceptions
+- Global exception handler
+- Professional JSON error responses
+
+### Concepts Learned
+- RuntimeException
+- @RestControllerAdvice
+- @ExceptionHandler
+- Enterprise API error handling
+
+---
+
+# ✅ Day 9 — Spring Security Internals
+
+### Implemented
+- CustomUserDetails
+- UserDetailsService
+- SecurityContextHolder integration
+- UsernamePasswordAuthenticationToken
+
+### Concepts Learned
+- Spring Security internals
+- Authentication lifecycle
+- Security context architecture
+
+---
+
+# ✅ Day 10 — Method-Level Security
+
+### Implemented
+- @PreAuthorize
+- Method-level authorization
+- Service-layer security
+- Enterprise authorization architecture
+
+### Concepts Learned
+- Method security
+- Spring authorization architecture
+- Clean controller design
+- Enterprise backend practices
+
+---
+
+# 🔐 Security Features
+
+- JWT Authentication
+- BCrypt Password Encryption
+- Role-Based Authorization
+- Method-Level Security
+- SecurityContext Authentication
+- Protected APIs
+- Global Exception Handling
+
+---
+
+# 💳 Core Functionalities
+
+- User Registration
+- Secure Login
+- Wallet Creation
+- Wallet Balance Management
+- Send Money
+- Transaction History
+- Admin/User Roles
+- Protected REST APIs
+
+---
+
+# 🏗️ Backend Architecture
 
 ```text
-User Login
+Controller Layer
 ↓
-JWT Token Generated
+Service Layer
 ↓
-Token Sent in Authorization Header
-↓
-JWT Filter Validates Token
-↓
-Protected API Access Granted
-## 🧠 Backend Architecture
-
-```text
-Client / Postman
-↓
-Controller
-↓
-Service
-↓
-Repository
+Repository Layer
 ↓
 MySQL Database
+```
 
+---
 
-# Day 6 — BCrypt Password Encryption
+# 🧠 Enterprise Concepts Learned
 
-## Features Implemented
-- Added BCrypt password hashing
-- Secure password storage
-- Password verification using BCrypt
-- JWT authentication integration
-- Protected APIs with token validation
+- REST API Architecture
+- Spring Security
+- JWT Authentication
+- BCrypt Encryption
+- Role-Based Access Control
+- Global Exception Handling
+- SecurityContextHolder
+- UserDetailsService
+- Method-Level Authorization
 
-## Security Improvements
-- Plain-text passwords removed
-- Encrypted password storage
-- Industry-level authentication flow
+---
 
-## APIs Tested
-- User Registration
-- User Login
-- Protected Transaction APIs
+# 🚀 Future Roadmap (Phase 2+)
 
-## Tech Used
-- Spring Boot
-- Spring Security BCrypt
-- JWT
-- MySQL
-- JPA/Hibernate
+## Upcoming Features
+
+- Refresh Tokens
+- Swagger API Documentation
+- Redis Caching
+- Docker Deployment
+- Kafka Event Streaming
+- AI Fraud Detection
+- Smart Analytics
+- Microservices Architecture
+- API Gateway
+- React Frontend
+- Cloud Deployment
+
+---
+
+# 🎯 Project Goal
+
+Build a production-level AI-powered fintech ecosystem capable of simulating real-world digital payment infrastructure with enterprise backend security and scalable architecture.
+
+---
+
+# 👨‍💻 Developer
+
+### Arya Patel
+- Competitive Programmer
+- Backend Developer
+- Spring Security Enthusiast
+- AI + FinTech Explorer
+
+---
+
+# ⭐ Current Status
+
+✅ Phase 1 Completed Successfully  
+🚀 Moving toward Enterprise AI FinTech Architecture
