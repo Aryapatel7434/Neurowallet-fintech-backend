@@ -295,3 +295,45 @@ Build a production-level AI-powered fintech ecosystem capable of simulating real
 
 ✅ Phase 1 Completed Successfully  
 🚀 Moving toward Enterprise AI FinTech Architecture
+
+
+
+//Phase -2
+
+## 🚀 Day 11 — Enterprise Wallet Architecture & Secure Balance System
+
+### ✅ Completed Features
+
+- Created Wallet entity
+- Added One-to-One relationship between User and Wallet
+- Auto-created wallet during user registration
+- Added wallet balance using BigDecimal
+- Added wallet status and currency fields
+- Implemented secure `/api/wallet/me` endpoint
+- Used JWT token to fetch logged-in user's wallet
+- Fixed Spring Security JWT filter flow
+- Fixed role-based access issue with `@PreAuthorize`
+- Added Access Denied handling in Global Exception Handler
+
+---
+
+### 🧠 Key Concepts Learned
+
+- Why money should use `BigDecimal`
+- Why wallet data should be separate from user data
+- One-to-One entity mapping in JPA
+- `@JoinColumn` usage
+- `SecurityContextHolder` usage
+- JWT authentication flow
+- Role-based authorization using `hasRole('USER')`
+- Why JwtFilter should not skip protected APIs
+- Why JPA entities need a no-argument constructor
+
+---
+
+### 🔐 API Added
+
+#### Get My Wallet
+
+```http
+GET /api/wallet/me
