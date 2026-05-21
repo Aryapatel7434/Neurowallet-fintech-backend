@@ -1,47 +1,97 @@
 package com.smartwallet.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "wallets")
 public class Wallet {
+
+    public Wallet(int userId, double par, String walletAddress) {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int walletId;
+    private Long walletId;
 
-    private int userId;
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @JsonIgnore
+    private User user;
 
-    private double balance;
+    @Column(nullable = false)
+    private BigDecimal balance = BigDecimal.ZERO;
 
-    private String walletAddress;
+    @Column(nullable = false)
+    private String currency = "INR";
+
+    @Column(nullable = false)
+    private String status = "ACTIVE";
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public Wallet() {
+      
     }
 
-    public Wallet(int userId, double balance, String walletAddress) {
-        this.userId = userId;
-        this.balance = balance;
-        this.walletAddress = walletAddress;
+    @PrePersist
+    public void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
-    public int getWalletId() {
+    @PreUpdate
+    public void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+    public Long getWalletId() {
         return walletId;
     }
 
-    public int getUserId() {
-        return userId;
+    public void setWalletId(Long walletId) {
+        this.walletId = walletId;
     }
 
-    public double getBalance() {
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public String getWalletAddress() {
-        return walletAddress;
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
-    
-    public void setBalance(double balance){
-        this.balance=balance;
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 }

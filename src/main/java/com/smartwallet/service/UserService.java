@@ -1,15 +1,19 @@
 package com.smartwallet.service;
 
+import java.math.BigDecimal;
 import java.util.List;
+
 import com.smartwallet.dto.RegisterRequest;
 import com.smartwallet.exception.ResourceNotFoundException;
 import com.smartwallet.model.User;
 import com.smartwallet.model.Wallet;
 import com.smartwallet.repository.UserRepository;
 import com.smartwallet.repository.WalletRepository;
+
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 @Service
 public class UserService {
 
@@ -40,39 +44,37 @@ public class UserService {
                 request.getName(),
                 request.getEmail(),
                 encodedPassword,
-                "USER"//Every new user become Normal user by default
+                "USER"
         );
 
         User savedUser = userRepository.save(user);
 
-        String walletAddress =
-                "WALLET_" + savedUser.getName().toUpperCase() + "_" + savedUser.getUserId();
-
-        Wallet wallet = new Wallet(
-                savedUser.getUserId(),
-                0.0,
-                walletAddress
-        );
+        Wallet wallet = new Wallet();
+        wallet.setUser(savedUser);
+        wallet.setBalance(BigDecimal.ZERO);
+        wallet.setCurrency("INR");
+        wallet.setStatus("ACTIVE");
 
         walletRepository.save(wallet);
 
-        return "User registered successfully. Wallet Address: " + walletAddress;
+        return "User registered successfully";
     }
 
     public Wallet getWalletByEmail(String email) {
 
         User user = userRepository.findByEmail(email);
 
-      if(user==null){
-          throw new ResourceNotFoundException(
-               "User not found with email: "+email
-          );
-      }
+        if (user == null) {
+            throw new ResourceNotFoundException(
+                    "User not found with email: " + email
+            );
+        }
 
-        return walletRepository.findByUserId(user.getUserId());
+        return walletRepository.findByUserUserId(user.getUserId());
     }
+
     @PreAuthorize("hasRole('ADMIN')")
-    public List<User>getAllUsers(){
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 }

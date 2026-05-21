@@ -12,14 +12,15 @@ import com.smartwallet.repository.WalletRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TransactionService {
-     //Dependancy injection
+
     private final UserRepository userRepository;
     private final WalletRepository walletRepository;
     private final TransactionRepository transactionRepository;
-    //constructor injection
+
     public TransactionService(UserRepository userRepository,
                               WalletRepository walletRepository,
                               TransactionRepository transactionRepository) {
@@ -28,50 +29,56 @@ public class TransactionService {
         this.walletRepository = walletRepository;
         this.transactionRepository = transactionRepository;
     }
-    //Main Business Method
+
+    @Transactional
     public String sendMoney(TransactionRequest request) {
 
-        User sender =
-                userRepository.findByEmail(request.getSenderEmail());
-
-        User receiver =
-                userRepository.findByEmail(request.getReceiverEmail());
+        User sender = userRepository.findByEmail(request.getSenderEmail());
+        User receiver = userRepository.findByEmail(request.getReceiverEmail());
 
         if (sender == null || receiver == null) {
-           throw new ResourceNotFoundException("Sender or Receiver not found");
+            throw new ResourceNotFoundException("Sender or Receiver not found");
         }
 
-        Wallet senderWallet =
-                walletRepository.findByUserId(sender.getUserId());
+        Wallet senderWallet;
+        senderWallet = walletRepository.findByUserUserId(sender.getUserId());
 
         Wallet receiverWallet =
-                walletRepository.findByUserId(receiver.getUserId());
+                walletRepository.findByUserUserId(receiver.getUserId());
 
-        if (senderWallet.getBalance() < request.getAmount()) {
-          throw new BadRequestException("Insufficient balance");
+        if (senderWallet == null || receiverWallet == null) {
+            throw new ResourceNotFoundException("Sender or Receiver wallet not found");
+        }
+
+        if (senderWallet.getBalance().compareTo(request.getAmount()) < 0) {
+            throw new BadRequestException("Insufficient balance");
         }
 
         senderWallet.setBalance(
-                senderWallet.getBalance() - request.getAmount());
+                senderWallet.getBalance().subtract(request.getAmount())
+        );
 
         receiverWallet.setBalance(
-                receiverWallet.getBalance() + request.getAmount());
+                receiverWallet.getBalance().add(request.getAmount())
+        );
 
         walletRepository.save(senderWallet);
         walletRepository.save(receiverWallet);
 
-       Transaction transaction = new Transaction(
-        request.getSenderEmail(),
-        request.getReceiverEmail(),
-        request.getAmount(),
-        "SUCCESS",
-        LocalDateTime.now()
-);
+        Transaction transaction = new Transaction(
+                request.getSenderEmail(),
+                request.getReceiverEmail(),
+                request.getAmount(),
+                "SUCCESS",
+                LocalDateTime.now()
+        );
 
-transactionRepository.save(transaction);
+        transactionRepository.save(transaction);
+
         return "Transaction Successful";
     }
-       public List<Transaction> getTransactionHistory(String email) {
-    return transactionRepository.findBySenderEmailOrReceiverEmail(email, email);
-}
+
+    public List<Transaction> getTransactionHistory(String email) {
+        return transactionRepository.findBySenderEmailOrReceiverEmail(email, email);
     }
+}

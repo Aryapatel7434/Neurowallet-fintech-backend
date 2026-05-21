@@ -1,33 +1,34 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.smartwallet.dto;
 
-/**
- *
- * @author ABC
- */
+import java.math.BigDecimal;
+
 public class TransactionRequest {
+
     private String senderEmail;
-    
     private String receiverEmail;
-    
-    private double amount;
-    
-    public TransactionRequest(){}
+    private BigDecimal amount;
 
     public String getSenderEmail() {
         return senderEmail;
+    }
+
+    public void setSenderEmail(String senderEmail) {
+        this.senderEmail = senderEmail;
     }
 
     public String getReceiverEmail() {
         return receiverEmail;
     }
 
-    public double getAmount() {
+    public void setReceiverEmail(String receiverEmail) {
+        this.receiverEmail = receiverEmail;
+    }
+
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
 }

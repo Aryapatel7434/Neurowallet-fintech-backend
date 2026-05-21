@@ -1,43 +1,47 @@
 package com.smartwallet.model;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "transactions")
 public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int transactionId;
+    private Long transactionId;
 
     private String senderEmail;
+
     private String receiverEmail;
-    private double amount;
+
+    private BigDecimal amount;
+
     private String status;
-    private LocalDateTime createdAt;
+
+    private LocalDateTime timestamp;
 
     public Transaction() {
     }
 
     public Transaction(String senderEmail,
                        String receiverEmail,
-                       double amount,
+                       BigDecimal amount,
                        String status,
-                       LocalDateTime createdAt) {
+                       LocalDateTime timestamp) {
 
         this.senderEmail = senderEmail;
         this.receiverEmail = receiverEmail;
         this.amount = amount;
         this.status = status;
-        this.createdAt = createdAt;
+        this.timestamp = timestamp;
     }
 
-    public int getTransactionId() {
+    public Long getTransactionId() {
         return transactionId;
     }
 
-    public void setTransactionId(int transactionId) {
+    public void setTransactionId(Long transactionId) {
         this.transactionId = transactionId;
     }
 
@@ -57,11 +61,11 @@ public class Transaction {
         this.receiverEmail = receiverEmail;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -73,11 +77,11 @@ public class Transaction {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 }

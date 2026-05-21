@@ -32,9 +32,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String path = request.getServletPath();
 
+        // Only skip public APIs
         if (path.equals("/api/auth/login")
-                || path.equals("/api/users/register")
-                || path.startsWith("/api/wallet/")) {
+                || path.equals("/api/users/register")) {
 
             filterChain.doFilter(request, response);
             return;
@@ -52,19 +52,18 @@ public class JwtFilter extends OncePerRequestFilter {
                 return;
             }
 
-            String email = jwtUtil.extractEmail(token);//extract email from token
-            //suppose token payload sub:"ary@gmail.com"
-           //jwt contains header.payload.signature
+            String email = jwtUtil.extractEmail(token);
+
             UserDetails userDetails =
                     userDetailsService.loadUserByUsername(email);
-          //check this user Authenticated
+
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,
                             userDetails.getAuthorities()
                     );
-           //This stores authenticated user inside
+
             SecurityContextHolder.getContext()
                     .setAuthentication(authToken);
         }

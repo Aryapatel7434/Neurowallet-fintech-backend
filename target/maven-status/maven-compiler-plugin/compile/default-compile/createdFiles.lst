@@ -7,6 +7,7 @@ com\smartwallet\dto\RegisterRequest.class
 com\smartwallet\exception\GlobalExceptionHandler.class
 com\smartwallet\service\UserService.class
 com\smartwallet\security\JwtUtil.class
+com\smartwallet\service\WalletService.class
 com\smartwallet\service\TransactionService.class
 com\smartwallet\model\User.class
 com\smartwallet\controller\UserController.class
@@ -20,6 +21,7 @@ com\smartwallet\service\bcryptPasswordEncoder.class
 com\smartwallet\exception\BadRequestException.class
 com\smartwallet\security\SecurityConfig.class
 com\smartwallet\dto\TransactionRequest.class
+com\smartwallet\controller\WalletController.class
 com\smartwallet\repository\WalletRepository.class
 com\smartwallet\repository\UserRepository.class
 com\smartwallet\service\AuthService.class
@@ -28,3 +30,4 @@ com\smartwallet\dto\LoginRequest.class
 com\smartwallet\controller\jwtUtil.class
 com\smartwallet\security\CustomUserDetails.class
 com\smartwallet\config\BcryptPasswordEncoder.class
+com\smartwallet\controller\wallletService.class
