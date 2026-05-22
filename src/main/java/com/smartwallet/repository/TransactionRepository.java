@@ -5,11 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TransactionRepository
-        extends JpaRepository<Transaction, Integer> {
-
-    List<Transaction> findBySenderEmail(String senderEmail);
-
-    List<Transaction> findByReceiverEmail(String receiverEmail);
+        extends JpaRepository<Transaction,Long> {
     
     List<Transaction>findBySenderEmailOrReceiverEmail(String senderEmail,String receiverEmail);
 }

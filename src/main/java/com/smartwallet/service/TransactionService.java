@@ -11,6 +11,7 @@ import com.smartwallet.repository.UserRepository;
 import com.smartwallet.repository.WalletRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,41 +34,76 @@ public class TransactionService {
     @Transactional
     public String sendMoney(TransactionRequest request) {
 
-        User sender = userRepository.findByEmail(request.getSenderEmail());
-        User receiver = userRepository.findByEmail(request.getReceiverEmail());
+        if (request.getAmount() == null ||
+                request.getAmount().compareTo(java.math.BigDecimal.ZERO) <= 0) {
 
-        if (sender == null || receiver == null) {
-            throw new ResourceNotFoundException("Sender or Receiver not found");
+            throw new BadRequestException(
+                    "Amount must be greater than zero"
+            );
         }
 
-        Wallet senderWallet;
-        senderWallet = walletRepository.findByUserUserId(sender.getUserId());
+        String senderEmail = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        User sender =
+                userRepository.findByEmail(senderEmail);
+
+        User receiver =
+                userRepository.findByEmail(
+                        request.getReceiverEmail()
+                );
+
+        if (receiver == null) {
+            throw new ResourceNotFoundException(
+                    "Receiver not found"
+            );
+        }
+
+        if (sender.getEmail().equals(receiver.getEmail())) {
+
+            throw new BadRequestException(
+                    "Cannot send money to yourself"
+            );
+        }
+       //Check the Wallet
+        Wallet senderWallet =
+                walletRepository.findByUserEmail(
+                        sender.getEmail()
+                );
 
         Wallet receiverWallet =
-                walletRepository.findByUserUserId(receiver.getUserId());
+                walletRepository.findByUserEmail(
+                        receiver.getEmail()
+                );
 
-        if (senderWallet == null || receiverWallet == null) {
-            throw new ResourceNotFoundException("Sender or Receiver wallet not found");
+        if (senderWallet.getBalance()
+                .compareTo(request.getAmount()) < 0) {
+
+            throw new BadRequestException(
+                    "Insufficient balance"
+            );
         }
 
-        if (senderWallet.getBalance().compareTo(request.getAmount()) < 0) {
-            throw new BadRequestException("Insufficient balance");
-        }
-
+        // deduct sender balance
         senderWallet.setBalance(
-                senderWallet.getBalance().subtract(request.getAmount())
+                senderWallet.getBalance()
+                        .subtract(request.getAmount())
         );
 
+        // add receiver balance
         receiverWallet.setBalance(
-                receiverWallet.getBalance().add(request.getAmount())
+                receiverWallet.getBalance()
+                        .add(request.getAmount())
         );
 
         walletRepository.save(senderWallet);
         walletRepository.save(receiverWallet);
 
         Transaction transaction = new Transaction(
-                request.getSenderEmail(),
-                request.getReceiverEmail(),
+                sender.getEmail(),
+                receiver.getEmail(),
                 request.getAmount(),
                 "SUCCESS",
                 LocalDateTime.now()
@@ -78,7 +114,13 @@ public class TransactionService {
         return "Transaction Successful";
     }
 
-    public List<Transaction> getTransactionHistory(String email) {
-        return transactionRepository.findBySenderEmailOrReceiverEmail(email, email);
+    public List<Transaction>
+    getTransactionHistory(String email) {
+
+        return transactionRepository
+                .findBySenderEmailOrReceiverEmail(
+                        email,
+                        email
+                );
     }
 }
