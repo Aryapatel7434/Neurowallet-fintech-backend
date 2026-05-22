@@ -375,3 +375,42 @@ Build a production-level AI-powered fintech ecosystem capable of simulating real
 ```http
 POST /api/wallet/add-money
 GET /api/wallet/me
+
+
+## 🚀 Day 13 — Withdraw Money API & Debit Transaction Validation
+
+### ✅ Completed Features
+
+- Created WithdrawRequest DTO
+- Implemented secure withdraw money API
+- Added wallet debit balance update logic
+- Added insufficient balance validation
+- Prevented negative withdrawal amounts
+- Used BigDecimal subtract operations
+- Added JWT-secured withdrawal operations
+- Used SecurityContextHolder for authenticated wallet access
+- Added transactional debit operations using @Transactional
+- Verified wallet balance updates in MySQL
+
+---
+
+### 🧠 Key Concepts Learned
+
+- Debit transaction systems
+- Insufficient balance protection
+- Financial validation rules
+- BigDecimal subtract operations
+- Transaction safety in fintech systems
+- JWT-secured balance updates
+- Secure authenticated wallet access
+- Business logic validation
+- Transaction rollback concepts using @Transactional
+
+---
+
+### 🔐 APIs Added
+
+#### Withdraw Money API
+
+```http
+POST /api/wallet/withdraw
