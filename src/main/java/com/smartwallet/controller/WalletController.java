@@ -5,7 +5,7 @@ import com.smartwallet.model.Wallet;
 import com.smartwallet.service.WalletService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
+import com.smartwallet.dto.WithdrawRequest;
 @RestController//Tells spring this class handle rest API
 @RequestMapping("/api/wallet")//Base URL
 public class WalletController {
@@ -27,4 +27,10 @@ public class WalletController {
     public Wallet addMoney(@RequestBody AddMoneyRequest request){//This Method Return wallet object
         return walletService.addMoney(request);
     }
-}
+    @PostMapping("/withdraw")
+    @PreAuthorize("hasRole('USER')")
+    
+    public Wallet withdrawMoney(@RequestBody WithdrawRequest request){
+        return walletService.withdrawMoney(request);
+    }
+} 

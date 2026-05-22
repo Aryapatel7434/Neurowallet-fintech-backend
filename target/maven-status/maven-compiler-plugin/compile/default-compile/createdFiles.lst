@@ -9,6 +9,7 @@ com\smartwallet\service\UserService.class
 com\smartwallet\security\JwtUtil.class
 com\smartwallet\dto\AddMoneyRequest.class
 com\smartwallet\service\WalletService.class
+com\smartwallet\dto\WithdrawRequest.class
 com\smartwallet\service\TransactionService.class
 com\smartwallet\model\User.class
 com\smartwallet\controller\UserController.class
@@ -32,4 +33,5 @@ com\smartwallet\dto\LoginRequest.class
 com\smartwallet\controller\jwtUtil.class
 com\smartwallet\security\CustomUserDetails.class
 com\smartwallet\config\BcryptPasswordEncoder.class
+com\smartwallet\controller\wallet.class
 com\smartwallet\controller\wallletService.class
