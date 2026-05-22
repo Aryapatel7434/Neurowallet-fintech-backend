@@ -414,3 +414,46 @@ GET /api/wallet/me
 
 ```http
 POST /api/wallet/withdraw
+
+
+
+## 🚀 Day 14 — Peer-to-Peer Transaction Engine
+
+### ✅ Completed Features
+
+- Created TransactionRequest DTO
+- Implemented secure send money API
+- Added peer-to-peer wallet transfer system
+- Added sender and receiver validation
+- Added insufficient balance protection
+- Prevented self-transfers
+- Created Transaction entity
+- Stored transaction history in database
+- Added transaction history retrieval API
+- Used JWT authentication for secure sender identification
+- Implemented atomic debit-credit transaction flow using @Transactional
+- Verified wallet balances and transaction records in MySQL
+
+---
+
+### 🧠 Key Concepts Learned
+
+- Peer-to-peer transaction systems
+- Atomic database transactions
+- Debit-credit transaction flow
+- Secure JWT-based sender identification
+- Transaction persistence
+- Financial consistency validation
+- BigDecimal transaction calculations
+- Transaction history systems
+- Business validation rules
+- Transaction rollback concepts
+
+---
+
+### 🔐 APIs Added
+
+#### Send Money API
+
+```http
+POST /api/transactions/send
