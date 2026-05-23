@@ -457,3 +457,42 @@ POST /api/wallet/withdraw
 
 ```http
 POST /api/transactions/send
+
+
+## 🚀 Day 15 — Transaction Analytics + Pagination + Sorting
+
+### ✅ Completed Features
+
+- Implemented paginated transaction history APIs
+- Added latest-first transaction sorting
+- Added sent transactions retrieval API
+- Added received transactions retrieval API
+- Used Spring Data Pageable and PageRequest
+- Added scalable transaction retrieval architecture
+- Implemented query parameter pagination
+- Added transaction filtering system
+- Tested multiple transaction pages
+- Verified transaction analytics in MySQL
+
+---
+
+### 🧠 Key Concepts Learned
+
+- Pagination in Spring Boot
+- Pageable and PageRequest
+- Enterprise transaction retrieval systems
+- Latest-first sorting using Sort.by()
+- Query parameter handling
+- Scalable API design
+- Financial transaction analytics
+- Sent vs received transaction filtering
+- Optimized backend retrieval systems
+
+---
+
+### 🔐 APIs Added
+
+#### Paginated Transaction History
+
+```http
+GET /api/transactions/history?page=0&size=5
