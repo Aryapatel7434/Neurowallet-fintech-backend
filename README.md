@@ -536,3 +536,91 @@ GET /api/transactions/history?page=0&size=5
 ```text id="f6shif"
 PENDING → SUCCESS
 PENDING → FAILED
+
+
+
+
+# 🚀 Day 17 — Admin Analytics & Failed Transaction Monitoring
+
+## ✅ Features Implemented
+
+- Transaction Status System
+  - SUCCESS
+  - FAILED
+  - PENDING
+
+- Failed Transaction Audit Logging
+
+- Admin Analytics APIs
+
+- Success Transaction Monitoring
+
+- Failed Transaction Monitoring
+
+- Pagination for Transaction APIs
+
+- Role-Based Admin Access
+
+- Secure JWT Protected APIs
+
+---
+
+## ✅ APIs Built
+
+### User APIs
+
+- Send Money
+- Transaction History
+- Sent Transactions
+- Received Transactions
+
+### Admin APIs
+
+- View Failed Transactions
+- View Successful Transactions
+- Transaction Analytics Dashboard
+
+---
+
+## ✅ Security
+
+- Spring Security
+- JWT Authentication
+- Role-Based Authorization
+- Method-Level Security
+- ADMIN & USER role handling
+
+---
+
+## ✅ Enterprise Concepts Learned
+
+- Fintech Transaction Monitoring
+- Audit Logging
+- Failed Transaction Persistence
+- Admin Dashboard Backend
+- Pagination Architecture
+- Secure Role-Based APIs
+- Transaction Analytics Systems
+
+---
+
+## ✅ Database Verification
+
+Verified:
+- SUCCESS transactions
+- FAILED transactions
+- Analytics counts
+- Transaction history
+- Audit records
+
+---
+
+## ✅ Tech Stack
+
+- Spring Boot
+- Spring Security
+- JWT
+- MySQL
+- JPA/Hibernate
+- Maven
+- REST APIs
