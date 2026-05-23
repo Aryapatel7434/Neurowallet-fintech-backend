@@ -8,6 +8,7 @@ com\smartwallet\exception\GlobalExceptionHandler.class
 com\smartwallet\service\UserService.class
 com\smartwallet\security\JwtUtil.class
 com\smartwallet\dto\AddMoneyRequest.class
+com\smartwallet\model\TransactionStatus.class
 com\smartwallet\service\WalletService.class
 com\smartwallet\dto\WithdrawRequest.class
 com\smartwallet\service\TransactionService.class

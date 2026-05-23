@@ -18,6 +18,7 @@ C:\Users\ABC\Downloads\demo\springboot1\demo\smartwalletRestApi\src\main\java\co
 C:\Users\ABC\Downloads\demo\springboot1\demo\smartwalletRestApi\src\main\java\com\smartwallet\exception\GlobalExceptionHandler.java
 C:\Users\ABC\Downloads\demo\springboot1\demo\smartwalletRestApi\src\main\java\com\smartwallet\exception\ResourceNotFoundException.java
 C:\Users\ABC\Downloads\demo\springboot1\demo\smartwalletRestApi\src\main\java\com\smartwallet\model\Transaction.java
+C:\Users\ABC\Downloads\demo\springboot1\demo\smartwalletRestApi\src\main\java\com\smartwallet\model\TransactionStatus.java
 C:\Users\ABC\Downloads\demo\springboot1\demo\smartwalletRestApi\src\main\java\com\smartwallet\model\User.java
 C:\Users\ABC\Downloads\demo\springboot1\demo\smartwalletRestApi\src\main\java\com\smartwallet\model\Wallet.java
 C:\Users\ABC\Downloads\demo\springboot1\demo\smartwalletRestApi\src\main\java\com\smartwallet\repository\TransactionRepository.java

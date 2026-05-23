@@ -17,7 +17,8 @@ public class Transaction {
 
     private BigDecimal amount;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private TransactionStatus status;
 
     private LocalDateTime timestamp;
 
@@ -27,7 +28,7 @@ public class Transaction {
     public Transaction(String senderEmail,
                        String receiverEmail,
                        BigDecimal amount,
-                       String status,
+                       TransactionStatus status,
                        LocalDateTime timestamp) {
 
         this.senderEmail = senderEmail;
@@ -53,11 +54,15 @@ public class Transaction {
         return amount;
     }
 
-    public String getStatus() {
+    public TransactionStatus getStatus() {
         return status;
     }
 
     public LocalDateTime getTimestamp() {
         return timestamp;
+    }
+
+    public void setStatus(TransactionStatus status) {
+        this.status = status;
     }
 }
