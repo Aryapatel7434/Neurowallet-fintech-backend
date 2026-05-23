@@ -496,3 +496,43 @@ POST /api/transactions/send
 
 ```http
 GET /api/transactions/history?page=0&size=5
+
+
+
+
+## 🚀 Day 16 — Transaction Status System & Failed Transaction Handling
+
+### ✅ Completed Features
+
+- Created TransactionStatus enum
+- Added PENDING, SUCCESS, and FAILED transaction lifecycle
+- Updated Transaction entity to use enum-based status
+- Implemented professional transaction state management
+- Added failed transaction handling
+- Added pending transaction creation before money transfer
+- Updated successful transaction completion flow
+- Added audit-style transaction lifecycle tracking
+- Improved fintech transaction architecture
+- Verified transaction status updates in MySQL
+
+---
+
+### 🧠 Key Concepts Learned
+
+- Transaction lifecycle management
+- Enum usage in Spring Boot JPA
+- Financial transaction state systems
+- Audit-friendly transaction architecture
+- Failed transaction handling
+- Transaction consistency design
+- Pending transaction processing
+- Transaction rollback concepts
+- Enterprise fintech transaction flow
+
+---
+
+### 🔐 Transaction Lifecycle Implemented
+
+```text id="f6shif"
+PENDING → SUCCESS
+PENDING → FAILED
