@@ -624,3 +624,27 @@ Verified:
 - JPA/Hibernate
 - Maven
 - REST APIs
+
+
+
+
+# 🚀 Day 18 — Transaction Search & Filtering System
+
+## ✅ Features Implemented
+
+- Transaction search by email
+- Amount range transaction filtering
+- Admin search APIs
+- Latest-first transaction sorting
+- Pageable transaction filtering
+- Search using Spring Data JPA derived queries
+- Enterprise admin transaction monitoring
+
+---
+
+## ✅ APIs Added
+
+### Search Transactions by Email
+
+```http
+GET /api/transactions/admin/search?email=rahul@gmail.com&page=0&size=5
