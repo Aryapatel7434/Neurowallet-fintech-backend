@@ -648,3 +648,22 @@ Verified:
 
 ```http
 GET /api/transactions/admin/search?email=rahul@gmail.com&page=0&size=5
+
+
+
+
+🚀 Day 19 — Scheduled Transactions System
+✅ Features Built
+Schedule future wallet transactions
+Future time validation
+Scheduled transaction database storage
+PENDING transaction status support
+JWT secured scheduling API
+MySQL persistence verification
+🧠 Backend Concepts Learned
+Spring Boot scheduling architecture
+Fintech payment scheduling flow
+LocalDateTime handling
+Entity persistence with JPA
+DTO to Entity mapping
+Enum status management
