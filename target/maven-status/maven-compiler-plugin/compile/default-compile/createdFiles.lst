@@ -1,4 +1,5 @@
 com\smartwallet\repository\TransactionRepository.class
+com\smartwallet\service\ScheduledTransactionProcessor.class
 com\smartwallet\security\CustomUserDetailsService.class
 com\smartwallet\SmartwalletRestApiApplication.class
 com\smartwallet\dto\RegisterRequest.class

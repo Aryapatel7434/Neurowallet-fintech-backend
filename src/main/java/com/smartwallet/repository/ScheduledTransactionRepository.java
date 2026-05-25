@@ -9,8 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ScheduledTransactionRepository
         extends JpaRepository<ScheduledTransaction, Long> {
 
-    List<ScheduledTransaction>
-    findByStatusAndScheduledTimeBefore(
+    List<ScheduledTransaction> findByStatusAndScheduledTimeBefore(
             TransactionStatus status,
             LocalDateTime time
     );

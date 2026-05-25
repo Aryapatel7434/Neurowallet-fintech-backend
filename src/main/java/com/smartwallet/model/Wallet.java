@@ -94,4 +94,8 @@ public class Wallet {
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
+
+    public Wallet orElseThrow() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
