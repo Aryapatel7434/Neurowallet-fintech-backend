@@ -715,3 +715,48 @@ scheduled_transaction table
 wallet balance auto-update
 SUCCESS status update
 FAILED status handling
+
+
+
+
+## 🚀 Phase 3 - Enterprise Backend Infrastructure Engineering
+
+### ✅ Day 21 - Wallet Caching & Performance Optimization
+
+Implemented caching for the wallet module to improve API performance and reduce unnecessary database queries.
+
+### 🔥 Features Added
+- Added Spring Boot cache support
+- Implemented wallet cache using `@Cacheable`
+- Implemented cache clearing using `@CacheEvict`
+- Optimized `/api/wallet/me` API
+- Prevented stale wallet balance after add money / withdraw / send money
+- Improved read-heavy fintech API performance
+
+### 🧠 Concepts Learned
+- Cache Hit
+- Cache Miss
+- Cache Eviction
+- Stale Cache Problem
+- Cache-Aside Pattern
+- Read Optimization
+- Fintech Wallet Consistency
+- Backend Performance Engineering
+
+### 🏦 Real Fintech Use Case
+Wallet balance is a read-heavy feature. Users repeatedly check their balance from dashboard, profile, and transaction pages. Caching avoids repeated MySQL queries and improves response speed.
+
+### ✅ Testing Completed
+- First `/api/wallet/me` request fetched data from MySQL
+- Second `/api/wallet/me` request returned data from cache
+- `add-money` cleared old wallet cache
+- Next `/api/wallet/me` request fetched fresh updated balance
+- MySQL connection verified
+- Postman testing completed successfully
+
+### 🧪 API Tested
+```http
+GET /api/wallet/me
+POST /api/wallet/add-money
+POST /api/wallet/withdraw
+POST /api/transactions/send
