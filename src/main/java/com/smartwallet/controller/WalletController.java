@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.*;
 public class WalletController {
 
     private final WalletService walletService;
-
+    //constructor injection
     public WalletController(WalletService walletService) {
         this.walletService = walletService;
     }
 
-    @GetMapping("/me")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @GetMapping("/me")//get wallet
+    //Return currently logged-in user's wallet
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")//only Role user and Role admin can access this Apis.
     public Wallet getMyWallet() {
         return walletService.getMyWallet();
     }

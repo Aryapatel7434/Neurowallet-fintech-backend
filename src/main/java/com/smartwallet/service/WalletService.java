@@ -13,7 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Service//This manage all user operations
 public class WalletService {
 
     private final WalletRepository walletRepository;
@@ -29,7 +29,7 @@ public class WalletService {
         this.userRepository = userRepository;
         this.walletCacheService = walletCacheService;
     }
-
+   //Fetch wallet using email with Redis caching
     @Cacheable(value = "myWallet", key = "#email")
     public Wallet getWalletByEmail(String email) {
 
@@ -40,15 +40,17 @@ public class WalletService {
         if (wallet == null) {
             throw new ResourceNotFoundException("Wallet not found");
         }
-
+        //if wallet found so spring store request in Redis
+        //and then second data Now redis is already data so,spring returns directly from redis.This is called Cache-Aside Pattern
         return wallet;
     }
 
     public Wallet getMyWallet() {
+        //Get wallet currently logged in user
 
         String email = getCurrentUserEmail();
 
-        return getWalletByEmail(email);
+        return getWalletByEmail(email);//Call cached Method
     }
 
     @Transactional

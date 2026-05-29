@@ -9,7 +9,9 @@ com\smartwallet\controller\ScheduledTransactionController.class
 com\smartwallet\security\JwtUtil.class
 com\smartwallet\model\TransactionStatus.class
 com\smartwallet\service\WalletService.class
+com\smartwallet\dto\OtpRequest.class
 com\smartwallet\dto\WithdrawRequest.class
+com\smartwallet\service\OtpService.class
 com\smartwallet\service\TransactionService.class
 com\smartwallet\dto\ScheduleTransactionRequest.class
 com\smartwallet\controller\UserController.class
@@ -21,7 +23,9 @@ com\smartwallet\service\bcryptPasswordEncoder.class
 com\smartwallet\security\SecurityConfig.class
 com\smartwallet\dto\TransactionRequest.class
 com\smartwallet\repository\WalletRepository.class
+com\smartwallet\controller\OtpController.class
 com\smartwallet\repository\UserRepository.class
+com\smartwallet\dto\VerifyOtpRequest.class
 com\smartwallet\service\AuthService.class
 com\smartwallet\service\TransactionAuditService.class
 com\smartwallet\dto\LoginRequest.class
@@ -31,6 +35,8 @@ com\smartwallet\controller\TransactionController.class
 com\smartwallet\model\Transaction.class
 com\smartwallet\dto\TransactionAnalyticsResponse.class
 com\smartwallet\repository\ScheduledTransactionRepository.class
+com\smartwallet\model\Otp.class
+com\smartwallet\repository\OtpRepository.class
 com\smartwallet\dto\AddMoneyRequest.class
 com\smartwallet\model\User.class
 com\smartwallet\service\WalletCacheService.class
@@ -43,6 +49,7 @@ com\smartwallet\service\page.class
 com\smartwallet\exception\BadRequestException.class
 com\smartwallet\controller\WalletController.class
 com\smartwallet\exception\ErrorResponse.class
+com\smartwallet\service\EmailService.class
 com\smartwallet\service\transactioRepository.class
 com\smartwallet\controller\jwtUtil.class
 com\smartwallet\security\CustomUserDetails.class
