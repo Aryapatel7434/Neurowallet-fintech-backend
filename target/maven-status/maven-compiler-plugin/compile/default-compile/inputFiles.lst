@@ -23,6 +23,8 @@ D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\exception\
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\exception\ErrorResponse.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\exception\GlobalExceptionHandler.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\exception\ResourceNotFoundException.java
+D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\exception\TooManyRequestsException.java
+D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\exception\TooManyRequestsExceptionString.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\Otp.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\ScheduledTransaction.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\Transaction.java
@@ -38,6 +40,8 @@ D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\security\C
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\security\CustomUserDetailsService.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\security\JwtFilter.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\security\JwtUtil.java
+D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\security\LoginAttemptService.java
+D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\security\RateLimiterService.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\security\SecurityConfig.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\service\AuthService.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\service\bcryptPasswordEncoder.java
