@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Component//create object of Jwtutil automatically
@@ -32,7 +33,7 @@ public class JwtUtil {
         
         return claims.getSubject();
     }
-    public boolean validateToken(String token){
+    public boolean validateToken(String token, UserDetails userDetails){
         try{
             Jwts.parser().verifyWith((javax.crypto.SecretKey)getSigningKey()).build().parseSignedClaims(token);
             

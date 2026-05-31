@@ -15,21 +15,31 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder passwordEncoder;
     private final LoginAttemptService loginAttemptService;
+    private final AuditService auditService;
 
     public AuthService(UserRepository userRepository,
                        JwtUtil jwtUtil,
                        BCryptPasswordEncoder passwordEncoder,
-                       LoginAttemptService loginAttemptService) {
+                       LoginAttemptService loginAttemptService,
+                       AuditService auditService) {
 
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;
         this.loginAttemptService = loginAttemptService;
+        this.auditService = auditService;
     }
 
     public String login(LoginRequest request) {
 
         if (loginAttemptService.isBlocked(request.getEmail())) {
+
+            auditService.log(
+                    request.getEmail(),
+                    "LOGIN",
+                    "BLOCKED"
+            );
+
             return "Account temporarily locked due to too many failed login attempts";
         }
 
@@ -39,6 +49,12 @@ public class AuthService {
 
             loginAttemptService.loginFailed(request.getEmail());
 
+            auditService.log(
+                    request.getEmail(),
+                    "LOGIN",
+                    "FAILED"
+            );
+
             return "Invalid email";
         }
 
@@ -46,10 +62,22 @@ public class AuthService {
 
             loginAttemptService.loginFailed(request.getEmail());
 
+            auditService.log(
+                    request.getEmail(),
+                    "LOGIN",
+                    "FAILED"
+            );
+
             return "Invalid password";
         }
 
         loginAttemptService.loginSucceeded(request.getEmail());
+
+        auditService.log(
+                request.getEmail(),
+                "LOGIN",
+                "SUCCESS"
+        );
 
         return jwtUtil.generateToken(
                 user.getEmail(),

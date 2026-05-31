@@ -15,20 +15,29 @@ public class OtpService {
     private final OtpRepository otpRepository;
     private final EmailService emailService;
     private final RateLimiterService rateLimiterService;
+    private final AuditService auditService;
 
     public OtpService(
             OtpRepository otpRepository,
             EmailService emailService,
-            RateLimiterService rateLimiterService) {
+            RateLimiterService rateLimiterService,
+            AuditService auditService) {
 
         this.otpRepository = otpRepository;
         this.emailService = emailService;
         this.rateLimiterService = rateLimiterService;
+        this.auditService = auditService;
     }
 
     public String sendOtp(String email) {
 
         if (!rateLimiterService.isAllowed(email)) {
+
+            auditService.log(
+                    email,
+                    "OTP_GENERATED",
+                    "BLOCKED"
+            );
 
             throw new TooManyRequestsException(
                     "Too many OTP requests. Try again after 1 minute."
@@ -61,6 +70,12 @@ public class OtpService {
                 otp
         );
 
+        auditService.log(
+                email,
+                "OTP_GENERATED",
+                "SUCCESS"
+        );
+
         return "OTP sent successfully";
     }
 
@@ -73,11 +88,24 @@ public class OtpService {
                 );
 
         if (otp == null) {
+
+            auditService.log(
+                    request.getEmail(),
+                    "OTP_VERIFY",
+                    "FAILED"
+            );
+
             return "OTP not found";
         }
 
         if (LocalDateTime.now()
                 .isAfter(otp.getExpiryTime())) {
+
+            auditService.log(
+                    request.getEmail(),
+                    "OTP_VERIFY",
+                    "EXPIRED"
+            );
 
             return "OTP expired";
         }
@@ -85,10 +113,22 @@ public class OtpService {
         if (!otp.getOtpCode()
                 .equals(request.getOtp())) {
 
+            auditService.log(
+                    request.getEmail(),
+                    "OTP_VERIFY",
+                    "FAILED"
+            );
+
             return "Invalid OTP";
         }
 
         otpRepository.delete(otp);
+
+        auditService.log(
+                request.getEmail(),
+                "OTP_VERIFY",
+                "SUCCESS"
+        );
 
         return "OTP verified successfully";
     }

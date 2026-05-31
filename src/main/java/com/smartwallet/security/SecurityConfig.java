@@ -29,6 +29,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/users/register").permitAll()
                         .requestMatchers("/api/otp/**").permitAll()
+                        .requestMatchers("/api/audit/**").permitAll()
 
                         .requestMatchers("/api/wallet/**").authenticated()
                         .requestMatchers("/api/transactions/**").authenticated()
@@ -38,8 +39,10 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
 
-                .addFilterBefore(jwtFilter,
-                        UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(
+                        jwtFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                );
 
         return http.build();
     }

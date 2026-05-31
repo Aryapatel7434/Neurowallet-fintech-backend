@@ -1,5 +1,6 @@
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\config\BcryptPasswordEncoder.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\config\SecurityBeans.java
+D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\controller\AuditController.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\controller\AuthController.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\controller\AuthService.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\controller\jwtUtil.java
@@ -25,12 +26,14 @@ D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\exception\
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\exception\ResourceNotFoundException.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\exception\TooManyRequestsException.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\exception\TooManyRequestsExceptionString.java
+D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\AuditLog.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\Otp.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\ScheduledTransaction.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\Transaction.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\TransactionStatus.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\User.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\Wallet.java
+D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\repository\AuditLogRepository.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\repository\OtpRepository.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\repository\ScheduledTransactionRepository.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\repository\TransactionRepository.java
@@ -43,6 +46,7 @@ D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\security\J
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\security\LoginAttemptService.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\security\RateLimiterService.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\security\SecurityConfig.java
+D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\service\AuditService.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\service\AuthService.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\service\bcryptPasswordEncoder.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\service\EmailService.java

@@ -11,10 +11,12 @@ com\smartwallet\security\JwtUtil.class
 com\smartwallet\model\TransactionStatus.class
 com\smartwallet\service\WalletService.class
 com\smartwallet\dto\OtpRequest.class
+com\smartwallet\service\AuditService.class
 com\smartwallet\dto\WithdrawRequest.class
 com\smartwallet\service\OtpService.class
 com\smartwallet\service\TransactionService.class
 com\smartwallet\dto\ScheduleTransactionRequest.class
+com\smartwallet\controller\AuditController.class
 com\smartwallet\controller\UserController.class
 com\smartwallet\service\Pagerequest.class
 com\smartwallet\security\JwtFilter.class
@@ -31,6 +33,7 @@ com\smartwallet\dto\VerifyOtpRequest.class
 com\smartwallet\service\AuthService.class
 com\smartwallet\service\TransactionAuditService.class
 com\smartwallet\dto\LoginRequest.class
+com\smartwallet\model\AuditLog.class
 com\smartwallet\config\BcryptPasswordEncoder.class
 com\smartwallet\controller\wallet.class
 com\smartwallet\controller\TransactionController.class
@@ -41,6 +44,7 @@ com\smartwallet\model\Otp.class
 com\smartwallet\repository\OtpRepository.class
 com\smartwallet\dto\AddMoneyRequest.class
 com\smartwallet\model\User.class
+com\smartwallet\repository\AuditLogRepository.class
 com\smartwallet\security\RateLimiterService.class
 com\smartwallet\service\WalletCacheService.class
 com\smartwallet\exception\ResourceNotFoundException.class
