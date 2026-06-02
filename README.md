@@ -817,3 +817,376 @@ Tech Stack:
 
 Status:
 Phase 3 Security Module In Progress
+
+
+
+
+
+# 🚀 NeuroWallet AI Fintech Platform
+
+## Day 25 – Apache Kafka Integration
+
+### 📌 Overview
+
+Day 25 introduces **Apache Kafka** into NeuroWallet to enable an event-driven architecture.
+
+Instead of tightly coupling transaction processing with notifications and analytics, NeuroWallet now publishes transaction events to Kafka topics and allows consumers to process those events asynchronously.
+
+This improves:
+
+- Scalability
+- Reliability
+- Performance
+- Decoupling of Services
+- Real-Time Event Processing
+
+---
+
+## 🏗 Kafka Architecture
+
+```text
+User
+ |
+ v
+Transaction Service
+ |
+ v
+Transaction Saved (MySQL)
+ |
+ v
+Kafka Producer
+ |
+ v
+Topic: transaction-events
+ |
+ +---------------------------+
+ |            |              |
+ v            v              v
+Email      Audit       Analytics
+Consumer   Consumer    Consumer
+```
+
+---
+
+## ✨ Features Added
+
+### Kafka Producer
+
+Publishes transaction events whenever a transaction is successfully completed.
+
+Example Event:
+
+```json
+{
+  "senderEmail": "ary@gmail.com",
+  "receiverEmail": "rahul@gmail.com",
+  "amount": 1000,
+  "status": "SUCCESS"
+}
+```
+
+### Kafka Topic
+
+```text
+transaction-events
+```
+
+Stores all transaction-related events.
+
+### Kafka Consumer
+
+Consumes transaction events asynchronously.
+
+Current Consumer Actions:
+
+- Receive Event
+- Print Event Details
+- Prepare Notification Flow
+
+Future Enhancements:
+
+- Email Notifications
+- SMS Notifications
+- Audit Logging
+- Analytics Processing
+
+---
+
+## 📂 Kafka Components
+
+### TransactionEvent
+
+DTO representing a transaction event.
+
+Fields:
+
+- senderEmail
+- receiverEmail
+- amount
+- status
+
+---
+
+### TransactionEventProducer
+
+Responsible for:
+
+```text
+Java Object
+      ↓
+JSON Conversion
+      ↓
+Kafka Topic Publish
+```
+
+Uses:
+
+```java
+KafkaTemplate<String, String>
+ObjectMapper
+```
+
+---
+
+### TransactionEventConsumer
+
+Responsible for:
+
+```text
+Kafka Topic
+      ↓
+Receive Message
+      ↓
+Process Event
+```
+
+Uses:
+
+```java
+@KafkaListener
+```
+
+---
+
+## ⚙ Kafka Configuration
+
+```properties
+spring.kafka.bootstrap-servers=localhost:9092
+
+spring.kafka.consumer.group-id=neurowallet-group
+spring.kafka.consumer.auto-offset-reset=earliest
+
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.value-serializer=org.apache.kafka.common.serialization.StringSerializer
+
+spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.consumer.value-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+
+logging.level.org.springframework.kafka=INFO
+logging.level.org.apache.kafka=WARN
+```
+
+---
+
+## 🔄 Event Flow
+
+### Step 1
+
+User sends money:
+
+```http
+POST /api/transactions/send
+```
+
+### Step 2
+
+Transaction saved to MySQL.
+
+### Step 3
+
+Transaction event created.
+
+```java
+TransactionEvent event =
+    new TransactionEvent(
+        senderEmail,
+        receiverEmail,
+        amount,
+        "SUCCESS"
+    );
+```
+
+### Step 4
+
+Producer publishes event.
+
+```java
+transactionEventProducer
+        .publishTransactionEvent(event);
+```
+
+### Step 5
+
+Kafka stores event in:
+
+```text
+transaction-events
+```
+
+### Step 6
+
+Consumer receives event.
+
+```java
+@KafkaListener(
+    topics = "transaction-events",
+    groupId = "neurowallet-group"
+)
+```
+
+### Step 7
+
+Notification, Audit, or Analytics actions can be executed.
+
+---
+
+## 📸 Sample Console Output
+
+### Producer Output
+
+```text
+Kafka event published:
+{
+ "senderEmail":"ary@gmail.com",
+ "receiverEmail":"rahul@gmail.com",
+ "amount":1000,
+ "status":"SUCCESS"
+}
+```
+
+### Consumer Output
+
+```text
+Kafka event received:
+{
+ "senderEmail":"ary@gmail.com",
+ "receiverEmail":"rahul@gmail.com",
+ "amount":1000,
+ "status":"SUCCESS"
+}
+
+Notification can be sent from here
+```
+
+---
+
+## 🎯 Benefits of Kafka Integration
+
+### Asynchronous Processing
+
+Transaction service does not wait for notifications.
+
+### Loose Coupling
+
+Services communicate through Kafka instead of direct API calls.
+
+### Fault Tolerance
+
+Events remain in Kafka even if consumers are temporarily unavailable.
+
+### Scalability
+
+Multiple consumers can process events in parallel.
+
+### Real-Time Streaming
+
+Events are processed immediately after transaction completion.
+
+---
+
+## 🛠 Technologies Used
+
+### Backend
+
+- Java 21
+- Spring Boot
+- Spring Security
+- Spring Data JPA
+- Hibernate
+
+### Database
+
+- MySQL
+
+### Messaging
+
+- Apache Kafka
+
+### Security
+
+- JWT Authentication
+- BCrypt Password Encoding
+
+### Additional Features
+
+- Redis Cache
+- OTP Verification
+- Email Integration
+- API Rate Limiting
+- Login Attempt Tracking
+- Audit Logging
+- Scheduled Transactions
+
+---
+
+## 📈 Project Progress
+
+### Phase 1 – Authentication & Wallet
+
+- ✅ JWT Authentication
+- ✅ BCrypt Password Encryption
+- ✅ Role-Based Authorization
+- ✅ Wallet Management
+- ✅ Transaction Management
+
+### Phase 2 – Enterprise Features
+
+- ✅ Pagination
+- ✅ Search & Filtering
+- ✅ Admin Analytics
+- ✅ Scheduled Transactions
+
+### Phase 3 – Performance & Scalability
+
+- ✅ Redis Caching
+- ✅ OTP Verification
+- ✅ Email Service Integration
+- ✅ API Rate Limiting
+- ✅ Login Attempt Tracking
+- ✅ Audit Logging
+- ✅ Apache Kafka Integration
+
+---
+
+## 🚀 Next Milestone (Day 26)
+
+Planned Enhancements:
+
+- Kafka-Based Email Notifications
+- Kafka-Based Audit Processing
+- Kafka Analytics Consumer
+- Docker Integration
+- Project Deployment Preparation
+
+---
+
+## 👨‍💻 Author
+
+**Ary Patel**
+
+B.Tech Information Technology  
+Dharmsinh Desai University (DDU)
+
+### NeuroWallet AI Fintech Platform
+
+A secure, scalable, and event-driven digital wallet platform built using Spring Boot, MySQL, Redis, Kafka, and JWT Security.
