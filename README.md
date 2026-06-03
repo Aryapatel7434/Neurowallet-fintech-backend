@@ -1190,3 +1190,176 @@ Dharmsinh Desai University (DDU)
 ### NeuroWallet AI Fintech Platform
 
 A secure, scalable, and event-driven digital wallet platform built using Spring Boot, MySQL, Redis, Kafka, and JWT Security.
+
+
+
+
+# Day 26 — Dockerization + Kafka Integration
+
+## Objective
+
+Containerize the NeuroWallet backend using Docker and verify end-to-end Kafka event streaming inside the application.
+
+---
+
+## Features Implemented
+
+### Docker Integration
+
+* Created Dockerfile for Spring Boot application
+* Built Docker image using Java 17
+* Generated executable JAR file
+* Ran NeuroWallet inside Docker container
+* Exposed application on port 8080
+
+### Kafka Integration
+
+* Kafka Producer publishes transaction events
+* Kafka Consumer receives transaction events
+* Kafka topic: `transaction-events`
+* Consumer group: `neurowallet-group`
+* Real-time event processing verified
+
+### Event Flow
+
+User Sends Money
+
+↓
+
+TransactionService
+
+↓
+
+TransactionEventProducer
+
+↓
+
+Kafka Topic (`transaction-events`)
+
+↓
+
+TransactionEventConsumer
+
+↓
+
+Notification Service (Future Extension)
+
+---
+
+## Docker Commands Used
+
+### Build JAR
+
+```bash
+mvn clean package
+```
+
+### Build Docker Image
+
+```bash
+docker build -t neurowallet-backend .
+```
+
+### Run Container
+
+```bash
+docker run --name neurowallet-app -p 8080:8080 \
+-e SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/smartwalletdb \
+-e SPRING_DATASOURCE_USERNAME=root \
+-e SPRING_DATASOURCE_PASSWORD=YOUR_PASSWORD \
+-e SPRING_KAFKA_BOOTSTRAP_SERVERS=host.docker.internal:9092 \
+neurowallet-backend
+```
+
+---
+
+## Kafka Verification
+
+### Create Topic
+
+```bash
+kafka-topics.bat --create \
+--topic transaction-events \
+--bootstrap-server localhost:9092
+```
+
+### Verify Topic
+
+```bash
+kafka-topics.bat --list \
+--bootstrap-server localhost:9092
+```
+
+Output:
+
+```text
+transaction-events
+```
+
+---
+
+## Postman Testing
+
+### Login
+
+```http
+POST /api/auth/login
+```
+
+### Add Money
+
+```http
+POST /api/wallet/add-money
+```
+
+### Send Money
+
+```http
+POST /api/transactions/send
+```
+
+### Transaction History
+
+```http
+GET /api/transactions/history
+```
+
+---
+
+## Successful Output
+
+Producer Log:
+
+```text
+Kafka event published
+```
+
+Consumer Log:
+
+```text
+Kafka event received
+Notification can be sent from here
+```
+
+---
+
+## Technologies Used
+
+* Java 17
+* Spring Boot 3
+* Spring Security
+* Spring Data JPA
+* MySQL
+* Redis Cache
+* Apache Kafka
+* Docker
+* Maven
+
+---
+
+## Day 26 Outcome
+
+Successfully containerized NeuroWallet backend and verified real-time Kafka event streaming between producer and consumer services running with Docker support.
+
+Status: ✅ Completed
+
