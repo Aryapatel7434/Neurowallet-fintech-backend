@@ -1363,3 +1363,91 @@ Successfully containerized NeuroWallet backend and verified real-time Kafka even
 
 Status: ✅ Completed
 
+
+
+# Day 27 – Docker Compose with MySQL and Kafka
+
+## Overview
+
+Day 27 focused on orchestrating the complete NeuroWallet platform using Docker Compose. Instead of manually starting MySQL, Kafka, and Spring Boot separately, the entire system can now be launched using a single command.
+
+## Features Implemented
+
+### Docker Compose Setup
+
+* Created `docker-compose.yml`
+* Automated container orchestration
+* Simplified development environment
+
+### MySQL Container
+
+* MySQL 8.0 containerized
+* Database exposed on port 3307
+* Persistent database configuration
+
+### Kafka Container
+
+* Apache Kafka containerized
+* Event streaming infrastructure
+* Exposed on port 9092
+
+### Spring Boot Container
+
+* NeuroWallet application containerized
+* Exposed on port 8080
+* Connected to MySQL and Kafka
+
+## Containers
+
+### NeuroWallet Application
+
+* Port: 8080
+
+### MySQL
+
+* Port: 3307
+
+### Kafka
+
+* Port: 9092
+
+## Docker Commands
+
+Build and start:
+
+```bash
+docker compose up -d
+```
+
+Stop:
+
+```bash
+docker compose down
+```
+
+View running containers:
+
+```bash
+docker ps
+```
+
+View logs:
+
+```bash
+docker compose logs
+```
+
+## Learning Outcomes
+
+* Docker Compose fundamentals
+* Multi-container applications
+* Container networking
+* Service orchestration
+* Spring Boot container deployment
+* Kafka container deployment
+* MySQL container deployment
+
+## Result
+
+NeuroWallet can now be started using a single Docker Compose command, making the application easier to deploy, manage, and scale.
+
