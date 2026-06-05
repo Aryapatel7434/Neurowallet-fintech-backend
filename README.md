@@ -1470,3 +1470,40 @@ Implemented industry-level logging using SLF4J and Spring Boot Logback.
 - Difference between System.out.println and Logger
 - Logging levels: INFO, WARN, ERROR, DEBUG
 - How industry debugs production issues
+
+
+
+
+## Day 32 - Request/Response Tracking
+
+Implemented request/response tracking using Spring Boot filter and MDC.
+
+### Features Added
+- Added unique request ID for every API call
+- Logged incoming API request method and URI
+- Logged response status code
+- Logged API execution time
+- Added MDC-based request tracing
+- Improved production debugging and monitoring
+
+### Files Added
+- RequestResponseLoggingFilter.java
+
+### Files Updated
+- application.properties
+
+### Concepts Learned
+- OncePerRequestFilter
+- MDC
+- Request ID
+- API tracing
+- Execution time tracking
+- Production request monitoring
+
+### Testing
+Tested with:
+- Login API
+- Get Wallet API
+- Add Money API
+- Withdraw API
+- Send Money API
