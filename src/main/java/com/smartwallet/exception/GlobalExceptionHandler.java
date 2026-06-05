@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.support.MethodArgumentNotValidException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,4 +62,21 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+public ResponseEntity<ErrorResponse> handleValidationException(
+        MethodArgumentNotValidException ex) {
+
+    String message = ex.getBindingResult()
+            .getFieldErrors()
+            .get(0)
+            .getDefaultMessage();
+
+    ErrorResponse error = new ErrorResponse(
+            LocalDateTime.now(),
+            HttpStatus.BAD_REQUEST.value(),
+            message
+    );
+
+    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+}
 }

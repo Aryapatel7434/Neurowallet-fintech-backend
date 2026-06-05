@@ -2,8 +2,7 @@ package com.smartwallet.controller;
 
 import com.smartwallet.dto.LoginRequest;
 import com.smartwallet.service.AuthService;
-import com.smartwallet.security.RateLimiterService;
-import com.smartwallet.exception.TooManyRequestsException;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,27 +10,13 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final RateLimiterService rateLimiterService;
 
-    public AuthController(
-            AuthService authService,
-            RateLimiterService rateLimiterService) {
-
+    public AuthController(AuthService authService) {
         this.authService = authService;
-        this.rateLimiterService = rateLimiterService;
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
-
-        String key = "login:" + request.getEmail();
-
-        if (!rateLimiterService.isAllowed(key)) {
-            throw new TooManyRequestsException(
-                    "Too many login requests. Try again after 1 minute."
-            );
-        }
-
+    public String login(@Valid @RequestBody LoginRequest request) {
         return authService.login(request);
     }
 }

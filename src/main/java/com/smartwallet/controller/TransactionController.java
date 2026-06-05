@@ -5,6 +5,7 @@ import com.smartwallet.dto.TransactionRequest;
 import com.smartwallet.model.Transaction;
 import com.smartwallet.model.TransactionStatus;
 import com.smartwallet.service.TransactionService;
+import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +24,7 @@ public class TransactionController {
 
     @PostMapping("/send")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public String sendMoney(@RequestBody TransactionRequest request) {
+    public String sendMoney(@Valid @RequestBody TransactionRequest request) {
         return transactionService.sendMoney(request);
     }
 

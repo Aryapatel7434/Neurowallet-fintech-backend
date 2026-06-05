@@ -1,23 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.smartwallet.dto;
+
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
-/**
- *
- * @author ABC
- */
+
 public class WithdrawRequest {
-      private BigDecimal amount;
+
+    @NotNull(message = "Withdraw amount is required")
+    @DecimalMin(value = "1.00", message = "Withdraw amount must be at least 1")
+    private BigDecimal amount;
 
     public BigDecimal getAmount() {
         return amount;
     }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-      
-      
 }

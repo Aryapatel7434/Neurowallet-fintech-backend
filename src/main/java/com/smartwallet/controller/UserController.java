@@ -4,8 +4,8 @@ import com.smartwallet.dto.RegisterRequest;
 import com.smartwallet.model.User;
 import com.smartwallet.model.Wallet;
 import com.smartwallet.service.UserService;
+import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,7 +19,7 @@ public class UserController {
     }
 
     @PostMapping("/users/register")
-    public String registerUser(@RequestBody RegisterRequest request) {
+    public String registerUser(@Valid @RequestBody RegisterRequest request) {
         return service.registerUser(request);
     }
 
@@ -28,10 +28,8 @@ public class UserController {
         return service.getWalletByEmail(email);
     }
 
-    
     @GetMapping("/users")
     public List<User> getAllUsers() {
-
         return service.getAllUsers();
     }
 }
