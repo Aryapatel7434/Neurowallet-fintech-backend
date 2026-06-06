@@ -1728,3 +1728,204 @@ Day 33 Successfully Completed ✅
 
 NeuroWallet AI Fintech Platform now supports enterprise-grade request validation.
 
+
+
+
+
+# Day 34 — JUnit Testing Fundamentals
+
+## Overview
+
+Implemented JUnit 5 testing fundamentals for NeuroWallet AI Fintech Platform.
+
+This phase introduces automated unit testing, assertions, test lifecycle management, and the Arrange-Act-Assert testing pattern used in enterprise software development.
+
+---
+
+## Technologies Used
+
+* JUnit 5
+* Maven Test Framework
+* Spring Boot Test Dependencies
+
+---
+
+## Objectives
+
+* Understand Unit Testing
+* Learn JUnit 5 Fundamentals
+* Implement Assertions
+* Learn Test Lifecycle
+* Understand Arrange-Act-Assert Pattern
+* Execute Automated Test Cases
+
+---
+
+## Test Package Structure
+
+```text
+src/test/java
+└── com.smartwallet.service
+    └── WalletServiceTest.java
+```
+
+---
+
+## Features Implemented
+
+### Basic Assertion Testing
+
+Implemented:
+
+```java
+assertEquals()
+assertTrue()
+assertFalse()
+assertNotNull()
+```
+
+---
+
+### Test Lifecycle
+
+Implemented:
+
+```java
+@BeforeEach
+@AfterEach
+```
+
+Used to perform setup and cleanup operations before and after each test.
+
+---
+
+### AAA Testing Pattern
+
+Every test follows:
+
+```text
+Arrange
+Act
+Assert
+```
+
+Example:
+
+```java
+// Arrange
+int balance = 1000;
+
+// Act
+int updatedBalance = balance + 500;
+
+// Assert
+assertEquals(1500, updatedBalance);
+```
+
+---
+
+## Test Cases Implemented
+
+### shouldAddTwoNumbers()
+
+Validates arithmetic assertion.
+
+### amountShouldBePositive()
+
+Validates positive amount condition.
+
+### amountShouldNotBeNegative()
+
+Validates negative amount handling.
+
+### objectShouldNotBeNull()
+
+Validates object existence.
+
+### withdrawShouldReduceBalance()
+
+Simulates wallet withdrawal logic.
+
+### depositShouldIncreaseBalance()
+
+Simulates wallet deposit logic.
+
+---
+
+## Test Results
+
+```text
+Tests Run: 6
+Failures: 0
+Errors: 0
+BUILD SUCCESS
+```
+
+All test cases executed successfully.
+
+---
+
+## Concepts Learned
+
+* Unit Testing
+* Automated Testing
+* JUnit 5
+* Assertions
+* Test Lifecycle
+* AAA Pattern
+* Test Execution
+* Build Verification
+
+---
+
+## Industry Relevance
+
+Unit testing is used by:
+
+* Google
+* Amazon
+* Netflix
+* Uber
+* Banking Applications
+* Fintech Platforms
+
+Automated tests help prevent bugs before deployment and are integrated into CI/CD pipelines.
+
+---
+
+## Interview Questions Covered
+
+### What is JUnit?
+
+A Java testing framework used for automated unit testing.
+
+### What does @Test do?
+
+Marks a method as a test case.
+
+### What is assertEquals?
+
+Verifies expected value equals actual value.
+
+### What is @BeforeEach?
+
+Runs before every test method.
+
+### What is @AfterEach?
+
+Runs after every test method.
+
+### What is AAA Pattern?
+
+Arrange → Act → Assert
+
+Standard structure used in professional test design.
+
+---
+
+## Project Status
+
+Day 34 Successfully Completed ✅
+
+NeuroWallet AI Fintech Platform now includes foundational automated unit testing using JUnit 5.
+
