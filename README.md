@@ -1970,3 +1970,16 @@ BUILD SUCCESS
 - Executed Maven test lifecycle
 - Fixed Java/Mockito compatibility issues
 
+
+
+
+## Day 36 - Integration Testing
+
+- User Registration API Test
+- Login API Test
+- Wallet API Test
+- Transaction API Test
+- JWT Security Validation
+- Redis Cache Verification
+- Kafka Producer Verification
+- MockMvc Integration Testing
