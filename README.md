@@ -2116,3 +2116,80 @@ docker logs neurowallet-mysql
 ```bash
 docker compose down
 ```
+
+
+
+
+# Day 40.5 — Database Indexing
+
+## Objective
+
+Improve database query performance using indexing.
+
+## Why Indexing?
+
+Without indexing, the database performs a full table scan when searching for records.
+
+With indexing, the database uses a B-Tree structure for faster lookups.
+
+## Implementation
+
+Updated User entity:
+
+* Added unique constraint on email
+* Added database index on email column
+
+```java
+@Column(unique = true, nullable = false)
+private String email;
+```
+
+## Verification
+
+Executed:
+
+```sql
+SHOW INDEX FROM users;
+```
+
+Result:
+
+* PRIMARY index on user_id
+* BTREE index on email
+
+## Industry Usage
+
+Used in:
+
+* Google Accounts
+* Amazon Users
+* Banking Systems
+* Fintech Platforms
+
+## Interview Questions
+
+### Why use indexing?
+
+Improves query performance by avoiding full table scans.
+
+### Which columns should be indexed?
+
+Frequently searched columns:
+
+* Email
+* Username
+* Transaction ID
+* Phone Number
+
+### Does indexing always improve performance?
+
+No.
+
+Read operations become faster.
+
+Write operations become slightly slower because indexes must also be updated.
+
+## Outcome
+
+Database indexing successfully implemented and verified.
+
