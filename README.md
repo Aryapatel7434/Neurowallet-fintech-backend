@@ -2000,3 +2000,119 @@ Day 37 - Enterprise Logging & Kafka Integration ✅
 
 Tests Passed: 15/15
 Build Status: SUCCESS
+
+
+
+
+
+
+# Day 39 - Docker Compose Integration
+
+## Overview
+
+Today I containerized the complete NeuroWallet AI Fintech Platform using Docker Compose.
+
+The application now runs as a multi-container system with:
+
+- Spring Boot Backend
+- MySQL Database
+- Apache Kafka
+- Docker Compose Orchestration
+
+---
+
+## Technologies Used
+
+- Java 17
+- Spring Boot 3
+- Spring Security
+- JWT Authentication
+- MySQL 8
+- Apache Kafka
+- Docker
+- Docker Compose
+- Swagger OpenAPI
+- Spring Actuator
+
+---
+
+## Docker Architecture
+
++----------------------+
+| Spring Boot Backend  |
+| Port: 8080           |
++----------+-----------+
+           |
+           |
+           v
++----------------------+
+| MySQL Database       |
+| Port: 3307           |
++----------------------+
+
+           |
+           |
+           v
+
++----------------------+
+| Apache Kafka         |
+| Port: 9092           |
++----------------------+
+
+---
+
+## Docker Compose Configuration
+
+### Services
+
+### MySQL
+
+- Image: mysql:8.0
+- Port: 3307
+- Database: smartwalletdb
+
+### Kafka
+
+- Image: apache/kafka:latest
+- Port: 9092
+
+### NeuroWallet Backend
+
+- Spring Boot Application
+- Port: 8080
+
+---
+
+## Docker Commands Used
+
+### Build Containers
+
+```bash
+docker compose build
+```
+
+### Start Containers
+
+```bash
+docker compose up -d
+```
+
+### Check Running Containers
+
+```bash
+docker compose ps
+```
+
+### View Logs
+
+```bash
+docker logs neurowallet-app
+docker logs neurowallet-kafka
+docker logs neurowallet-mysql
+```
+
+### Stop Containers
+
+```bash
+docker compose down
+```
