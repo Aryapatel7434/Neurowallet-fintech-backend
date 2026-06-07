@@ -2193,3 +2193,79 @@ Write operations become slightly slower because indexes must also be updated.
 
 Database indexing successfully implemented and verified.
 
+
+
+
+
+# Day 40.6 — Performance Testing
+
+## Objective
+
+Validate NeuroWallet API performance under concurrent load.
+
+## Tool Used
+
+Apache JMeter 5.6.3
+
+## API Tested
+
+POST /api/auth/login
+
+## Test Configuration
+
+Users (Threads): 100
+
+Ramp-Up Period: 10 Seconds
+
+Loop Count: 1
+
+## Results
+
+Samples: 100
+
+Average Response Time: 1913 ms
+
+Minimum Response Time: 113 ms
+
+Maximum Response Time: 5242 ms
+
+Error Rate: 0%
+
+Throughput: 10.2 Requests/Second
+
+## Outcome
+
+- Login API successfully handled 100 requests.
+- No request failures occurred.
+- Backend remained stable under load.
+
+## Industry Usage
+
+Performance testing is used by:
+
+- Google
+- Amazon
+- Netflix
+- Banking Systems
+- Fintech Platforms
+
+before production deployment.
+
+## Interview Questions
+
+Q: What is Throughput?
+
+Number of requests processed per second.
+
+Q: What is Response Time?
+
+Time required to process a request.
+
+Q: Why perform Load Testing?
+
+To verify system stability under concurrent users.
+
+## Status
+
+Day 40.6 Completed Successfully.
+
