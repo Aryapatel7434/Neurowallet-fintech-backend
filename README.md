@@ -2269,3 +2269,45 @@ To verify system stability under concurrent users.
 
 Day 40.6 Completed Successfully.
 
+
+
+
+
+## Day 40.7 — Integration Testing
+
+### Objectives
+
+* Validate login API using Spring Boot Integration Testing.
+* Test complete authentication flow.
+* Verify JWT and Refresh Token generation.
+* Validate MockMvc configuration.
+
+### Technologies
+
+* Spring Boot Test
+* JUnit 5
+* MockMvc
+* BCrypt Password Encoder
+
+### Implemented
+
+* LoginControllerIntegrationTest
+* Test user creation before execution
+* API request simulation using MockMvc
+* Authentication response validation
+
+### Results
+
+* Login API returns HTTP 200
+* JWT Access Token generated successfully
+* Refresh Token generated successfully
+* BUILD SUCCESS achieved
+
+### Industry Relevance
+
+Integration testing verifies complete application behavior by testing Controller → Service → Repository → Database interaction together.
+
+### Status
+
+✅ Completed
+
