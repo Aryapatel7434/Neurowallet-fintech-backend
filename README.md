@@ -2311,3 +2311,186 @@ Integration testing verifies complete application behavior by testing Controller
 
 ✅ Completed
 
+
+
+
+Day 40.8 — Password Reset Flow
+Objective
+
+Implement a secure Password Reset Flow that allows users to reset forgotten passwords using a temporary reset token.
+
+Features Implemented
+Password Reset Token Entity
+
+Created a dedicated entity to store:
+
+Reset Token
+User Email
+Expiry Time
+
+This ensures password reset requests are time-bound and secure.
+
+Password Reset Token Repository
+
+Implemented repository support for:
+
+Saving reset tokens
+Fetching tokens
+Validating token existence
+Forgot Password API
+
+Endpoint:
+
+POST /api/auth/forgot-password
+
+Request:
+
+{
+  "email": "admin@gmail.com"
+}
+
+Response:
+
+Reset Token: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+Functionality:
+
+Verifies user exists
+Generates unique token
+Stores token in database
+Returns token
+Reset Password API
+
+Endpoint:
+
+POST /api/auth/reset-password
+
+Request:
+
+{
+  "token": "generated-token",
+  "newPassword": "Admin@123"
+}
+
+Functionality:
+
+Validates token
+Checks expiry
+Encrypts password using BCrypt
+Updates user password
+Invalidates token
+Security Configuration Updates
+
+Added public access for:
+
+/api/auth/forgot-password
+/api/auth/reset-password
+/api/auth/refresh
+
+Updated SecurityConfig to prevent 403 errors during password recovery.
+
+Testing Performed
+Forgot Password
+
+Test Result:
+
+200 OK
+Reset Token Generated
+Reset Password
+
+Test Result:
+
+Password Updated Successfully
+Login Verification
+
+Login tested with new password:
+
+{
+  "email": "admin@gmail.com",
+  "password": "Admin@123"
+}
+
+Result:
+
+{
+  "accessToken": "...",
+  "refreshToken": "..."
+}
+
+Authentication successful.
+
+Security Benefits
+BCrypt password encryption
+Token-based password recovery
+Expiry-based validation
+Secure password updates
+JWT authentication compatibility
+Technologies Used
+Spring Boot
+Spring Security
+Spring Data JPA
+MySQL
+BCryptPasswordEncoder
+JWT Authentication
+
+
+
+
+
+# Day 40.9 — Security Review
+
+## Features Reviewed
+
+### JWT Authentication
+- Login API tested
+- JWT generation verified
+- Protected endpoints validated
+
+### Role Based Authorization
+- Admin APIs restricted
+- USER role access validated
+- Spring Security role mapping verified
+
+### Password Reset Flow
+- Forgot Password API tested
+- Reset Password API tested
+- Password update validation completed
+
+### Refresh Token Validation
+- Refresh token generation verified
+- Access token regeneration tested
+
+### Rate Limiting & Brute Force Protection
+- Login attempt tracking implemented
+- Temporary account lock verified
+- Protection against repeated failed logins
+
+### Swagger Security Audit
+- Public endpoints verified
+- Protected endpoints require authentication
+- Admin endpoints require ADMIN role
+
+### Audit Logging
+- Authentication events logged
+- Security actions recorded
+
+## Security Checklist
+
+- JWT Authentication ✅
+- Role Based Authorization ✅
+- Refresh Tokens ✅
+- Password Reset Flow ✅
+- Rate Limiting ✅
+- Brute Force Protection ✅
+- Audit Logging ✅
+- BCrypt Password Hashing ✅
+- Protected APIs ✅
+- Swagger Security Validation ✅
+
+## Build Status
+
+BUILD SUCCESS
+
+## Progress
+
+Day 40.9 Completed ✅
