@@ -13,10 +13,12 @@ D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\controller
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\controller\wallletService.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\dto\AddMoneyRequest.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\dto\AuthResponse.java
+D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\dto\ForgotPasswordRequest.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\dto\LoginRequest.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\dto\OtpRequest.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\dto\RefreshTokenRequest.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\dto\RegisterRequest.java
+D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\dto\ResetPasswordRequest.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\dto\ScheduleTransactionRequest.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\dto\TransactionAnalyticsResponse.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\dto\TransactionEvent.java
@@ -34,6 +36,7 @@ D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\kafka\Tran
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\kafka\TransactionEventProducer.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\AuditLog.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\Otp.java
+D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\PasswordResetToken.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\RefreshToken.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\ScheduledTransaction.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\Transaction.java
@@ -42,6 +45,7 @@ D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\User
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\model\Wallet.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\repository\AuditLogRepository.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\repository\OtpRepository.java
+D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\repository\PasswordResetTokenRepository.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\repository\RefreshTokenRepository.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\repository\ScheduledTransactionRepository.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\repository\TransactionRepository.java
@@ -62,6 +66,7 @@ D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\service\lo
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\service\OtpService.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\service\page.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\service\Pagerequest.java
+D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\service\PasswordResetService.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\service\RefreshTokenService.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\service\request.java
 D:\demo\NeuroWallet-AI-Fintech-Platform\src\main\java\com\smartwallet\service\ScheduledTransactionProcessor.java

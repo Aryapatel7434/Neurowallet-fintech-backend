@@ -21,9 +21,11 @@ com\smartwallet\service\OtpService.class
 com\smartwallet\service\TransactionService.class
 com\smartwallet\filter\RequestResponseLoggingFilter.class
 com\smartwallet\dto\ScheduleTransactionRequest.class
+com\smartwallet\service\PasswordResetService.class
 com\smartwallet\controller\AuditController.class
 com\smartwallet\controller\UserController.class
 com\smartwallet\dto\AuthResponse.class
+com\smartwallet\repository\PasswordResetTokenRepository.class
 com\smartwallet\service\Pagerequest.class
 com\smartwallet\security\JwtFilter.class
 com\smartwallet\config\SecurityBeans.class
@@ -38,6 +40,7 @@ com\smartwallet\repository\WalletRepository.class
 com\smartwallet\controller\OtpController.class
 com\smartwallet\repository\UserRepository.class
 com\smartwallet\dto\VerifyOtpRequest.class
+com\smartwallet\model\PasswordResetToken.class
 com\smartwallet\service\AuthService.class
 com\smartwallet\service\TransactionAuditService.class
 com\smartwallet\dto\LoginRequest.class
@@ -51,6 +54,7 @@ com\smartwallet\repository\ScheduledTransactionRepository.class
 com\smartwallet\model\Otp.class
 com\smartwallet\repository\OtpRepository.class
 com\smartwallet\dto\AddMoneyRequest.class
+com\smartwallet\dto\ResetPasswordRequest.class
 com\smartwallet\kafka\TransactionEventProducer.class
 com\smartwallet\model\User.class
 com\smartwallet\repository\AuditLogRepository.class
@@ -58,6 +62,7 @@ com\smartwallet\security\RateLimiterService.class
 com\smartwallet\service\WalletCacheService.class
 com\smartwallet\exception\ResourceNotFoundException.class
 com\smartwallet\model\Wallet.class
+com\smartwallet\dto\ForgotPasswordRequest.class
 com\smartwallet\service\ScheduledTransactionService.class
 com\smartwallet\service\walletRepostiroy.class
 com\smartwallet\dto\RefreshTokenRequest.class

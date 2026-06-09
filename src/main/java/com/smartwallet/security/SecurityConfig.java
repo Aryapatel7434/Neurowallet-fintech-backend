@@ -26,28 +26,40 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        // Public Endpoints
-                        .requestMatchers("/api/auth/login").permitAll()
+                        // Authentication APIs
+                        .requestMatchers(
+                                "/api/auth/login",
+                                "/api/auth/refresh",
+                                "/api/auth/forgot-password",
+                                "/api/auth/reset-password"
+                        ).permitAll()
+
+                        // Registration
                         .requestMatchers("/api/users/register").permitAll()
+
+                        // OTP
                         .requestMatchers("/api/otp/**").permitAll()
+
+                        // Audit
                         .requestMatchers("/api/audit/**").permitAll()
 
-                        // Actuator Endpoints
+                        // Actuator
                         .requestMatchers("/actuator/**").permitAll()
 
-                        // Protected Endpoints
+                        // Swagger
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**"
+                        ).permitAll()
+
+                        // Protected APIs
                         .requestMatchers("/api/wallet/**").authenticated()
                         .requestMatchers("/api/transactions/**").authenticated()
 
-                        // Admin Endpoints
-                        .requestMatchers("/api/users").hasAuthority("ROLE_ADMIN")
-                        
-                        //Swagger public endpoints
-                        .requestMatchers(
-                        "/swagger-ui/**",
-                        "/swagger-ui.html",
-                          "/v3/api-docs/**"
-                    ).permitAll()
+                        // Admin APIs
+                        .requestMatchers("/api/users")
+                        .hasAuthority("ROLE_ADMIN")
 
                         .anyRequest().authenticated()
                 )
