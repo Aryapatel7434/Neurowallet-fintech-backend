@@ -35,6 +35,7 @@ com\smartwallet\service\log.class
 com\smartwallet\exception\TooManyRequestsException.class
 com\smartwallet\repository\RefreshTokenRepository.class
 com\smartwallet\security\SecurityConfig.class
+com\smartwallet\controller\DashboardController.class
 com\smartwallet\dto\TransactionRequest.class
 com\smartwallet\repository\WalletRepository.class
 com\smartwallet\controller\OtpController.class
