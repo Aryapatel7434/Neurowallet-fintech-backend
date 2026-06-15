@@ -116,16 +116,18 @@ System.out.println("USER = " + user);
             );
         }
 
-        boolean passwordMatch =
-                passwordEncoder.matches(
-                        request.getPassword(),
-                        user.getPassword()
-                );
+        System.out.println("RAW PASSWORD = " + request.getPassword());
+System.out.println("DB HASH = " + user.getPassword());
 
-        System.out.println(
-                "PASSWORD MATCH = " +
-                        passwordMatch
-        );
+boolean passwordMatch =
+    passwordEncoder.matches(
+        request.getPassword(),
+        user.getPassword()
+    );
+
+System.out.println("PASSWORD MATCH = " + passwordMatch);
+
+       
 
         if (!passwordMatch) {
 
