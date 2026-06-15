@@ -7,7 +7,8 @@ import com.smartwallet.service.WalletService;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
+import com.smartwallet.model.WalletTransaction;
+import java.util.List;
 @RestController
 @RequestMapping("/api/wallet")
 public class WalletController {
@@ -23,7 +24,16 @@ public class WalletController {
     public Wallet getMyWallet() {
         return walletService.getMyWallet();
     }
+        @GetMapping("/transactions")
+@PreAuthorize(
+        "hasAnyRole('USER','ADMIN')"
+)
+public List<WalletTransaction>
+getWalletTransactions() {
 
+    return walletService
+            .getWalletTransactions();
+}
     @PostMapping("/add-money")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public Wallet addMoney(@Valid @RequestBody AddMoneyRequest request) {
