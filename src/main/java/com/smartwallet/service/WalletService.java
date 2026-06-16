@@ -18,6 +18,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.smartwallet.model.WalletTransaction;
 import java.util.List;
+import com.smartwallet.dto.TransferMoneyRequest;
+import com.smartwallet.model.Transaction;
+import com.smartwallet.model.TransactionStatus;
+import com.smartwallet.repository.TransactionRepository;
+
+import java.time.LocalDateTime;
 @Service
 public class WalletService {
 
@@ -28,17 +34,17 @@ public class WalletService {
     private final UserRepository userRepository;
     private final WalletCacheService walletCacheService;
     private final WalletTransactionRepository walletTransactionRepository;
-
+    private final TransactionRepository transactionRepository;
     public WalletService(
             WalletRepository walletRepository,
             UserRepository userRepository,
-            WalletCacheService walletCacheService,WalletTransactionRepository walletTransactionRepository) {
+            WalletCacheService walletCacheService,WalletTransactionRepository walletTransactionRepository,TransactionRepository transactionRepository) {
 
         this.walletRepository = walletRepository;
         this.userRepository = userRepository;
         this.walletCacheService = walletCacheService;
         this.walletTransactionRepository=walletTransactionRepository;
-
+        this.transactionRepository =transactionRepository;
     }
 
     @Cacheable(value = "myWallet", key = "#email")
@@ -250,5 +256,108 @@ getWalletTransactions() {
             .findByWalletOrderByCreatedAtDesc(
                     wallet
             );
+}
+@Transactional
+public String transferMoney(
+        TransferMoneyRequest request
+) {
+
+    String senderEmail =
+            getCurrentUserEmail();
+
+    String receiverEmail =
+            request.getReceiverEmail();
+
+    if (senderEmail.equals(receiverEmail)) {
+
+        throw new BadRequestException(
+                "Cannot transfer money to yourself"
+        );
+    }
+
+    Wallet senderWallet =
+            walletRepository.findByUserEmail(
+                    senderEmail
+            );
+
+    Wallet receiverWallet =
+            walletRepository.findByUserEmail(
+                    receiverEmail
+            );
+
+    if (receiverWallet == null) {
+
+        throw new ResourceNotFoundException(
+                "Receiver wallet not found"
+        );
+    }
+
+    if (senderWallet.getBalance()
+            .compareTo(request.getAmount()) < 0) {
+
+        throw new BadRequestException(
+                "Insufficient balance"
+        );
+    }
+
+    senderWallet.setBalance(
+            senderWallet.getBalance()
+                    .subtract(request.getAmount())
+    );
+
+    receiverWallet.setBalance(
+            receiverWallet.getBalance()
+                    .add(request.getAmount())
+    );
+
+    walletRepository.save(
+            senderWallet
+    );
+
+    walletRepository.save(
+            receiverWallet
+    );
+    Transaction transaction =
+        new Transaction(
+
+                senderEmail,
+
+                receiverEmail,
+
+                request.getAmount(),
+
+                TransactionStatus.SUCCESS,
+
+                LocalDateTime.now()
+
+        );
+
+transactionRepository.save(
+        transaction
+);
+WalletTransaction senderTx =
+        new WalletTransaction();
+
+senderTx.setAmount(
+        request.getAmount()
+);
+
+senderTx.setType(
+        "TRANSFER"
+);
+
+senderTx.setCreatedAt(
+        LocalDateTime.now()
+);
+
+senderTx.setWallet(
+        senderWallet
+);
+
+walletTransactionRepository.save(
+        senderTx
+);
+
+    return "Transfer Successful";
 }
 }

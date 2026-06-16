@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.smartwallet.model.WalletTransaction;
 import java.util.List;
+import com.smartwallet.dto.TransferMoneyRequest;
 @RestController
 @RequestMapping("/api/wallet")
 public class WalletController {
@@ -45,4 +46,17 @@ getWalletTransactions() {
     public Wallet withdrawMoney(@Valid @RequestBody WithdrawRequest request) {
         return walletService.withdrawMoney(request);
     }
+    @PostMapping("/transfer")
+@PreAuthorize("hasAnyRole('USER','ADMIN')")
+public String transferMoney(
+        @Valid
+        @RequestBody
+        TransferMoneyRequest request
+) {
+
+    return walletService
+            .transferMoney(
+                    request
+            );
+}
 }
