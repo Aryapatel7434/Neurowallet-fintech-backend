@@ -35,16 +35,18 @@ public class WalletService {
     private final WalletCacheService walletCacheService;
     private final WalletTransactionRepository walletTransactionRepository;
     private final TransactionRepository transactionRepository;
+    private final NotificationService notificationService;
     public WalletService(
             WalletRepository walletRepository,
             UserRepository userRepository,
-            WalletCacheService walletCacheService,WalletTransactionRepository walletTransactionRepository,TransactionRepository transactionRepository) {
+            WalletCacheService walletCacheService,WalletTransactionRepository walletTransactionRepository,TransactionRepository transactionRepository,NotificationService notificationService) {
 
         this.walletRepository = walletRepository;
         this.userRepository = userRepository;
         this.walletCacheService = walletCacheService;
         this.walletTransactionRepository=walletTransactionRepository;
         this.transactionRepository =transactionRepository;
+        this.notificationService =notificationService;
     }
 
     @Cacheable(value = "myWallet", key = "#email")
@@ -107,6 +109,16 @@ public class WalletService {
         );
 
         Wallet savedWallet = walletRepository.save(wallet);
+        notificationService
+        .createNotification(
+
+                email,
+
+                "₹" +
+                request.getAmount() +
+                " added to your wallet"
+
+        );
         WalletTransaction transaction =
         new WalletTransaction();
 
@@ -213,6 +225,16 @@ public Wallet withdrawMoney(WithdrawRequest request) {
 
     Wallet savedWallet =
             walletRepository.save(wallet);
+    notificationService
+        .createNotification(
+
+                email,
+
+                "₹" +
+                request.getAmount() +
+                " withdrawn from your wallet"
+
+        );
 
     walletCacheService.clearWalletCache(
             email
@@ -335,6 +357,28 @@ public String transferMoney(
 transactionRepository.save(
         transaction
 );
+notificationService
+        .createNotification(
+
+                senderEmail,
+
+                "₹" +
+                request.getAmount() +
+                " transferred to " +
+                receiverEmail
+
+        );
+notificationService
+        .createNotification(
+
+                receiverEmail,
+
+                "₹" +
+                request.getAmount() +
+                " received from " +
+                senderEmail
+
+        );
 WalletTransaction senderTx =
         new WalletTransaction();
 
