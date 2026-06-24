@@ -24,7 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.smartwallet.dto.TransactionResponseDTO;
 @Service
 public class TransactionService {
 
@@ -204,47 +204,80 @@ public class TransactionService {
         return "Transaction Successful";
     }
 
-    public Page<Transaction> getTransactionHistory(
-            String email,
-            int page,
-            int size) {
+  public Page<TransactionResponseDTO> getTransactionHistory(
+        String email,
+        int page,
+        int size) {
 
-        logger.info("Fetching transaction history for email: {}, page: {}, size: {}",
-                email,
-                page,
-                size);
+    logger.info(
+            "Fetching transaction history for email: {}, page: {}, size: {}",
+            email,
+            page,
+            size
+    );
 
-        Pageable pageable =
-                PageRequest.of(
-                        page,
-                        size,
-                        Sort.by("timestamp").descending()
-                );
+    Pageable pageable =
+            PageRequest.of(
+                    page,
+                    size,
+                    Sort.by("timestamp").descending()
+            );
 
-        return transactionRepository.findBySenderEmailOrReceiverEmail(
-                email,
-                email,
-                pageable
-        );
-    }
+    Page<Transaction> transactions =
+            transactionRepository
+                    .findBySenderEmailOrReceiverEmail(
+                            email,
+                            email,
+                            pageable
+                    );
 
-    public Page<Transaction> getSentTransactions(
-            String email,
-            int page,
-            int size) {
+  return transactions.map(tx ->
+        new TransactionResponseDTO(
+                tx.getTransactionId(),
+                tx.getSenderEmail(),
+                tx.getReceiverEmail(),
+                tx.getAmount(),
+                tx.getStatus().name(),
+                tx.getTimestamp()
+        )
+);
+}
 
-        logger.info("Fetching sent transactions for email: {}", email);
+     public Page<TransactionResponseDTO> getSentTransactions(
+        String email,
+        int page,
+        int size) {
 
-        Pageable pageable =
-                PageRequest.of(
-                        page,
-                        size,
-                        Sort.by("timestamp").descending()
-                );
+    logger.info(
+            "Fetching sent transactions for email: {}",
+            email
+    );
 
-        return transactionRepository.findBySenderEmail(email, pageable);
-    }
+    Pageable pageable =
+            PageRequest.of(
+                    page,
+                    size,
+                    Sort.by("timestamp").descending()
+            );
 
+    Page<Transaction> transactions =
+            transactionRepository
+                    .findBySenderEmail(
+                            email,
+                            pageable
+                    );
+
+    return transactions.map(tx ->
+            new TransactionResponseDTO(
+                    tx.getTransactionId(),
+                    tx.getSenderEmail(),
+                    tx.getReceiverEmail(),
+                    tx.getAmount(),
+                    tx.getStatus().name(),
+                    tx.getTimestamp()
+            )
+    );
+}
     public Page<Transaction> getReceivedTransactions(
             String email,
             int page,

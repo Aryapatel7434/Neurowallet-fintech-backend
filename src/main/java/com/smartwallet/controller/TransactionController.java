@@ -11,7 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
+import com.smartwallet.dto.TransactionResponseDTO;
 @RestController
 @RequestMapping("/api/transactions")
 public class TransactionController {
@@ -29,22 +29,27 @@ public class TransactionController {
     }
 
     @GetMapping("/history")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public Page<Transaction> getHistory(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
+@PreAuthorize("hasAnyRole('USER','ADMIN')")
+public Page<TransactionResponseDTO> getHistory(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size) {
 
-        String email = SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getName();
+    String email = SecurityContextHolder
+            .getContext()
+            .getAuthentication()
+            .getName();
 
-        return transactionService.getTransactionHistory(email, page, size);
-    }
+    return transactionService
+            .getTransactionHistory(
+                    email,
+                    page,
+                    size
+            );
+}
 
     @GetMapping("/sent")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public Page<Transaction> getSentTransactions(
+    public Page<TransactionResponseDTO> getSentTransactions(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
 

@@ -1,38 +1,26 @@
-package com.smartwallet.model;
+package com.smartwallet.dto;
 
-import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
-public class Transaction {
+public class TransactionResponseDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionId;
-
     private String senderEmail;
-
     private String receiverEmail;
-
     private BigDecimal amount;
-    
-      
-
-    @Enumerated(EnumType.STRING)
-    private TransactionStatus status;
-
+    private String status;
     private LocalDateTime timestamp;
 
-    public Transaction() {
-    }
+    public TransactionResponseDTO(
+            Long transactionId,
+            String senderEmail,
+            String receiverEmail,
+            BigDecimal amount,
+            String status,
+            LocalDateTime timestamp) {
 
-    public Transaction(String senderEmail,
-                       String receiverEmail,
-                       BigDecimal amount,
-                       TransactionStatus status,
-                       LocalDateTime timestamp) {
-
+        this.transactionId = transactionId;
         this.senderEmail = senderEmail;
         this.receiverEmail = receiverEmail;
         this.amount = amount;
@@ -56,15 +44,11 @@ public class Transaction {
         return amount;
     }
 
-    public TransactionStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
     public LocalDateTime getTimestamp() {
         return timestamp;
-    }
-
-    public void setStatus(TransactionStatus status) {
-        this.status = status;
     }
 }
