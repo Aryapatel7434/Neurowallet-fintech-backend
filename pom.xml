@@ -125,7 +125,12 @@
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>br.com.objectos.way</groupId>
+            <artifactId>sql-type-testing</artifactId>
+            <version>0.4.1</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>

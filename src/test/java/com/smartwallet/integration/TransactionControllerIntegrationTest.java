@@ -92,12 +92,13 @@ public class TransactionControllerIntegrationTest {
                         "USER"
                 );
 
-        String json = """
-        {
-            "receiverEmail":"rahul@gmail.com",
-            "amount":100
-        }
-        """;
+      String json = """
+{
+   "receiverEmail":"rahul@gmail.com",
+   "amount":100,
+   "category":"FOOD"
+}
+""";
 
         mockMvc.perform(
                 post("/api/transactions/send")

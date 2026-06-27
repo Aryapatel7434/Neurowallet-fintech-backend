@@ -1,5 +1,6 @@
 package com.smartwallet.dto;
 
+import com.smartwallet.model.TransactionCategory;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +17,7 @@ public class TransferMoneyRequest {
     @NotNull
     @DecimalMin(value = "1.0")
     private BigDecimal amount;
-
+    private TransactionCategory category;
     public TransferMoneyRequest() {
     }
 
@@ -39,4 +40,12 @@ public class TransferMoneyRequest {
     ) {
         this.amount = amount;
     }
+
+   public TransactionCategory getCategory() {
+    return category;
+}
+
+public void setCategory(TransactionCategory category) {
+    this.category = category;
+}
 }

@@ -1,5 +1,6 @@
 package com.smartwallet.model;
-
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,7 +22,11 @@ public class Transaction {
 
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
-
+    
+    @Enumerated(EnumType.STRING)
+@Column(nullable = false)
+private TransactionCategory category;
+    
     private LocalDateTime timestamp;
 
     public Transaction() {
@@ -30,13 +35,14 @@ public class Transaction {
     public Transaction(String senderEmail,
                        String receiverEmail,
                        BigDecimal amount,
-                       TransactionStatus status,
+                       TransactionStatus status, TransactionCategory category,
                        LocalDateTime timestamp) {
 
         this.senderEmail = senderEmail;
         this.receiverEmail = receiverEmail;
         this.amount = amount;
         this.status = status;
+         this.category = category;
         this.timestamp = timestamp;
     }
 
@@ -67,4 +73,11 @@ public class Transaction {
     public void setStatus(TransactionStatus status) {
         this.status = status;
     }
+    public TransactionCategory getCategory() {
+    return category;
+}
+
+public void setCategory(TransactionCategory category) {
+    this.category = category;
+}
 }

@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
-
+import com.smartwallet.model.TransactionCategory;
 public class TransactionRequest {
 
     @NotBlank(message = "Receiver email is required")
@@ -15,7 +15,8 @@ public class TransactionRequest {
     @NotNull(message = "Amount is required")
     @DecimalMin(value = "1.00", message = "Amount must be at least 1")
     private BigDecimal amount;
-
+    
+    private TransactionCategory category;
     public String getReceiverEmail() {
         return receiverEmail;
     }
@@ -23,4 +24,11 @@ public class TransactionRequest {
     public BigDecimal getAmount() {
         return amount;
     }
+    public TransactionCategory getCategory() {
+    return category;
+}
+
+public void setCategory(TransactionCategory category) {
+    this.category = category;
+}
 }

@@ -177,12 +177,13 @@ System.out.println("PASSWORD MATCH = " + passwordMatch);
                         user.getEmail()
                 );
 
-        return new AuthResponse(
-                accessToken,
-                refreshToken.getToken()
-        );
+     return new AuthResponse(
+    accessToken,
+    refreshToken.getToken(),
+    user.getEmail(),
+    user.getName()
+);
     }
-
     public AuthResponse refreshToken(
             String refreshTokenValue) {
 
@@ -216,9 +217,11 @@ System.out.println("PASSWORD MATCH = " + passwordMatch);
                         user.getRole()
                 );
 
-        return new AuthResponse(
-                accessToken,
-                refreshToken.getToken()
-        );
+   return new AuthResponse(
+    accessToken,
+    refreshToken.getToken(),
+    user.getEmail(),
+    user.getName()
+);
     }
 }

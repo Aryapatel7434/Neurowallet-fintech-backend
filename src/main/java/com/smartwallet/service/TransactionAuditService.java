@@ -1,6 +1,7 @@
 package com.smartwallet.service;
 
 import com.smartwallet.model.Transaction;
+import com.smartwallet.model.TransactionCategory;
 import com.smartwallet.model.TransactionStatus;
 import com.smartwallet.repository.TransactionRepository;
 import java.math.BigDecimal;
@@ -19,15 +20,17 @@ public class TransactionAuditService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void saveFailedTransaction(String senderEmail,
-                                      String receiverEmail,
-                                      BigDecimal amount) {
+    public void saveFailedTransaction(
+            String senderEmail,
+            String receiverEmail,
+            BigDecimal amount) {
 
         Transaction failedTransaction = new Transaction(
                 senderEmail,
                 receiverEmail,
                 amount,
                 TransactionStatus.FAILED,
+                TransactionCategory.OTHER,
                 LocalDateTime.now()
         );
 

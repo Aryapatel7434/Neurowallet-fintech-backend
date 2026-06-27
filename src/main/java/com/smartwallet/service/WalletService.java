@@ -22,7 +22,7 @@ import com.smartwallet.dto.TransferMoneyRequest;
 import com.smartwallet.model.Transaction;
 import com.smartwallet.model.TransactionStatus;
 import com.smartwallet.repository.TransactionRepository;
-
+import com.smartwallet.model.TransactionCategory;
 import java.time.LocalDateTime;
 @Service
 public class WalletService {
@@ -36,6 +36,7 @@ public class WalletService {
     private final WalletTransactionRepository walletTransactionRepository;
     private final TransactionRepository transactionRepository;
     private final NotificationService notificationService;
+    private TransactionCategory category;
     public WalletService(
             WalletRepository walletRepository,
             UserRepository userRepository,
@@ -339,24 +340,16 @@ public String transferMoney(
     walletRepository.save(
             receiverWallet
     );
-    Transaction transaction =
-        new Transaction(
-
-                senderEmail,
-
-                receiverEmail,
-
-                request.getAmount(),
-
-                TransactionStatus.SUCCESS,
-
-                LocalDateTime.now()
-
-        );
-
-transactionRepository.save(
-        transaction
+Transaction transaction = new Transaction(
+        senderEmail,
+        receiverEmail,
+        request.getAmount(),
+        TransactionStatus.SUCCESS,
+        request.getCategory(),
+        LocalDateTime.now()
 );
+
+transactionRepository.save(transaction);
 notificationService
         .createNotification(
 

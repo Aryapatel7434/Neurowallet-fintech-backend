@@ -152,14 +152,15 @@ public class TransactionService {
             throw new BadRequestException("Insufficient balance");
         }
 
-        Transaction transaction =
-                new Transaction(
-                        sender.getEmail(),
-                        receiver.getEmail(),
-                        request.getAmount(),
-                        TransactionStatus.PENDING,
-                        LocalDateTime.now()
-                );
+       Transaction transaction =
+        new Transaction(
+                sender.getEmail(),
+                receiver.getEmail(),
+                request.getAmount(),
+                TransactionStatus.PENDING,
+                request.getCategory(),
+                LocalDateTime.now()
+        );
 
         transactionRepository.save(transaction);
 
@@ -231,13 +232,14 @@ public class TransactionService {
                             pageable
                     );
 
-  return transactions.map(tx ->
+return transactions.map(tx ->
         new TransactionResponseDTO(
                 tx.getTransactionId(),
                 tx.getSenderEmail(),
                 tx.getReceiverEmail(),
                 tx.getAmount(),
                 tx.getStatus().name(),
+                tx.getCategory(),
                 tx.getTimestamp()
         )
 );
@@ -267,16 +269,17 @@ public class TransactionService {
                             pageable
                     );
 
-    return transactions.map(tx ->
-            new TransactionResponseDTO(
-                    tx.getTransactionId(),
-                    tx.getSenderEmail(),
-                    tx.getReceiverEmail(),
-                    tx.getAmount(),
-                    tx.getStatus().name(),
-                    tx.getTimestamp()
-            )
-    );
+  return transactions.map(tx ->
+        new TransactionResponseDTO(
+                tx.getTransactionId(),
+                tx.getSenderEmail(),
+                tx.getReceiverEmail(),
+                tx.getAmount(),
+                tx.getStatus().name(),
+                tx.getCategory(),
+                tx.getTimestamp()
+        )
+);
 }
     public Page<Transaction> getReceivedTransactions(
             String email,
