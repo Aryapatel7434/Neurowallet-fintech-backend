@@ -1,25 +1,30 @@
 package com.smartwallet.controller;
 
-import org.springframework.web.bind.annotation.*;
-import java.util.*;
+import com.smartwallet.dto.DashboardInsightResponse;
+import com.smartwallet.service.TransactionService;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/dashboard")
-@CrossOrigin(origins = "http://localhost:3000")
 public class DashboardController {
 
-    @GetMapping("/stats")
-    public Map<String, Object> getStats() throws Exception {
+    private final TransactionService transactionService;
 
-        // Artificial delay for testing loading screen
+    public DashboardController(
+            TransactionService transactionService) {
 
-        Map<String, Object> data = new HashMap<>();
-
-        data.put("balance", 125000);
-        data.put("income", 50000);
-        data.put("expenses", 15000);
-        data.put("savings", 35000);
-
-        return data;
+        this.transactionService = transactionService;
     }
+
+    @GetMapping("/insights")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public DashboardInsightResponse getDashboardInsights() {
+
+        return transactionService.getDashboardInsights();
+
+    }
+
 }

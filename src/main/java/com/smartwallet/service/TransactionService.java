@@ -25,6 +25,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.smartwallet.dto.TransactionResponseDTO;
+import com.smartwallet.dto.DashboardInsightResponse;
+import java.util.HashMap;
+import java.util.Map;
+import com.smartwallet.model.TransactionCategory;
+import java.util.List;
 @Service
 public class TransactionService {
 
@@ -151,7 +156,6 @@ public class TransactionService {
 
             throw new BadRequestException("Insufficient balance");
         }
-
        Transaction transaction =
         new Transaction(
                 sender.getEmail(),
@@ -384,4 +388,86 @@ return transactions.map(tx ->
                 pageable
         );
     }
+    public DashboardInsightResponse getDashboardInsights() {
+
+    // Logged-in user
+    String email = SecurityContextHolder
+            .getContext()
+            .getAuthentication()
+            .getName();
+
+    // Fetch all transactions of logged-in user
+    List<Transaction> transactions =
+            transactionRepository
+                    .findBySenderEmailOrReceiverEmail(
+                            email,
+                            email
+                    );
+
+    BigDecimal totalIncome = BigDecimal.ZERO;
+    BigDecimal totalExpense = BigDecimal.ZERO;
+
+    Map<TransactionCategory, BigDecimal> categoryTotals =
+            new HashMap<>();
+
+    // Calculate analytics
+    for (Transaction tx : transactions) {
+
+        // Money received
+        if (email.equals(tx.getReceiverEmail())
+                && tx.getStatus() == TransactionStatus.SUCCESS) {
+
+            totalIncome = totalIncome.add(tx.getAmount());
+        }
+
+        // Money sent
+        if (email.equals(tx.getSenderEmail())
+                && tx.getStatus() == TransactionStatus.SUCCESS) {
+
+            totalExpense = totalExpense.add(tx.getAmount());
+
+            TransactionCategory category = tx.getCategory();
+
+            categoryTotals.put(
+                    category,
+                    categoryTotals.getOrDefault(
+                            category,
+                            BigDecimal.ZERO
+                    ).add(tx.getAmount())
+            );
+        }
+    }
+
+    // Net Cash Flow
+    BigDecimal netCashFlow =
+            totalIncome.subtract(totalExpense);
+
+    // Top Spending Category
+    TransactionCategory topCategory = null;
+    BigDecimal topCategoryAmount = BigDecimal.ZERO;
+
+    for (Map.Entry<TransactionCategory, BigDecimal> entry
+            : categoryTotals.entrySet()) {
+
+        if (entry.getValue().compareTo(topCategoryAmount) > 0) {
+
+            topCategory = entry.getKey();
+            topCategoryAmount = entry.getValue();
+        }
+    }
+
+    // Return response
+    return new DashboardInsightResponse(
+
+            totalIncome,
+            totalExpense,
+            netCashFlow,
+            transactions.size(),
+            topCategory == null
+                    ? "NONE"
+                    : topCategory.name(),
+            topCategoryAmount
+    );
+}
+       
 }
