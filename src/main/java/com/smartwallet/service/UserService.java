@@ -44,7 +44,7 @@ public class UserService {
                 request.getName(),
                 request.getEmail(),
                 encodedPassword,
-                "USER"
+                "ROLE_USER"
         );
 
         User savedUser = userRepository.save(user);

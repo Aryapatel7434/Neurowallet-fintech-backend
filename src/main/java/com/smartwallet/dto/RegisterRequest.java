@@ -17,9 +17,6 @@ public class RegisterRequest {
     @Size(min = 6, message = "Password must contain at least 6 characters")
     private String password;
 
-    @NotBlank(message = "Role is required")
-    private String role;
-
     public String getName() {
         return name;
     }
@@ -30,9 +27,5 @@ public class RegisterRequest {
 
     public String getPassword() {
         return password;
-    }
-
-    public String getRole() {
-        return role;
     }
 }
