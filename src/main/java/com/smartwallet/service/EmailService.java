@@ -2,12 +2,13 @@ package com.smartwallet.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
+import java.io.UnsupportedEncodingException;
 @Service
 public class EmailService {
 
@@ -40,7 +41,7 @@ public class EmailService {
              PASSWORD RESET EMAIL
     ========================================== */
 
-    public void sendPasswordResetEmail(String toEmail, String token) {
+  public void sendPasswordResetEmail(String toEmail, String token) {
 
         try {
 
@@ -53,80 +54,154 @@ public class EmailService {
                     new MimeMessageHelper(message, true, "UTF-8");
 
             helper.setTo(toEmail);
+helper.setFrom("arypatel913@gmail.com");
+helper.setReplyTo("arypatel913@gmail.com");
+           helper.setSubject("NeuroWallet Security • Password Reset Request");
 
-            helper.setSubject("Reset Your NeuroWallet Password");
+  String html =
+    "<html>" +
+    "<body style='margin:0;padding:0;background:#f5f7fb;font-family:Arial,sans-serif;'>" +
 
-            String html =
-                    "<html>" +
-                    "<body style='font-family:Arial;background:#f4f7fb;padding:40px;'>" +
+    "<table width='100%' cellpadding='0' cellspacing='0'>" +
+    "<tr><td align='center'>" +
 
-                    "<div style='max-width:650px;margin:auto;background:#ffffff;padding:40px;border-radius:12px;'>" +
+    "<table width='620' cellpadding='0' cellspacing='0' style='background:#ffffff;border-radius:12px;margin:40px 0;overflow:hidden;border:1px solid #e5e7eb;'>"
 
-                    "<h1 style='color:#6d5efc;'>NeuroWallet</h1>" +
+    +
 
-                    "<h2>Password Reset Request</h2>" +
+    "<tr style='background:#6d5efc;'>"
+    +
 
-                    "<p>We received a request to reset your password.</p>" +
+    "<td style='padding:24px;color:white;font-size:28px;font-weight:bold;'>"
+    +
 
-                    "<p>Click the button below to continue.</p>" +
+    "NeuroWallet"
+    +
 
-                    "<a href='" + resetLink + "' " +
+    "</td></tr>"
 
-                    "style='display:inline-block;" +
-                    "padding:15px 30px;" +
-                    "background:#6d5efc;" +
-                    "color:white;" +
-                    "text-decoration:none;" +
-                    "border-radius:8px;" +
-                    "font-weight:bold;'>"
+    +
 
-                    +
+    "<tr><td style='padding:35px;'>"
 
-                    "Reset Password"
+    +
 
-                    +
+    "<h2 style='margin-top:0;color:#111827;'>Password Reset Request</h2>"
 
-                    "</a>"
+    +
 
-                    +
+    "<p style='color:#4b5563;font-size:16px;'>"
 
-                    "<p style='margin-top:30px;'>"
+    +
 
-                    +
+    "We received a request to reset the password for your NeuroWallet account."
 
-                    "If you did not request this password reset, simply ignore this email."
+    +
 
-                    +
+    "</p>"
 
-                    "</p>"
+    +
 
-                    +
+    "<p style='color:#4b5563;'>"
 
-                    "<hr>"
+    +
 
-                    +
+    "Click the secure button below to continue."
 
-                    "<small>© NeuroWallet AI Fintech Platform</small>"
+    +
 
-                    +
+    "</p>"
 
-                    "</div>"
+    +
 
-                    +
+    "<p style='text-align:center;margin:35px 0;'>"
 
-                    "</body>"
+    +
 
-                    +
+    "<a href='" + resetLink + "' style='background:#6d5efc;color:#ffffff;text-decoration:none;padding:15px 30px;border-radius:8px;font-size:16px;font-weight:bold;'>"
 
-                    "</html>";
+    +
 
+    "Reset Password"
+
+    +
+
+    "</a>"
+
+    +
+
+    "</p>"
+
+    +
+
+    "<p style='font-size:14px;color:#6b7280;'>"
+
+    +
+
+    "This reset link expires in <strong>15 minutes</strong>."
+
+    +
+
+    "</p>"
+
+    +
+
+    "<p style='font-size:14px;color:#6b7280;'>"
+
+    +
+
+    "If you did not request this password reset, you can safely ignore this email."
+
+    +
+
+    "</p>"
+
+    +
+
+    "<hr style='margin:30px 0;border:none;border-top:1px solid #e5e7eb;'>"
+
+    +
+
+    "<p style='font-size:13px;color:#9ca3af;'>"
+
+    +
+
+    "NeuroWallet Security Team<br>"
+
+    +
+
+    "This is an automated email. Please do not reply."
+
+    +
+
+    "</p>"
+
+    +
+
+    "</td></tr>"
+
+    +
+
+    "</table>"
+
+    +
+
+    "</td></tr>"
+
+    +
+
+    "</table>"
+
+    +
+
+    "</body></html>";
             helper.setText(html, true);
 
             mailSender.send(message);
 
         }
 
-        catch (MessagingException e) {
+       catch (MessagingException e) {
 
             throw new RuntimeException(
 
