@@ -7,6 +7,7 @@ import com.smartwallet.dto.ForgotPasswordRequest;
 import com.smartwallet.dto.ResetPasswordRequest;
 import com.smartwallet.service.AuthService;
 import com.smartwallet.service.PasswordResetService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,14 +44,13 @@ public class AuthController {
 
     @PostMapping("/forgot-password")
     public String forgotPassword(
-            @RequestBody ForgotPasswordRequest request) {
+            @RequestBody ForgotPasswordRequest request) throws MessagingException {
 
-        String token =
-                passwordResetService.generateResetToken(
-                        request.getEmail()
-                );
+       passwordResetService.generateResetToken(
+        request.getEmail()
+);
 
-        return "Reset Token: " + token;
+return "Password reset email sent successfully.";
     }
 
     @PostMapping("/reset-password")
