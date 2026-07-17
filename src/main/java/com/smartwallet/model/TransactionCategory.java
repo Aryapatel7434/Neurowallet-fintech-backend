@@ -18,7 +18,9 @@ public enum TransactionCategory {
 
     INVESTMENT,
 
-    SALARY,
+    RENT,
+
+    EMI,
 
     TRANSFER,
 
