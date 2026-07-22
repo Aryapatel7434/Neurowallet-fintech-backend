@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.support.MethodArgumentNotValidException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 
@@ -78,5 +78,17 @@ public ResponseEntity<ErrorResponse> handleValidationException(
     );
 
     return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+}
+@ExceptionHandler(WalletNotFoundException.class)
+public ResponseEntity<ErrorResponse> handleWalletNotFound(
+        WalletNotFoundException ex) {
+
+    ErrorResponse error = new ErrorResponse(
+            LocalDateTime.now(),
+            HttpStatus.NOT_FOUND.value(),
+            ex.getMessage()
+    );
+
+    return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 }
 }
