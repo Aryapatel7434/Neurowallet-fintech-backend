@@ -3,6 +3,7 @@ package com.smartwallet.service;
 import com.smartwallet.model.Transaction;
 import com.smartwallet.model.TransactionCategory;
 import com.smartwallet.model.TransactionStatus;
+import com.smartwallet.model.TransactionType;
 import com.smartwallet.repository.TransactionRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,14 +26,15 @@ public class TransactionAuditService {
             String receiverEmail,
             BigDecimal amount) {
 
-        Transaction failedTransaction = new Transaction(
-                senderEmail,
-                receiverEmail,
-                amount,
-                TransactionStatus.FAILED,
-                TransactionCategory.OTHER,
-                LocalDateTime.now()
-        );
+       Transaction failedTransaction = new Transaction(
+        senderEmail,
+        receiverEmail,
+        amount,
+        TransactionStatus.FAILED,
+        TransactionType.TRANSFER,
+        TransactionCategory.OTHER,
+        LocalDateTime.now()
+);
 
         transactionRepository.save(failedTransaction);
     }

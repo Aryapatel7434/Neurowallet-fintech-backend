@@ -319,7 +319,7 @@ logger.info("Generating goal recommendation for user: {}", email);
 
     BigDecimal targetAmount = new BigDecimal("100000");
 
-    BigDecimal currentAmount = summary.getSavings();
+    BigDecimal currentAmount = wallet.getBalance();
 
     if (currentAmount.compareTo(BigDecimal.ZERO) < 0) {
         currentAmount = BigDecimal.ZERO;

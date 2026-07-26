@@ -29,7 +29,10 @@ import com.smartwallet.dto.DashboardInsightResponse;
 import java.util.HashMap;
 import java.util.Map;
 import com.smartwallet.model.TransactionCategory;
+import com.smartwallet.model.TransactionType;
 import java.util.List;
+import com.smartwallet.model.WalletTransaction;
+import com.smartwallet.repository.WalletTransactionRepository;
 @Service
 public class TransactionService {
 
@@ -42,21 +45,24 @@ public class TransactionService {
     private final TransactionAuditService transactionAuditService;
     private final WalletCacheService walletCacheService;
     private final TransactionEventProducer transactionEventProducer;
+private final WalletTransactionRepository walletTransactionRepository;
 
-    public TransactionService(
-            UserRepository userRepository,
-            WalletRepository walletRepository,
-            TransactionRepository transactionRepository,
-            TransactionAuditService transactionAuditService,
-            WalletCacheService walletCacheService,
-            TransactionEventProducer transactionEventProducer) {
-
+public TransactionService(
+        UserRepository userRepository,
+        WalletRepository walletRepository,
+        TransactionRepository transactionRepository,
+        TransactionAuditService transactionAuditService,
+        WalletCacheService walletCacheService,
+        TransactionEventProducer transactionEventProducer,
+        WalletTransactionRepository walletTransactionRepository){
+    
         this.userRepository = userRepository;
         this.walletRepository = walletRepository;
         this.transactionRepository = transactionRepository;
         this.transactionAuditService = transactionAuditService;
         this.walletCacheService = walletCacheService;
         this.transactionEventProducer = transactionEventProducer;
+        this.walletTransactionRepository = walletTransactionRepository;
     }
 
     @Transactional
@@ -156,15 +162,16 @@ public class TransactionService {
 
             throw new BadRequestException("Insufficient balance");
         }
-       Transaction transaction =
-        new Transaction(
-                sender.getEmail(),
-                receiver.getEmail(),
-                request.getAmount(),
-                TransactionStatus.PENDING,
-                request.getCategory(),
-                LocalDateTime.now()
-        );
+     Transaction transaction =
+    new Transaction(
+        sender.getEmail(),
+        receiver.getEmail(),
+        request.getAmount(),
+        TransactionStatus.PENDING,
+        TransactionType.TRANSFER,
+        request.getCategory(),
+        LocalDateTime.now()
+    );
 
         transactionRepository.save(transaction);
 
@@ -180,6 +187,24 @@ public class TransactionService {
 
         walletRepository.save(senderWallet);
         walletRepository.save(receiverWallet);
+        
+        WalletTransaction senderLedger = new WalletTransaction();
+
+senderLedger.setWallet(senderWallet);
+senderLedger.setAmount(request.getAmount());
+senderLedger.setType("DEBIT");
+senderLedger.setCreatedAt(LocalDateTime.now());
+
+walletTransactionRepository.save(senderLedger);
+
+WalletTransaction receiverLedger = new WalletTransaction();
+
+receiverLedger.setWallet(receiverWallet);
+receiverLedger.setAmount(request.getAmount());
+receiverLedger.setType("CREDIT");
+receiverLedger.setCreatedAt(LocalDateTime.now());
+
+walletTransactionRepository.save(receiverLedger);
 
         logger.info("Wallet balances updated successfully for sender and receiver");
 
@@ -237,15 +262,16 @@ public class TransactionService {
                     );
 
 return transactions.map(tx ->
-        new TransactionResponseDTO(
-                tx.getTransactionId(),
-                tx.getSenderEmail(),
-                tx.getReceiverEmail(),
-                tx.getAmount(),
-                tx.getStatus().name(),
-                tx.getCategory(),
-                tx.getTimestamp()
-        )
+    new TransactionResponseDTO(
+    tx.getTransactionId(),
+    tx.getSenderEmail(),
+    tx.getReceiverEmail(),
+    tx.getAmount(),
+    tx.getStatus().name(),
+    tx.getType(),
+    tx.getCategory(),
+    tx.getTimestamp()
+)
 );
 }
 

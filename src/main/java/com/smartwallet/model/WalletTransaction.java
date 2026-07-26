@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "transactions")
+@Table(name = "wallet_transactions")
 public class WalletTransaction {
 
     @Id
@@ -22,6 +22,9 @@ private Long transactionId;
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;
 
+    /**
+     *
+     */
     public WalletTransaction() {
     }
 
@@ -45,10 +48,9 @@ private Long transactionId;
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
+  public void setType(String type) {
+    this.type = type;
+}
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
