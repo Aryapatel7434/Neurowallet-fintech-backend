@@ -91,4 +91,19 @@ public ResponseEntity<ErrorResponse> handleWalletNotFound(
 
     return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 }
+@ExceptionHandler(AIServiceException.class)
+public ResponseEntity<ErrorResponse> handleAIServiceException(
+        AIServiceException ex) {
+
+    ErrorResponse error = new ErrorResponse(
+            LocalDateTime.now(),
+            HttpStatus.SERVICE_UNAVAILABLE.value(),
+            ex.getMessage()
+    );
+
+    return new ResponseEntity<>(
+            error,
+            HttpStatus.SERVICE_UNAVAILABLE
+    );
+}
 }
