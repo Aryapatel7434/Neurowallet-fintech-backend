@@ -10,6 +10,7 @@ import com.smartwallet.dto.FinancialScoreResponse;
 import com.smartwallet.dto.FinancialSummary;
 import com.smartwallet.dto.GoalRecommendationResponse;
 
+import com.smartwallet.exception.AIServiceException;
 import com.smartwallet.exception.WalletNotFoundException;
 
 import com.smartwallet.model.Transaction;
@@ -27,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
-import com.smartwallet.exception.AIServiceException;
 
 @Service
 public class AIService {
@@ -41,7 +41,6 @@ public class AIService {
     private final ChatClient chatClient;
     private final ObjectMapper objectMapper;
 
-
     public AIService(
             WalletRepository walletRepository,
             TransactionRepository transactionRepository,
@@ -52,7 +51,6 @@ public class AIService {
         this.walletRepository = walletRepository;
         this.transactionRepository = transactionRepository;
         this.promptBuilder = promptBuilder;
-
         this.chatClient = chatClientBuilder.build();
         this.objectMapper = objectMapper;
     }
@@ -80,6 +78,7 @@ public class AIService {
      *   ↓
      * AIInsightResponse
      */
+
     public AIInsightResponse getAIInsights(String email) {
 
         logger.info(
@@ -138,25 +137,26 @@ public class AIService {
          */
         String aiResponse;
 
-try {
-    aiResponse = chatClient
-            .prompt()
-            .user(prompt)
-            .call()
-            .content();
+        try {
 
-} catch (Exception e) {
+            aiResponse = chatClient
+                    .prompt()
+                    .user(prompt)
+                    .call()
+                    .content();
 
-    logger.error(
-            "AI provider failure while generating insights",
-            e
-    );
+        } catch (Exception e) {
 
-    throw new AIServiceException(
-            "AI service is temporarily unavailable.",
-            e
-    );
-}
+            logger.error(
+                    "AI provider failure while generating insights",
+                    e
+            );
+
+            throw new AIServiceException(
+                    "AI service is temporarily unavailable.",
+                    e
+            );
+        }
 
         /*
          * Gemini returns JSON as String.
@@ -165,40 +165,42 @@ try {
          * AIInsightResponse DTO.
          */
         AIInsightResponse aiInsightResponse;
-      
+
         try {
 
-    if (aiResponse == null || aiResponse.isBlank()) {
+            if (aiResponse == null || aiResponse.isBlank()) {
 
-        throw new AIServiceException(
-                "AI service returned an empty response."
-        );
-    }
+                throw new AIServiceException(
+                        "AI service returned an empty response."
+                );
+            }
 
-    aiInsightResponse =
-            objectMapper.readValue(
-                    aiResponse,
-                    AIInsightResponse.class
+            aiInsightResponse =
+                    objectMapper.readValue(
+                            aiResponse,
+                            AIInsightResponse.class
+                    );
+
+            /*
+             * Validate the structured AI response
+             * exactly once.
+             */
+            validateAIInsightResponse(
+                    aiInsightResponse
             );
 
-} catch (JsonProcessingException e) {
+        } catch (JsonProcessingException e) {
 
-    logger.error(
-            "Invalid structured response received from AI",
-            e
-    );
+            logger.error(
+                    "Invalid structured response received from AI",
+                    e
+            );
 
-    throw new AIServiceException(
-            "AI service returned an invalid response.",
-            e
-    );
-}
-      
-
-        /*
-         * Basic validation of the structured AI response.
-         */
-        validateAIInsightResponse(aiInsightResponse);
+            throw new AIServiceException(
+                    "AI service returned an invalid response.",
+                    e
+            );
+        }
 
         logger.info(
                 "AI insights generated successfully for user: {}",
@@ -206,9 +208,7 @@ try {
         );
 
         /*
-         * IMPORTANT:
-         *
-         * We now return the actual Gemini-generated
+         * Return the actual Gemini-generated
          * structured response.
          */
         return aiInsightResponse;
@@ -216,65 +216,10 @@ try {
 
     /*
      * ============================================================
-     * AI RESPONSE VALIDATION
-     * ============================================================
-     */
-    private void validateAIInsightResponse(
-            AIInsightResponse response) {
-
-        if (response == null) {
-
-            throw new IllegalStateException(
-                    "AI response cannot be null."
-            );
-        }
-
-        if (response.getConfidence() < 0
-                || response.getConfidence() > 100) {
-
-            throw new IllegalStateException(
-                    "AI confidence must be between 0 and 100."
-            );
-        }
-
-        if (response.getSavingOpportunity() == null
-                || response.getSavingOpportunity().isBlank()) {
-
-            throw new IllegalStateException(
-                    "AI saving opportunity is missing."
-            );
-        }
-
-        if (response.getBudgetAlert() == null
-                || response.getBudgetAlert().isBlank()) {
-
-            throw new IllegalStateException(
-                    "AI budget alert is missing."
-            );
-        }
-
-        if (response.getInvestmentSuggestion() == null
-                || response.getInvestmentSuggestion().isBlank()) {
-
-            throw new IllegalStateException(
-                    "AI investment suggestion is missing."
-            );
-        }
-
-        if (response.getFinancialRisk() == null
-                || response.getFinancialRisk().isBlank()) {
-
-            throw new IllegalStateException(
-                    "AI financial risk is missing."
-            );
-        }
-    }
-
-    /*
-     * ============================================================
      * BUDGET ALERT
      * ============================================================
      */
+
     private String calculateBudgetAlert(
             FinancialSummary summary) {
 
@@ -307,6 +252,7 @@ try {
      * INVESTMENT SUGGESTION
      * ============================================================
      */
+
     private String calculateInvestmentSuggestion(
             FinancialSummary summary) {
 
@@ -332,7 +278,15 @@ try {
      * ============================================================
      * FINANCIAL SUMMARY
      * ============================================================
+     *
+     * IMPORTANT:
+     *
+     * Only successful/completed transactions are included.
+     *
+     * Pending, failed, cancelled or invalid transactions
+     * must not affect financial analysis.
      */
+
     private FinancialSummary calculateFinancialSummary(
             Wallet wallet,
             List<Transaction> transactions,
@@ -344,30 +298,103 @@ try {
         BigDecimal totalExpense =
                 BigDecimal.ZERO;
 
+        int validTransactionCount = 0;
+
         for (Transaction transaction : transactions) {
 
-            if (email.equals(
-                    transaction.getReceiverEmail())) {
+            /*
+             * Ignore invalid transaction records.
+             */
+            if (transaction == null
+                    || transaction.getAmount() == null
+                    || transaction.getStatus() == null) {
+
+                continue;
+            }
+
+            /*
+             * Only completed/successful transactions
+             * affect financial analysis.
+             */
+            String status =
+                    transaction.getStatus().name();
+
+            boolean successful =
+                    "COMPLETED".equalsIgnoreCase(status)
+                    || "SUCCESS".equalsIgnoreCase(status)
+                    || "SUCCESSFUL".equalsIgnoreCase(status);
+
+            if (!successful) {
+                continue;
+            }
+
+            String sender =
+                    transaction.getSenderEmail();
+
+            String receiver =
+                    transaction.getReceiverEmail();
+
+            /*
+             * Ignore malformed transactions
+             * where both directions are missing.
+             */
+            if (sender == null && receiver == null) {
+                continue;
+            }
+
+            /*
+             * Ignore self-transactions.
+             *
+             * Prevents the same transaction from being
+             * counted as both income and expense.
+             */
+            if (email.equals(sender)
+                    && email.equals(receiver)) {
+
+                continue;
+            }
+
+            /*
+             * Money received by the authenticated user
+             * is income.
+             */
+            if (email.equals(receiver)) {
 
                 totalIncome =
                         totalIncome.add(
                                 transaction.getAmount()
                         );
+
+                validTransactionCount++;
+
             }
 
-            if (email.equals(
-                    transaction.getSenderEmail())) {
+            /*
+             * Money sent by the authenticated user
+             * is expense.
+             */
+            else if (email.equals(sender)) {
 
                 totalExpense =
                         totalExpense.add(
                                 transaction.getAmount()
                         );
+
+                validTransactionCount++;
             }
         }
 
+        /*
+         * Savings = Income - Expense
+         */
         BigDecimal savings =
                 totalIncome.subtract(totalExpense);
 
+        /*
+         * Savings Ratio =
+         *
+         * (Savings / Income) * 100
+         */
         BigDecimal savingsRatio =
                 BigDecimal.ZERO;
 
@@ -392,7 +419,7 @@ try {
                 totalExpense,
                 savings,
                 savingsRatio,
-                transactions.size()
+                validTransactionCount
         );
     }
 
@@ -401,6 +428,7 @@ try {
      * FINANCIAL CONFIDENCE / SCORE
      * ============================================================
      */
+
     private int calculateConfidence(
             FinancialSummary summary) {
 
@@ -446,6 +474,7 @@ try {
      * SAVING OPPORTUNITY
      * ============================================================
      */
+
     private String calculateSavingOpportunity(
             FinancialSummary summary) {
 
@@ -482,6 +511,7 @@ try {
      * FINANCIAL RISK
      * ============================================================
      */
+
     private String calculateFinancialRisk(
             FinancialSummary summary) {
 
@@ -513,6 +543,7 @@ try {
      * FINANCIAL SCORE
      * ============================================================
      */
+
     public FinancialScoreResponse getFinancialScore(
             String email) {
 
@@ -599,6 +630,7 @@ try {
      * BUDGET HEALTH
      * ============================================================
      */
+
     public BudgetHealthResponse getBudgetHealth(
             String email) {
 
@@ -694,6 +726,7 @@ try {
      * GOAL RECOMMENDATION
      * ============================================================
      */
+
     public GoalRecommendationResponse getGoalRecommendation(
             String email) {
 
@@ -802,6 +835,7 @@ try {
      * FINANCIAL CONTEXT
      * ============================================================
      */
+
     private FinancialContext buildFinancialContext(
             FinancialSummary summary) {
 
@@ -813,5 +847,63 @@ try {
                 summary.getSavingsRatio(),
                 summary.getTotalTransactions()
         );
+    }
+
+    /*
+     * ============================================================
+     * AI RESPONSE VALIDATION
+     * ============================================================
+     */
+
+    private void validateAIInsightResponse(
+            AIInsightResponse response) {
+
+        if (response == null) {
+
+            throw new AIServiceException(
+                    "AI service returned a null response."
+            );
+        }
+
+        if (response.getConfidence() < 0
+                || response.getConfidence() > 100) {
+
+            throw new AIServiceException(
+                    "AI service returned an invalid confidence score."
+            );
+        }
+
+        if (isBlank(response.getSavingOpportunity())) {
+
+            throw new AIServiceException(
+                    "AI service returned an empty saving opportunity."
+            );
+        }
+
+        if (isBlank(response.getBudgetAlert())) {
+
+            throw new AIServiceException(
+                    "AI service returned an empty budget alert."
+            );
+        }
+
+        if (isBlank(response.getInvestmentSuggestion())) {
+
+            throw new AIServiceException(
+                    "AI service returned an empty investment suggestion."
+            );
+        }
+
+        if (isBlank(response.getFinancialRisk())) {
+
+            throw new AIServiceException(
+                    "AI service returned an empty financial risk."
+            );
+        }
+    }
+
+    private boolean isBlank(String value) {
+
+        return value == null || value.isBlank();
     }
 }
