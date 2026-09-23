@@ -5,10 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.smartwallet.dto.AIInsightResponse;
 import com.smartwallet.dto.BudgetHealthResponse;
+import com.smartwallet.dto.CategorySpendingResponse;
+import com.smartwallet.dto.FinancialAnalysisContext;
+import com.smartwallet.dto.FinancialAnalysisResponse;
 import com.smartwallet.dto.FinancialContext;
 import com.smartwallet.dto.FinancialScoreResponse;
 import com.smartwallet.dto.FinancialSummary;
 import com.smartwallet.dto.GoalRecommendationResponse;
+import com.smartwallet.dto.SpendingPatternResponse;
+import com.smartwallet.dto.TransactionAnalyticsResponse;
 
 import com.smartwallet.exception.AIServiceException;
 import com.smartwallet.exception.WalletNotFoundException;
@@ -35,31 +40,55 @@ public class AIService {
     private static final Logger logger =
             LoggerFactory.getLogger(AIService.class);
 
+    // ============================================================
+    // DEPENDENCIES
+    // ============================================================
+
     private final WalletRepository walletRepository;
     private final TransactionRepository transactionRepository;
     private final AIPromptBuilder promptBuilder;
     private final ChatClient chatClient;
     private final ObjectMapper objectMapper;
 
+    private final TransactionAnalyticsService transactionAnalyticsService;
+    private final CategoryAnalysisService categoryAnalysisService;
+    private final SpendingPatternService spendingPatternService;
+
+    // ============================================================
+    // CONSTRUCTOR
+    // ============================================================
+
     public AIService(
             WalletRepository walletRepository,
             TransactionRepository transactionRepository,
             AIPromptBuilder promptBuilder,
             ChatClient.Builder chatClientBuilder,
-            ObjectMapper objectMapper) {
+            ObjectMapper objectMapper,
+            TransactionAnalyticsService transactionAnalyticsService,
+            CategoryAnalysisService categoryAnalysisService,
+            SpendingPatternService spendingPatternService) {
 
         this.walletRepository = walletRepository;
         this.transactionRepository = transactionRepository;
         this.promptBuilder = promptBuilder;
         this.chatClient = chatClientBuilder.build();
         this.objectMapper = objectMapper;
+
+        this.transactionAnalyticsService =
+                transactionAnalyticsService;
+
+        this.categoryAnalysisService =
+                categoryAnalysisService;
+
+        this.spendingPatternService =
+                spendingPatternService;
     }
 
+    // ============================================================
+    // AI INSIGHTS
+    // ============================================================
+
     /*
-     * ============================================================
-     * AI INSIGHTS
-     * ============================================================
-     *
      * Flow:
      *
      * User
@@ -102,10 +131,11 @@ public class AIService {
         }
 
         List<Transaction> transactions =
-                transactionRepository.findBySenderEmailOrReceiverEmail(
-                        email,
-                        email
-                );
+                transactionRepository
+                        .findBySenderEmailOrReceiverEmail(
+                                email,
+                                email
+                        );
 
         FinancialSummary summary =
                 calculateFinancialSummary(
@@ -122,28 +152,28 @@ public class AIService {
                 buildFinancialContext(summary);
 
         /*
-         * Build the prompt for Gemini.
+         * Build prompt for Gemini.
          */
         String prompt =
-                promptBuilder.buildFinancialInsightPrompt(context);
+                promptBuilder.buildFinancialInsightPrompt(
+                        context
+                );
 
         logger.debug(
                 "Financial AI prompt prepared for user: {}",
                 email
         );
 
-        /*
-         * Send financial context/prompt to Gemini.
-         */
         String aiResponse;
 
         try {
 
-            aiResponse = chatClient
-                    .prompt()
-                    .user(prompt)
-                    .call()
-                    .content();
+            aiResponse =
+                    chatClient
+                            .prompt()
+                            .user(prompt)
+                            .call()
+                            .content();
 
         } catch (Exception e) {
 
@@ -158,33 +188,27 @@ public class AIService {
             );
         }
 
-        /*
-         * Gemini returns JSON as String.
-         *
-         * Convert that JSON into our existing
-         * AIInsightResponse DTO.
-         */
         AIInsightResponse aiInsightResponse;
 
         try {
 
-            if (aiResponse == null || aiResponse.isBlank()) {
+            if (aiResponse == null
+                    || aiResponse.isBlank()) {
 
                 throw new AIServiceException(
                         "AI service returned an empty response."
                 );
             }
 
+            String cleanedResponse =
+                    cleanJsonResponse(aiResponse);
+
             aiInsightResponse =
                     objectMapper.readValue(
-                            aiResponse,
+                            cleanedResponse,
                             AIInsightResponse.class
                     );
 
-            /*
-             * Validate the structured AI response
-             * exactly once.
-             */
             validateAIInsightResponse(
                     aiInsightResponse
             );
@@ -207,18 +231,199 @@ public class AIService {
                 email
         );
 
-        /*
-         * Return the actual Gemini-generated
-         * structured response.
-         */
         return aiInsightResponse;
     }
 
+    // ============================================================
+    // FINANCIAL ANALYSIS
+    // ============================================================
+
     /*
-     * ============================================================
-     * BUDGET ALERT
-     * ============================================================
+     * Production flow:
+     *
+     * Transaction DB
+     *       ↓
+     * Transaction Analytics
+     *       ↓
+     * Category Analysis
+     *       ↓
+     * Spending Pattern
+     *       ↓
+     * Financial Analysis Context
+     *       ↓
+     * Prompt Builder
+     *       ↓
+     * Gemini
+     *       ↓
+     * Financial Analysis Response
      */
+
+    public FinancialAnalysisResponse
+            getFinancialAnalysis(String email) {
+
+        logger.info(
+                "Generating financial analysis for user: {}",
+                email
+        );
+
+        // --------------------------------------------------------
+        // 1. Deterministic transaction analytics
+        // --------------------------------------------------------
+
+        TransactionAnalyticsResponse analytics =
+                transactionAnalyticsService
+                        .getTransactionAnalytics(email);
+
+        // --------------------------------------------------------
+        // 2. Category-wise spending
+        // --------------------------------------------------------
+
+        List<CategorySpendingResponse> categories =
+                categoryAnalysisService
+                        .getCategorySpending(email);
+
+        // --------------------------------------------------------
+        // 3. Spending pattern
+        // --------------------------------------------------------
+
+        SpendingPatternResponse pattern =
+                spendingPatternService
+                        .getSpendingPattern(email);
+
+        // --------------------------------------------------------
+        // 4. Build AI context
+        // --------------------------------------------------------
+
+        FinancialAnalysisContext context =
+                new FinancialAnalysisContext(
+                        analytics.getTotalIncome(),
+                        analytics.getTotalExpense(),
+                        analytics.getSavings(),
+                        analytics.getSavingsRatio(),
+
+                        pattern.getTotalSpending(),
+                        pattern.getAverageSpending(),
+                        pattern.getLargestTransaction(),
+
+                        pattern.getTopCategory(),
+                        pattern.getTopCategoryAmount(),
+                        pattern.getTopCategoryPercentage(),
+
+                        pattern.getActiveCategories(),
+                        pattern.getHighValueTransactionCount(),
+                        pattern.getSpendingConcentration(),
+
+                        categories
+                );
+
+        // --------------------------------------------------------
+        // 5. Build AI prompt
+        // --------------------------------------------------------
+
+        String prompt =
+                promptBuilder.buildFinancialAnalysisPrompt(
+                        context
+                );
+
+        // --------------------------------------------------------
+        // 6. Call Gemini
+        // --------------------------------------------------------
+
+        String aiResponse;
+
+        try {
+
+            aiResponse =
+                    chatClient
+                            .prompt()
+                            .user(prompt)
+                            .call()
+                            .content();
+
+        } catch (Exception e) {
+
+            logger.error(
+                    "AI provider failure while generating financial analysis",
+                    e
+            );
+
+            throw new AIServiceException(
+                    "AI service is temporarily unavailable.",
+                    e
+            );
+        }
+
+        // --------------------------------------------------------
+        // 7. Validate AI response
+        // --------------------------------------------------------
+
+        if (aiResponse == null
+                || aiResponse.isBlank()) {
+
+            logger.error(
+                    "AI returned an empty financial analysis response"
+            );
+
+            throw new AIServiceException(
+                    "AI service returned an empty response."
+            );
+        }
+
+        try {
+
+            String cleanedResponse =
+                    cleanJsonResponse(aiResponse);
+
+            FinancialAnalysisResponse response =
+                    objectMapper.readValue(
+                            cleanedResponse,
+                            FinancialAnalysisResponse.class
+                    );
+
+            validateFinancialAnalysisResponse(
+                    response
+            );
+
+            logger.info(
+                    "Financial analysis generated successfully for user: {}",
+                    email
+            );
+
+            return response;
+
+        } catch (JsonProcessingException e) {
+
+            logger.error(
+                    "Invalid financial analysis JSON received from AI",
+                    e
+            );
+
+            throw new AIServiceException(
+                    "AI service returned an invalid financial analysis response.",
+                    e
+            );
+
+        } catch (AIServiceException e) {
+
+            throw e;
+
+        } catch (Exception e) {
+
+            logger.error(
+                    "Financial analysis processing failed",
+                    e
+            );
+
+            throw new AIServiceException(
+                    "Unable to process financial analysis.",
+                    e
+            );
+        }
+    }
+
+    // ============================================================
+    // BUDGET ALERT
+    // ============================================================
 
     private String calculateBudgetAlert(
             FinancialSummary summary) {
@@ -247,11 +452,9 @@ public class AIService {
         return "Warning: Your expenses exceed your income.";
     }
 
-    /*
-     * ============================================================
-     * INVESTMENT SUGGESTION
-     * ============================================================
-     */
+    // ============================================================
+    // INVESTMENT SUGGESTION
+    // ============================================================
 
     private String calculateInvestmentSuggestion(
             FinancialSummary summary) {
@@ -274,18 +477,9 @@ public class AIService {
         return "Focus on building an emergency fund before investing.";
     }
 
-    /*
-     * ============================================================
-     * FINANCIAL SUMMARY
-     * ============================================================
-     *
-     * IMPORTANT:
-     *
-     * Only successful/completed transactions are included.
-     *
-     * Pending, failed, cancelled or invalid transactions
-     * must not affect financial analysis.
-     */
+    // ============================================================
+    // FINANCIAL SUMMARY
+    // ============================================================
 
     private FinancialSummary calculateFinancialSummary(
             Wallet wallet,
@@ -302,9 +496,10 @@ public class AIService {
 
         for (Transaction transaction : transactions) {
 
-            /*
-             * Ignore invalid transaction records.
-             */
+            // ----------------------------------------------------
+            // Ignore invalid transaction records
+            // ----------------------------------------------------
+
             if (transaction == null
                     || transaction.getAmount() == null
                     || transaction.getStatus() == null) {
@@ -312,10 +507,10 @@ public class AIService {
                 continue;
             }
 
-            /*
-             * Only completed/successful transactions
-             * affect financial analysis.
-             */
+            // ----------------------------------------------------
+            // Only successful transactions
+            // ----------------------------------------------------
+
             String status =
                     transaction.getStatus().name();
 
@@ -334,67 +529,65 @@ public class AIService {
             String receiver =
                     transaction.getReceiverEmail();
 
-            /*
-             * Ignore malformed transactions
-             * where both directions are missing.
-             */
-            if (sender == null && receiver == null) {
+            // ----------------------------------------------------
+            // Ignore malformed transactions
+            // ----------------------------------------------------
+
+            if (sender == null
+                    && receiver == null) {
+
                 continue;
             }
 
-            /*
-             * Ignore self-transactions.
-             *
-             * Prevents the same transaction from being
-             * counted as both income and expense.
-             */
+            // ----------------------------------------------------
+            // Ignore self-transactions
+            // ----------------------------------------------------
+
             if (email.equals(sender)
                     && email.equals(receiver)) {
 
                 continue;
             }
 
-            /*
-             * Money received by the authenticated user
-             * is income.
-             */
+            BigDecimal amount =
+                    transaction.getAmount().abs();
+
+            // ----------------------------------------------------
+            // Money received = income
+            // ----------------------------------------------------
+
             if (email.equals(receiver)) {
 
                 totalIncome =
-                        totalIncome.add(
-                                transaction.getAmount()
-                        );
+                        totalIncome.add(amount);
 
                 validTransactionCount++;
-
             }
 
-            /*
-             * Money sent by the authenticated user
-             * is expense.
-             */
+            // ----------------------------------------------------
+            // Money sent = expense
+            // ----------------------------------------------------
+
             else if (email.equals(sender)) {
 
                 totalExpense =
-                        totalExpense.add(
-                                transaction.getAmount()
-                        );
+                        totalExpense.add(amount);
 
                 validTransactionCount++;
             }
         }
 
-        /*
-         * Savings = Income - Expense
-         */
+        // --------------------------------------------------------
+        // Savings
+        // --------------------------------------------------------
+
         BigDecimal savings =
                 totalIncome.subtract(totalExpense);
 
-        /*
-         * Savings Ratio =
-         *
-         * (Savings / Income) * 100
-         */
+        // --------------------------------------------------------
+        // Savings ratio
+        // --------------------------------------------------------
+
         BigDecimal savingsRatio =
                 BigDecimal.ZERO;
 
@@ -423,11 +616,9 @@ public class AIService {
         );
     }
 
-    /*
-     * ============================================================
-     * FINANCIAL CONFIDENCE / SCORE
-     * ============================================================
-     */
+    // ============================================================
+    // FINANCIAL CONFIDENCE / SCORE
+    // ============================================================
 
     private int calculateConfidence(
             FinancialSummary summary) {
@@ -469,11 +660,9 @@ public class AIService {
         return Math.min(score, 100);
     }
 
-    /*
-     * ============================================================
-     * SAVING OPPORTUNITY
-     * ============================================================
-     */
+    // ============================================================
+    // SAVING OPPORTUNITY
+    // ============================================================
 
     private String calculateSavingOpportunity(
             FinancialSummary summary) {
@@ -506,11 +695,9 @@ public class AIService {
                 + "Focus on reducing expenses and increasing your income.";
     }
 
-    /*
-     * ============================================================
-     * FINANCIAL RISK
-     * ============================================================
-     */
+    // ============================================================
+    // FINANCIAL RISK
+    // ============================================================
 
     private String calculateFinancialRisk(
             FinancialSummary summary) {
@@ -538,11 +725,9 @@ public class AIService {
         return "Low Risk: Your financial health is stable.";
     }
 
-    /*
-     * ============================================================
-     * FINANCIAL SCORE
-     * ============================================================
-     */
+    // ============================================================
+    // FINANCIAL SCORE
+    // ============================================================
 
     public FinancialScoreResponse getFinancialScore(
             String email) {
@@ -568,10 +753,11 @@ public class AIService {
         }
 
         List<Transaction> transactions =
-                transactionRepository.findBySenderEmailOrReceiverEmail(
-                        email,
-                        email
-                );
+                transactionRepository
+                        .findBySenderEmailOrReceiverEmail(
+                                email,
+                                email
+                        );
 
         FinancialSummary summary =
                 calculateFinancialSummary(
@@ -625,11 +811,9 @@ public class AIService {
         );
     }
 
-    /*
-     * ============================================================
-     * BUDGET HEALTH
-     * ============================================================
-     */
+    // ============================================================
+    // BUDGET HEALTH
+    // ============================================================
 
     public BudgetHealthResponse getBudgetHealth(
             String email) {
@@ -655,10 +839,11 @@ public class AIService {
         }
 
         List<Transaction> transactions =
-                transactionRepository.findBySenderEmailOrReceiverEmail(
-                        email,
-                        email
-                );
+                transactionRepository
+                        .findBySenderEmailOrReceiverEmail(
+                                email,
+                                email
+                        );
 
         FinancialSummary summary =
                 calculateFinancialSummary(
@@ -721,11 +906,9 @@ public class AIService {
         );
     }
 
-    /*
-     * ============================================================
-     * GOAL RECOMMENDATION
-     * ============================================================
-     */
+    // ============================================================
+    // GOAL RECOMMENDATION
+    // ============================================================
 
     public GoalRecommendationResponse getGoalRecommendation(
             String email) {
@@ -751,10 +934,11 @@ public class AIService {
         }
 
         List<Transaction> transactions =
-                transactionRepository.findBySenderEmailOrReceiverEmail(
-                        email,
-                        email
-                );
+                transactionRepository
+                        .findBySenderEmailOrReceiverEmail(
+                                email,
+                                email
+                        );
 
         FinancialSummary summary =
                 calculateFinancialSummary(
@@ -772,7 +956,8 @@ public class AIService {
         if (currentAmount.compareTo(
                 BigDecimal.ZERO) < 0) {
 
-            currentAmount = BigDecimal.ZERO;
+            currentAmount =
+                    BigDecimal.ZERO;
         }
 
         int progressPercentage =
@@ -830,11 +1015,9 @@ public class AIService {
         );
     }
 
-    /*
-     * ============================================================
-     * FINANCIAL CONTEXT
-     * ============================================================
-     */
+    // ============================================================
+    // FINANCIAL CONTEXT
+    // ============================================================
 
     private FinancialContext buildFinancialContext(
             FinancialSummary summary) {
@@ -849,11 +1032,23 @@ public class AIService {
         );
     }
 
-    /*
-     * ============================================================
-     * AI RESPONSE VALIDATION
-     * ============================================================
-     */
+    // ============================================================
+    // CLEAN JSON RESPONSE
+    // ============================================================
+
+    private String cleanJsonResponse(
+            String response) {
+
+        return response
+                .replace("```json", "")
+                .replace("```JSON", "")
+                .replace("```", "")
+                .trim();
+    }
+
+    // ============================================================
+    // AI INSIGHT VALIDATION
+    // ============================================================
 
     private void validateAIInsightResponse(
             AIInsightResponse response) {
@@ -873,28 +1068,32 @@ public class AIService {
             );
         }
 
-        if (isBlank(response.getSavingOpportunity())) {
+        if (isBlank(
+                response.getSavingOpportunity())) {
 
             throw new AIServiceException(
                     "AI service returned an empty saving opportunity."
             );
         }
 
-        if (isBlank(response.getBudgetAlert())) {
+        if (isBlank(
+                response.getBudgetAlert())) {
 
             throw new AIServiceException(
                     "AI service returned an empty budget alert."
             );
         }
 
-        if (isBlank(response.getInvestmentSuggestion())) {
+        if (isBlank(
+                response.getInvestmentSuggestion())) {
 
             throw new AIServiceException(
                     "AI service returned an empty investment suggestion."
             );
         }
 
-        if (isBlank(response.getFinancialRisk())) {
+        if (isBlank(
+                response.getFinancialRisk())) {
 
             throw new AIServiceException(
                     "AI service returned an empty financial risk."
@@ -902,8 +1101,61 @@ public class AIService {
         }
     }
 
-    private boolean isBlank(String value) {
+    // ============================================================
+    // FINANCIAL ANALYSIS VALIDATION
+    // ============================================================
 
-        return value == null || value.isBlank();
+    private void validateFinancialAnalysisResponse(
+            FinancialAnalysisResponse response) {
+
+        if (response == null) {
+
+            throw new AIServiceException(
+                    "AI service returned a null financial analysis."
+            );
+        }
+
+        if (isBlank(
+                response.getSummary())) {
+
+            throw new AIServiceException(
+                    "AI service returned an empty summary."
+            );
+        }
+
+        if (isBlank(
+                response.getSpendingAnalysis())) {
+
+            throw new AIServiceException(
+                    "AI service returned an empty spending analysis."
+            );
+        }
+
+        if (isBlank(
+                response.getRiskAnalysis())) {
+
+            throw new AIServiceException(
+                    "AI service returned an empty risk analysis."
+            );
+        }
+
+        if (isBlank(
+                response.getRecommendation())) {
+
+            throw new AIServiceException(
+                    "AI service returned an empty recommendation."
+            );
+        }
+    }
+
+    // ============================================================
+    // STRING VALIDATION
+    // ============================================================
+
+    private boolean isBlank(
+            String value) {
+
+        return value == null
+                || value.isBlank();
     }
 }

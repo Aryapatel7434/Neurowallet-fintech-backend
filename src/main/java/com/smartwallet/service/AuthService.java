@@ -7,8 +7,10 @@ import com.smartwallet.model.User;
 import com.smartwallet.repository.UserRepository;
 import com.smartwallet.security.JwtUtil;
 import com.smartwallet.security.LoginAttemptService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,32 +43,32 @@ public class AuthService {
         this.refreshTokenService = refreshTokenService;
     }
 
+    // ============================================================
+    // LOGIN
+    // ============================================================
+
     public AuthResponse login(LoginRequest request) {
 
-        System.out.println(
-                "EMAIL RECEIVED = " +
-                        request.getEmail()
-        );
-
-        System.out.println(
-                "ALL USERS IN DB = " +
-                        userRepository.findAll().size()
-        );
+        String email = request.getEmail();
 
         logger.info(
                 "Login request received for email: {}",
-                request.getEmail()
+                email
         );
 
-        if (loginAttemptService.isBlocked(request.getEmail())) {
+        // --------------------------------------------------------
+        // Check login attempt lock
+        // --------------------------------------------------------
+
+        if (loginAttemptService.isBlocked(email)) {
 
             logger.warn(
                     "Login blocked due to too many failed attempts for email: {}",
-                    request.getEmail()
+                    email
             );
 
             auditService.log(
-                    request.getEmail(),
+                    email,
                     "LOGIN",
                     "BLOCKED"
             );
@@ -76,37 +78,24 @@ public class AuthService {
             );
         }
 
-       System.out.println("EMAIL FROM REQUEST = [" + request.getEmail() + "]");
+        // --------------------------------------------------------
+        // Find user
+        // --------------------------------------------------------
 
-User user = userRepository.findByEmail(
-        request.getEmail()
-);
-
-System.out.println("USER = " + user);
-
-        System.out.println(
-                "USER OBJECT = " +
-                        user
-        );
-
-        System.out.println(
-                "USER FOUND = " +
-                        (user != null)
-        );
+        User user =
+                userRepository.findByEmail(email);
 
         if (user == null) {
 
             logger.warn(
                     "Login failed. Invalid email: {}",
-                    request.getEmail()
+                    email
             );
 
-            loginAttemptService.loginFailed(
-                    request.getEmail()
-            );
+            loginAttemptService.loginFailed(email);
 
             auditService.log(
-                    request.getEmail(),
+                    email,
                     "LOGIN",
                     "FAILED"
             );
@@ -116,32 +105,27 @@ System.out.println("USER = " + user);
             );
         }
 
-        System.out.println("RAW PASSWORD = " + request.getPassword());
-System.out.println("DB HASH = " + user.getPassword());
+        // --------------------------------------------------------
+        // Verify password
+        // --------------------------------------------------------
 
-boolean passwordMatch =
-    passwordEncoder.matches(
-        request.getPassword(),
-        user.getPassword()
-    );
-
-System.out.println("PASSWORD MATCH = " + passwordMatch);
-
-       
+        boolean passwordMatch =
+                passwordEncoder.matches(
+                        request.getPassword(),
+                        user.getPassword()
+                );
 
         if (!passwordMatch) {
 
             logger.warn(
                     "Login failed. Invalid password for email: {}",
-                    request.getEmail()
+                    email
             );
 
-            loginAttemptService.loginFailed(
-                    request.getEmail()
-            );
+            loginAttemptService.loginFailed(email);
 
             auditService.log(
-                    request.getEmail(),
+                    email,
                     "LOGIN",
                     "FAILED"
             );
@@ -151,20 +135,26 @@ System.out.println("PASSWORD MATCH = " + passwordMatch);
             );
         }
 
-        loginAttemptService.loginSucceeded(
-                request.getEmail()
-        );
+        // --------------------------------------------------------
+        // Successful login
+        // --------------------------------------------------------
+
+        loginAttemptService.loginSucceeded(email);
 
         auditService.log(
-                request.getEmail(),
+                email,
                 "LOGIN",
                 "SUCCESS"
         );
 
         logger.info(
                 "Login successful for email: {}",
-                request.getEmail()
+                email
         );
+
+        // --------------------------------------------------------
+        // Generate access token
+        // --------------------------------------------------------
 
         String accessToken =
                 jwtUtil.generateToken(
@@ -172,18 +162,31 @@ System.out.println("PASSWORD MATCH = " + passwordMatch);
                         user.getRole()
                 );
 
+        // --------------------------------------------------------
+        // Generate refresh token
+        // --------------------------------------------------------
+
         RefreshToken refreshToken =
                 refreshTokenService.createRefreshToken(
                         user.getEmail()
                 );
 
-     return new AuthResponse(
-    accessToken,
-    refreshToken.getToken(),
-    user.getEmail(),
-    user.getName()
-);
+        // --------------------------------------------------------
+        // Return authentication response
+        // --------------------------------------------------------
+
+        return new AuthResponse(
+                accessToken,
+                refreshToken.getToken(),
+                user.getEmail(),
+                user.getName()
+        );
     }
+
+    // ============================================================
+    // REFRESH ACCESS TOKEN
+    // ============================================================
+
     public AuthResponse refreshToken(
             String refreshTokenValue) {
 
@@ -194,10 +197,18 @@ System.out.println("PASSWORD MATCH = " + passwordMatch);
 
         if (refreshToken == null) {
 
+            logger.warn(
+                    "Refresh token validation failed"
+            );
+
             throw new RuntimeException(
                     "Invalid Refresh Token"
             );
         }
+
+        // --------------------------------------------------------
+        // Find user associated with refresh token
+        // --------------------------------------------------------
 
         User user =
                 userRepository.findByEmail(
@@ -206,10 +217,18 @@ System.out.println("PASSWORD MATCH = " + passwordMatch);
 
         if (user == null) {
 
+            logger.warn(
+                    "Refresh token belongs to a non-existent user"
+            );
+
             throw new RuntimeException(
                     "User not found"
             );
         }
+
+        // --------------------------------------------------------
+        // Generate new access token
+        // --------------------------------------------------------
 
         String accessToken =
                 jwtUtil.generateToken(
@@ -217,11 +236,15 @@ System.out.println("PASSWORD MATCH = " + passwordMatch);
                         user.getRole()
                 );
 
-   return new AuthResponse(
-    accessToken,
-    refreshToken.getToken(),
-    user.getEmail(),
-    user.getName()
-);
+        // --------------------------------------------------------
+        // Return authentication response
+        // --------------------------------------------------------
+
+        return new AuthResponse(
+                accessToken,
+                refreshToken.getToken(),
+                user.getEmail(),
+                user.getName()
+        );
     }
 }
