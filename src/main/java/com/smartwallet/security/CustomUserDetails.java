@@ -21,11 +21,10 @@ public Collection<? extends GrantedAuthority> getAuthorities() {
 
     return List.of(
             new SimpleGrantedAuthority(
-                    "ROLE_" + user.getRole()
+                    user.getRole()
             )
     );
 }
-
     @Override
     //Return store encypted password //uses during login verification
     public String getPassword() {

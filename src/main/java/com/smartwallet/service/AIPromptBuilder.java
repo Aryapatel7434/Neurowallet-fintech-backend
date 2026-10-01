@@ -2,6 +2,7 @@ package com.smartwallet.service;
 
 import com.smartwallet.dto.FinancialAnalysisContext;
 import com.smartwallet.dto.FinancialContext;
+import java.math.BigDecimal;
 
 import org.springframework.stereotype.Component;
 
@@ -439,4 +440,90 @@ public class AIPromptBuilder {
                 context.getCategories()
         );
     }
+    public String buildBudgetAdvisorPrompt(
+        BigDecimal income,
+        BigDecimal expense,
+        BigDecimal savings,
+        BigDecimal essentialExpense,
+        BigDecimal discretionaryExpense,
+        BigDecimal recommendedSavings,
+        BigDecimal essentialBudget,
+        BigDecimal discretionaryBudget) {
+
+    return """
+            You are an AI financial budgeting advisor inside NeuroWallet.
+
+            Your job is to analyze the financial facts provided by the
+            backend and generate a practical personalized budget plan.
+
+            IMPORTANT RULES:
+
+            1. Use ONLY the financial numbers provided below.
+            2. Do NOT invent transactions, income, expenses, or categories.
+            3. Do NOT change the backend financial facts.
+            4. If expenses exceed income, clearly explain that the user
+               needs to restore positive cash flow first.
+            5. Recommendations must be practical and actionable.
+            6. Do not provide investment, tax, loan, or legal advice.
+            7. Return ONLY valid JSON.
+            8. Do not use markdown.
+            9. Do not include ```json or ```.
+
+            FINANCIAL DATA:
+
+            Monthly Income:
+            %s
+
+            Monthly Expense:
+            %s
+
+            Current Savings:
+            %s
+
+            Essential Expenses:
+            %s
+
+            Discretionary Expenses:
+            %s
+
+            Backend Recommended Savings Target:
+            %s
+
+            Backend Essential Budget:
+            %s
+
+            Backend Discretionary Budget:
+            %s
+
+            Generate a personalized budget recommendation.
+
+            Return EXACTLY this JSON structure:
+
+            {
+              "summary": "short personalized financial summary",
+              "priority": "CRITICAL, HIGH, MEDIUM, or NORMAL",
+              "recommendedSavings": 0,
+              "essentialBudget": 0,
+              "discretionaryBudget": 0,
+              "recommendations": [
+                "recommendation 1",
+                "recommendation 2",
+                "recommendation 3"
+              ]
+            }
+
+            The numeric values must remain consistent with the
+            backend-provided financial facts and budget targets.
+            """
+            .formatted(
+                    income,
+                    expense,
+                    savings,
+                    essentialExpense,
+                    discretionaryExpense,
+                    recommendedSavings,
+                    essentialBudget,
+                    discretionaryBudget
+            );
+}
 }

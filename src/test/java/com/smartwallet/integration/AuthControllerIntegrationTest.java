@@ -5,8 +5,10 @@ import com.smartwallet.model.Wallet;
 import com.smartwallet.repository.UserRepository;
 import com.smartwallet.repository.WalletRepository;
 import com.smartwallet.security.JwtUtil;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -56,9 +58,24 @@ public class AuthControllerIntegrationTest {
             user.setPassword(
                     passwordEncoder.encode("123456")
             );
-            user.setRole("USER");
+            user.setRole("ROLE_USER");
 
             user = userRepository.save(user);
+
+        } else {
+
+            /*
+             * Normalize role for integration testing.
+             */
+            user.setRole("ROLE_USER");
+
+            if (user.getPassword() == null) {
+                user.setPassword(
+                        passwordEncoder.encode("123456")
+                );
+            }
+
+            userRepository.save(user);
         }
 
         Wallet wallet =

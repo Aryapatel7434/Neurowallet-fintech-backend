@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
-
+import com.smartwallet.dto.BudgetAdvisorResponse;
 @Service
 public class AIService {
 
@@ -53,7 +53,8 @@ public class AIService {
     private final TransactionAnalyticsService transactionAnalyticsService;
     private final CategoryAnalysisService categoryAnalysisService;
     private final SpendingPatternService spendingPatternService;
-
+    
+    private final BudgetAdvisorService budgetAdvisorService;
     // ============================================================
     // CONSTRUCTOR
     // ============================================================
@@ -66,7 +67,7 @@ public class AIService {
             ObjectMapper objectMapper,
             TransactionAnalyticsService transactionAnalyticsService,
             CategoryAnalysisService categoryAnalysisService,
-            SpendingPatternService spendingPatternService) {
+            SpendingPatternService spendingPatternService, BudgetAdvisorService budgetAdvisorService) {
 
         this.walletRepository = walletRepository;
         this.transactionRepository = transactionRepository;
@@ -82,6 +83,9 @@ public class AIService {
 
         this.spendingPatternService =
                 spendingPatternService;
+        
+        this.budgetAdvisorService =
+            budgetAdvisorService;
     }
 
     // ============================================================
@@ -1158,4 +1162,237 @@ public class AIService {
         return value == null
                 || value.isBlank();
     }
+   public BudgetAdvisorResponse getBudgetAdvisor(
+        String email) {
+
+    logger.info(
+            "Generating AI budget advisor for user: {}",
+            email
+    );
+
+    // ------------------------------------------------------------
+    // 1. Get trusted deterministic financial data
+    // ------------------------------------------------------------
+
+    BudgetAdvisorResponse backendBudget =
+            budgetAdvisorService
+                    .getBudgetAdvisor(email);
+
+    // ------------------------------------------------------------
+    // 2. Build AI prompt
+    // ------------------------------------------------------------
+
+    String prompt =
+            promptBuilder.buildBudgetAdvisorPrompt(
+                    backendBudget.getMonthlyIncome(),
+                    backendBudget.getMonthlyExpense(),
+                    backendBudget.getCurrentSavings(),
+                    backendBudget.getEssentialBudget(),
+                    backendBudget.getDiscretionaryBudget(),
+                    backendBudget.getRecommendedSavings(),
+                    backendBudget.getEssentialBudget(),
+                    backendBudget.getDiscretionaryBudget()
+            );
+
+    try {
+
+        // --------------------------------------------------------
+        // 3. Call Gemini
+        // --------------------------------------------------------
+
+        String aiResponse =
+                chatClient
+                        .prompt()
+                        .user(prompt)
+                        .call()
+                        .content();
+
+        if (aiResponse == null
+                || aiResponse.isBlank()) {
+
+            throw new AIServiceException(
+                    "Gemini returned an empty budget response"
+            );
+        }
+
+        // --------------------------------------------------------
+        // 4. Clean JSON
+        // --------------------------------------------------------
+
+        String cleanJson =
+                aiResponse
+                        .replace("```json", "")
+                        .replace("```JSON", "")
+                        .replace("```", "")
+                        .trim();
+
+        // --------------------------------------------------------
+        // 5. Parse AI response
+        // --------------------------------------------------------
+
+        BudgetAdvisorResponse aiBudget =
+                objectMapper.readValue(
+                        cleanJson,
+                        BudgetAdvisorResponse.class
+                );
+
+        // --------------------------------------------------------
+        // 6. Merge trusted backend facts with AI decisions
+        // --------------------------------------------------------
+
+        BudgetAdvisorResponse finalResponse =
+                new BudgetAdvisorResponse();
+
+        // Trusted backend values
+        finalResponse.setMonthlyIncome(
+                backendBudget.getMonthlyIncome()
+        );
+
+        finalResponse.setMonthlyExpense(
+                backendBudget.getMonthlyExpense()
+        );
+
+        finalResponse.setCurrentSavings(
+                backendBudget.getCurrentSavings()
+        );
+
+        // AI-generated values
+        finalResponse.setRecommendedSavings(
+                aiBudget.getRecommendedSavings()
+        );
+
+        finalResponse.setEssentialBudget(
+                aiBudget.getEssentialBudget()
+        );
+
+        finalResponse.setDiscretionaryBudget(
+                aiBudget.getDiscretionaryBudget()
+        );
+
+        finalResponse.setPriority(
+                aiBudget.getPriority()
+        );
+
+        finalResponse.setSummary(
+                aiBudget.getSummary()
+        );
+
+        finalResponse.setRecommendations(
+                aiBudget.getRecommendations()
+        );
+
+        // --------------------------------------------------------
+        // 7. Validate final response
+        // --------------------------------------------------------
+
+        validateBudgetAdvisorResponse(
+                finalResponse
+        );
+
+        logger.info(
+                "AI budget advisor generated successfully for user: {}",
+                email
+        );
+
+        return finalResponse;
+
+    } catch (AIServiceException e) {
+
+        throw e;
+
+    } catch (Exception e) {
+
+        logger.error(
+                "Budget Advisor AI generation failed",
+                e
+        );
+
+        throw new AIServiceException(
+                "Failed to generate AI budget advisor response",
+                e
+        );
+    }
+}
+ private void validateBudgetAdvisorResponse(
+        BudgetAdvisorResponse response) {
+
+    if (response == null) {
+
+        throw new AIServiceException(
+                "AI budget advisor response is null"
+        );
+    }
+
+    // ------------------------------------------------------------
+    // Trusted backend financial facts
+    // ------------------------------------------------------------
+
+    if (response.getMonthlyIncome() == null) {
+
+        throw new AIServiceException(
+                "Backend budget response is missing monthlyIncome"
+        );
+    }
+
+    if (response.getMonthlyExpense() == null) {
+
+        throw new AIServiceException(
+                "Backend budget response is missing monthlyExpense"
+        );
+    }
+
+    if (response.getCurrentSavings() == null) {
+
+        throw new AIServiceException(
+                "Backend budget response is missing currentSavings"
+        );
+    }
+
+    // ------------------------------------------------------------
+    // AI-generated budget decisions
+    // ------------------------------------------------------------
+
+    if (response.getRecommendedSavings() == null) {
+
+        throw new AIServiceException(
+                "AI budget advisor response is missing recommendedSavings"
+        );
+    }
+
+    if (response.getEssentialBudget() == null) {
+
+        throw new AIServiceException(
+                "AI budget advisor response is missing essentialBudget"
+        );
+    }
+
+    if (response.getDiscretionaryBudget() == null) {
+
+        throw new AIServiceException(
+                "AI budget advisor response is missing discretionaryBudget"
+        );
+    }
+
+    if (isBlank(response.getPriority())) {
+
+        throw new AIServiceException(
+                "AI budget advisor response is missing priority"
+        );
+    }
+
+    if (isBlank(response.getSummary())) {
+
+        throw new AIServiceException(
+                "AI budget advisor response is missing summary"
+        );
+    }
+
+    if (response.getRecommendations() == null
+            || response.getRecommendations().isEmpty()) {
+
+        throw new AIServiceException(
+                "AI budget advisor response is missing recommendations"
+        );
+    }
+}
 }

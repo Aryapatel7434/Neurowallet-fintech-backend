@@ -25,7 +25,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.smartwallet.dto.BudgetAdvisorResponse;
 @Tag(
         name = "AI APIs",
         description = "AI-powered financial analysis and recommendation endpoints"
@@ -203,4 +203,17 @@ public class AIController {
                 authentication.getName()
         );
     }
+    @Operation(
+        summary = "AI Budget Advisor",
+        description = "Generates a personalized AI-powered budget plan using the authenticated user's financial data."
+)
+@GetMapping("/budget-advisor")
+@PreAuthorize("hasAnyRole('USER','ADMIN')")
+public BudgetAdvisorResponse getBudgetAdvisor(
+        Authentication authentication) {
+
+    return aiService.getBudgetAdvisor(
+            authentication.getName()
+    );
+}
 }

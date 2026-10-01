@@ -5,8 +5,10 @@ import com.smartwallet.model.Wallet;
 import com.smartwallet.repository.UserRepository;
 import com.smartwallet.repository.WalletRepository;
 import com.smartwallet.security.JwtUtil;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,44 +44,128 @@ public class TransactionControllerIntegrationTest {
     @BeforeEach
     void setup() {
 
-        User user =
+        // =========================================================
+        // SENDER USER
+        // =========================================================
+
+        User sender =
                 userRepository.findByEmail(
                         "integration@test.com"
                 );
 
-        if (user == null) {
+        if (sender == null) {
 
-            user = new User();
+            sender = new User();
 
-            user.setName("Integration User");
-            user.setEmail("integration@test.com");
-            user.setPassword(
+            sender.setName("Integration User");
+            sender.setEmail("integration@test.com");
+
+            sender.setPassword(
                     passwordEncoder.encode("123456")
             );
-            user.setRole("USER");
 
-            user = userRepository.save(user);
+            sender.setRole("ROLE_USER");
+
+            sender = userRepository.save(sender);
+
+        } else {
+
+            sender.setRole("ROLE_USER");
+
+            if (sender.getPassword() == null) {
+                sender.setPassword(
+                        passwordEncoder.encode("123456")
+                );
+            }
+
+            userRepository.save(sender);
         }
 
-        Wallet wallet =
+        // =========================================================
+        // SENDER WALLET
+        // =========================================================
+
+        Wallet senderWallet =
                 walletRepository.findByUserEmail(
                         "integration@test.com"
                 );
 
-        if (wallet == null) {
+        if (senderWallet == null) {
 
-            wallet = new Wallet();
+            senderWallet = new Wallet();
 
-            wallet.setUser(user);
+            senderWallet.setUser(sender);
 
-            wallet.setBalance(
+            senderWallet.setBalance(
                     new BigDecimal("10000")
             );
 
-            wallet.setCurrency("INR");
-            wallet.setStatus("ACTIVE");
+            senderWallet.setCurrency("INR");
+            senderWallet.setStatus("ACTIVE");
 
-            walletRepository.save(wallet);
+            walletRepository.save(senderWallet);
+        }
+
+        // =========================================================
+        // RECEIVER USER
+        // =========================================================
+
+        User receiver =
+                userRepository.findByEmail(
+                        "rahul@gmail.com"
+                );
+
+        if (receiver == null) {
+
+            receiver = new User();
+
+            receiver.setName("Rahul");
+            receiver.setEmail("rahul@gmail.com");
+
+            receiver.setPassword(
+                    passwordEncoder.encode("123456")
+            );
+
+            receiver.setRole("ROLE_USER");
+
+            receiver = userRepository.save(receiver);
+
+        } else {
+
+            receiver.setRole("ROLE_USER");
+
+            if (receiver.getPassword() == null) {
+                receiver.setPassword(
+                        passwordEncoder.encode("123456")
+                );
+            }
+
+            userRepository.save(receiver);
+        }
+
+        // =========================================================
+        // RECEIVER WALLET
+        // =========================================================
+
+        Wallet receiverWallet =
+                walletRepository.findByUserEmail(
+                        "rahul@gmail.com"
+                );
+
+        if (receiverWallet == null) {
+
+            receiverWallet = new Wallet();
+
+            receiverWallet.setUser(receiver);
+
+            receiverWallet.setBalance(
+                    new BigDecimal("5000")
+            );
+
+            receiverWallet.setCurrency("INR");
+            receiverWallet.setStatus("ACTIVE");
+
+            walletRepository.save(receiverWallet);
         }
     }
 
@@ -92,13 +178,13 @@ public class TransactionControllerIntegrationTest {
                         "USER"
                 );
 
-      String json = """
-{
-   "receiverEmail":"rahul@gmail.com",
-   "amount":100,
-   "category":"FOOD"
-}
-""";
+        String json = """
+        {
+            "receiverEmail":"rahul@gmail.com",
+            "amount":100,
+            "category":"FOOD"
+        }
+        """;
 
         mockMvc.perform(
                 post("/api/transactions/send")
