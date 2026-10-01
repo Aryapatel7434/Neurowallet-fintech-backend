@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
-
+import com.smartwallet.dto.FraudDetectionResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 
@@ -33,6 +33,8 @@ import com.smartwallet.service.AIAssistantService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import com.smartwallet.service.FraudDetectionService;
+import org.springframework.web.bind.annotation.PathVariable;
 @Tag(
         name = "AI APIs",
         description = "AI-powered financial analysis and recommendation endpoints"
@@ -45,13 +47,13 @@ public class AIController {
     private final TransactionAnalyticsService transactionAnalyticsService;
     private final CategoryAnalysisService categoryAnalysisService;
     private final SpendingPatternService spendingPatternService;
-     
+     private final FraudDetectionService fraudDetectionService;
     private final AIAssistantService aiAssistantService;
     public AIController(
             AIService aiService,
             TransactionAnalyticsService transactionAnalyticsService,
             CategoryAnalysisService categoryAnalysisService,
-            SpendingPatternService spendingPatternService,AIAssistantService aiAssistantService) {
+            SpendingPatternService spendingPatternService,AIAssistantService aiAssistantService, FraudDetectionService fraudDetectionService) {
 
         this.aiService = aiService;
 
@@ -65,6 +67,9 @@ public class AIController {
                 spendingPatternService;
         
         this.aiAssistantService = aiAssistantService;
+        
+        this.fraudDetectionService =
+        fraudDetectionService;
     }
 
     // ============================================================
@@ -239,6 +244,21 @@ public AIAssistantResponse askAssistant(
     return aiAssistantService.askAssistant(
             authentication.getName(),
             request.getQuestion()
+    );
+}
+@Operation(
+        summary = "AI Fraud Detection",
+        description = "Analyzes a transaction using NeuroWallet's rule-based fraud detection engine and user behavioral history."
+)
+@GetMapping("/fraud/{transactionId}")
+@PreAuthorize("hasAnyRole('USER','ADMIN')")
+public FraudDetectionResponse detectFraud(
+        @PathVariable Long transactionId,
+        Authentication authentication) {
+
+    return fraudDetectionService.detectFraud(
+            transactionId,
+            authentication.getName()
     );
 }
 }
