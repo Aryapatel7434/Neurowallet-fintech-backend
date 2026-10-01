@@ -26,6 +26,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.smartwallet.dto.BudgetAdvisorResponse;
+import com.smartwallet.dto.AIAssistantRequest;
+import com.smartwallet.dto.AIAssistantResponse;
+import com.smartwallet.service.AIAssistantService;
+
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 @Tag(
         name = "AI APIs",
         description = "AI-powered financial analysis and recommendation endpoints"
@@ -38,12 +45,13 @@ public class AIController {
     private final TransactionAnalyticsService transactionAnalyticsService;
     private final CategoryAnalysisService categoryAnalysisService;
     private final SpendingPatternService spendingPatternService;
-
+     
+    private final AIAssistantService aiAssistantService;
     public AIController(
             AIService aiService,
             TransactionAnalyticsService transactionAnalyticsService,
             CategoryAnalysisService categoryAnalysisService,
-            SpendingPatternService spendingPatternService) {
+            SpendingPatternService spendingPatternService,AIAssistantService aiAssistantService) {
 
         this.aiService = aiService;
 
@@ -55,6 +63,8 @@ public class AIController {
 
         this.spendingPatternService =
                 spendingPatternService;
+        
+        this.aiAssistantService = aiAssistantService;
     }
 
     // ============================================================
@@ -214,6 +224,21 @@ public BudgetAdvisorResponse getBudgetAdvisor(
 
     return aiService.getBudgetAdvisor(
             authentication.getName()
+    );
+}
+@Operation(
+        summary = "AI Financial Assistant",
+        description = "Answers financial questions using the authenticated user's trusted financial context."
+)
+@PostMapping("/assistant")
+@PreAuthorize("hasAnyRole('USER','ADMIN')")
+public AIAssistantResponse askAssistant(
+        @Valid @RequestBody AIAssistantRequest request,
+        Authentication authentication) {
+
+    return aiAssistantService.askAssistant(
+            authentication.getName(),
+            request.getQuestion()
     );
 }
 }

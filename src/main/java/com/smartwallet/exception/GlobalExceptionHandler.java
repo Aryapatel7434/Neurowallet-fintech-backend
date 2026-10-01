@@ -6,7 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -21,7 +22,10 @@ public class GlobalExceptionHandler {
                 ex.getMessage()
         );
 
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(
+                error,
+                HttpStatus.NOT_FOUND
+        );
     }
 
     @ExceptionHandler(BadRequestException.class)
@@ -34,7 +38,10 @@ public class GlobalExceptionHandler {
                 ex.getMessage()
         );
 
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(
+                error,
+                HttpStatus.BAD_REQUEST
+        );
     }
 
     @ExceptionHandler(AccessDeniedException.class)
@@ -47,7 +54,77 @@ public class GlobalExceptionHandler {
                 "Access Denied"
         );
 
-        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(
+                error,
+                HttpStatus.FORBIDDEN
+        );
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse>
+    handleValidationException(
+            MethodArgumentNotValidException ex) {
+
+        String message = ex.getBindingResult()
+                .getFieldErrors()
+                .get(0)
+                .getDefaultMessage();
+
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                message
+        );
+
+        return new ResponseEntity<>(
+                error,
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(WalletNotFoundException.class)
+    public ResponseEntity<ErrorResponse>
+    handleWalletNotFound(
+            WalletNotFoundException ex) {
+
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage()
+        );
+
+        return new ResponseEntity<>(
+                error,
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    /**
+     * Handles AI request validation and AI-specific
+     * application errors.
+     *
+     * Examples:
+     * - Empty/invalid AI question
+     * - Prompt injection attempt
+     * - Unsupported AI instruction
+     * - Invalid financial context
+     * - Invalid AI response
+     */
+    @ExceptionHandler(AIServiceException.class)
+    public ResponseEntity<ErrorResponse>
+    handleAIServiceException(
+            AIServiceException ex) {
+
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage()
+        );
+
+        return new ResponseEntity<>(
+                error,
+                HttpStatus.BAD_REQUEST
+        );
     }
 
     @ExceptionHandler(Exception.class)
@@ -60,50 +137,9 @@ public class GlobalExceptionHandler {
                 ex.getMessage()
         );
 
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(
+                error,
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-public ResponseEntity<ErrorResponse> handleValidationException(
-        MethodArgumentNotValidException ex) {
-
-    String message = ex.getBindingResult()
-            .getFieldErrors()
-            .get(0)
-            .getDefaultMessage();
-
-    ErrorResponse error = new ErrorResponse(
-            LocalDateTime.now(),
-            HttpStatus.BAD_REQUEST.value(),
-            message
-    );
-
-    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-}
-@ExceptionHandler(WalletNotFoundException.class)
-public ResponseEntity<ErrorResponse> handleWalletNotFound(
-        WalletNotFoundException ex) {
-
-    ErrorResponse error = new ErrorResponse(
-            LocalDateTime.now(),
-            HttpStatus.NOT_FOUND.value(),
-            ex.getMessage()
-    );
-
-    return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-}
-@ExceptionHandler(AIServiceException.class)
-public ResponseEntity<ErrorResponse> handleAIServiceException(
-        AIServiceException ex) {
-
-    ErrorResponse error = new ErrorResponse(
-            LocalDateTime.now(),
-            HttpStatus.SERVICE_UNAVAILABLE.value(),
-            ex.getMessage()
-    );
-
-    return new ResponseEntity<>(
-            error,
-            HttpStatus.SERVICE_UNAVAILABLE
-    );
-}
 }
