@@ -11,6 +11,7 @@ import com.smartwallet.model.WalletTransaction;
 import java.util.List;
 import com.smartwallet.dto.TransferMoneyRequest;
 import com.smartwallet.dto.WalletSummaryResponse;
+import org.springframework.security.core.Authentication;
 @RestController
 @RequestMapping("/api/wallet")
 public class WalletController {
@@ -21,11 +22,11 @@ public class WalletController {
         this.walletService = walletService;
     }
 
-    @GetMapping("/me")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public Wallet getMyWallet() {
-        return walletService.getMyWallet();
-    }
+ @GetMapping("/me")
+@PreAuthorize("hasAnyRole('USER','ADMIN')")
+public Wallet getMyWallet(Authentication authentication) {
+    return walletService.getWalletByEmail(authentication.getName());
+}
         @GetMapping("/transactions")
 @PreAuthorize(
         "hasAnyRole('USER','ADMIN')"

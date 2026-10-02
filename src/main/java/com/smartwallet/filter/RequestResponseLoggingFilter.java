@@ -1,24 +1,31 @@
 package com.smartwallet.filter;
 
+import java.io.IOException;
+import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
-public class RequestResponseLoggingFilter extends OncePerRequestFilter {
+public class RequestResponseLoggingFilter
+        extends OncePerRequestFilter {
 
     private static final Logger logger =
-            LoggerFactory.getLogger(RequestResponseLoggingFilter.class);
+            LoggerFactory.getLogger(
+                    RequestResponseLoggingFilter.class
+            );
 
-    private static final String REQUEST_ID = "requestId";
+    private static final String REQUEST_ID =
+            "requestId";
 
     @Override
     protected void doFilterInternal(
@@ -27,35 +34,68 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
             FilterChain filterChain)
             throws ServletException, IOException {
 
-        String requestId = UUID.randomUUID().toString();
+        String requestId =
+                UUID.randomUUID().toString();
 
-        MDC.put(REQUEST_ID, requestId);
-
-        long startTime = System.currentTimeMillis();
+        long startTime =
+                System.currentTimeMillis();
 
         try {
 
+            // ----------------------------------------------------
+            // REQUEST ID
+            // ----------------------------------------------------
+
+            MDC.put(
+                    REQUEST_ID,
+                    requestId
+            );
+
+            response.setHeader(
+                    "X-Request-ID",
+                    requestId
+            );
+
+            // ----------------------------------------------------
+            // REQUEST LOG
+            // ----------------------------------------------------
+
             logger.info(
-                    "Incoming Request | RequestId: {} | Method: {} | URI: {}",
-                    requestId,
+                    "Request started: {} {}",
                     request.getMethod(),
                     request.getRequestURI()
             );
 
-            filterChain.doFilter(request, response);
+            // ----------------------------------------------------
+            // CONTINUE REQUEST
+            // ----------------------------------------------------
+
+            filterChain.doFilter(
+                    request,
+                    response
+            );
 
         } finally {
 
-            long timeTaken = System.currentTimeMillis() - startTime;
+            // ----------------------------------------------------
+            // RESPONSE LOG
+            // ----------------------------------------------------
+
+            long duration =
+                    System.currentTimeMillis()
+                    - startTime;
 
             logger.info(
-                    "Completed Request | RequestId: {} | Method: {} | URI: {} | Status: {} | TimeTaken: {} ms",
-                    requestId,
+                    "Request completed: {} {} - Status: {} - Duration: {} ms",
                     request.getMethod(),
                     request.getRequestURI(),
                     response.getStatus(),
-                    timeTaken
+                    duration
             );
+
+            // ----------------------------------------------------
+            // CLEAN MDC
+            // ----------------------------------------------------
 
             MDC.remove(REQUEST_ID);
         }

@@ -1,9 +1,13 @@
 package com.smartwallet.security;
+
+import java.util.List;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,13 +24,25 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)
-            throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http) throws Exception {
 
-       http
-    .cors(cors -> {})
-    .csrf(csrf -> csrf.disable())
-               
+        http
+                // =========================
+                // CORS
+                // =========================
+                .cors(cors -> {
+                })
+
+                // =========================
+                // CSRF
+                // JWT-based API
+                // =========================
+                .csrf(csrf -> csrf.disable())
+
+                // =========================
+                // Authorization Rules
+                // =========================
                 .authorizeHttpRequests(auth -> auth
 
                         // Authentication APIs
@@ -38,36 +54,75 @@ public class SecurityConfig {
                         ).permitAll()
 
                         // Registration
-                        .requestMatchers("/api/users/register").permitAll()
+                        .requestMatchers(
+                                "/api/users/register"
+                        ).permitAll()
 
                         // OTP
-                        .requestMatchers("/api/otp/**").permitAll()
+                        .requestMatchers(
+                                "/api/otp/**"
+                        ).permitAll()
 
-                        // Audit
-                        .requestMatchers("/api/audit/**").permitAll()
+                        // Audit APIs
+                        .requestMatchers(
+                                "/api/audit/**"
+                        ).authenticated()
 
+                        // =========================
                         // Actuator
-                        .requestMatchers("/actuator/**").permitAll()
+                        // =========================
+                        .requestMatchers(
+                                "/actuator/health"
+                        ).permitAll()
 
-                        // Swagger
+                        .requestMatchers(
+                                "/actuator/info"
+                        ).permitAll()
+
+                        .requestMatchers(
+                                "/actuator/metrics/**"
+                        ).hasAuthority("ROLE_ADMIN")
+
+                        // =========================
+                        // Swagger / OpenAPI
+                        // =========================
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**"
                         ).permitAll()
 
+                        // =========================
                         // Protected APIs
-                        .requestMatchers("/api/wallet/**").authenticated()
-                        .requestMatchers("/api/transactions/**").authenticated()
-                        .requestMatchers("/api/dashboard/**").authenticated()
+                        // =========================
+                        .requestMatchers(
+                                "/api/wallet/**"
+                        ).authenticated()
 
+                        .requestMatchers(
+                                "/api/transactions/**"
+                        ).authenticated()
+
+                        .requestMatchers(
+                                "/api/dashboard/**"
+                        ).authenticated()
+
+                        // =========================
                         // Admin APIs
-                        .requestMatchers("/api/users")
-                        .hasAuthority("ROLE_ADMIN")
+                        // =========================
+                        .requestMatchers(
+                                "/api/users"
+                        ).hasAuthority("ROLE_ADMIN")
 
+                        // =========================
+                        // Everything Else
+                        // =========================
                         .anyRequest().authenticated()
                 )
 
+                // =========================
+                // JWT Filter
+                // =========================
                 .addFilterBefore(
                         jwtFilter,
                         UsernamePasswordAuthenticationFilter.class
@@ -75,30 +130,70 @@ public class SecurityConfig {
 
         return http.build();
     }
+
     @Bean
-public CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
 
-    CorsConfiguration configuration =
-            new CorsConfiguration();
+        CorsConfiguration configuration =
+                new CorsConfiguration();
 
-    configuration.setAllowCredentials(true);
+        // =========================
+        // Trusted Frontend
+        // =========================
+        configuration.setAllowCredentials(true);
 
-    configuration.addAllowedOrigin(
-            "http://localhost:3000"
-    );
+        configuration.setAllowedOrigins(
+                List.of(
+                        "http://localhost:3000"
+                )
+        );
 
-    configuration.addAllowedHeader("*");
+        // =========================
+        // Allowed HTTP Methods
+        // =========================
+        configuration.setAllowedMethods(
+                List.of(
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "PATCH",
+                        "DELETE",
+                        "OPTIONS"
+                )
+        );
 
-    configuration.addAllowedMethod("*");
+        // =========================
+        // Allowed Request Headers
+        // =========================
+        configuration.setAllowedHeaders(
+                List.of(
+                        "Authorization",
+                        "Content-Type",
+                        "Accept",
+                        "X-Request-ID"
+                )
+        );
 
-    UrlBasedCorsConfigurationSource source =
-            new UrlBasedCorsConfigurationSource();
+        // =========================
+        // Exposed Response Headers
+        // =========================
+        configuration.setExposedHeaders(
+                List.of(
+                        "X-Request-ID"
+                )
+        );
 
-    source.registerCorsConfiguration(
-            "/**",
-            configuration
-    );
+        // =========================
+        // Register CORS Configuration
+        // =========================
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
 
-    return source;
-}
+        source.registerCorsConfiguration(
+                "/**",
+                configuration
+        );
+
+        return source;
+    }
 }

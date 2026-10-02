@@ -51,10 +51,7 @@ public class AuthService {
 
         String email = request.getEmail();
 
-        logger.info(
-                "Login request received for email: {}",
-                email
-        );
+        logger.info("Login request received");
 
         // --------------------------------------------------------
         // Check login attempt lock
@@ -63,8 +60,7 @@ public class AuthService {
         if (loginAttemptService.isBlocked(email)) {
 
             logger.warn(
-                    "Login blocked due to too many failed attempts for email: {}",
-                    email
+                    "Login blocked due to too many failed attempts"
             );
 
             auditService.log(
@@ -88,8 +84,7 @@ public class AuthService {
         if (user == null) {
 
             logger.warn(
-                    "Login failed. Invalid email: {}",
-                    email
+                    "Login failed. Invalid credentials"
             );
 
             loginAttemptService.loginFailed(email);
@@ -118,8 +113,7 @@ public class AuthService {
         if (!passwordMatch) {
 
             logger.warn(
-                    "Login failed. Invalid password for email: {}",
-                    email
+                    "Login failed. Invalid credentials"
             );
 
             loginAttemptService.loginFailed(email);
@@ -148,8 +142,7 @@ public class AuthService {
         );
 
         logger.info(
-                "Login successful for email: {}",
-                email
+                "Login successful"
         );
 
         // --------------------------------------------------------

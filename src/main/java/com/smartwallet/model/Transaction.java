@@ -5,20 +5,48 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "transaction")
+@Table(
+        name = "transaction",
+        indexes = {
+                @Index(
+                        name = "idx_transaction_sender_email",
+                        columnList = "senderEmail"
+                ),
+                @Index(
+                        name = "idx_transaction_receiver_email",
+                        columnList = "receiverEmail"
+                ),
+                @Index(
+                        name = "idx_transaction_status",
+                        columnList = "status"
+                ),
+                @Index(
+                        name = "idx_transaction_timestamp",
+                        columnList = "timestamp"
+                )
+        }
+)
 public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionId;
 
+    @Column(nullable = false)
     private String senderEmail;
 
+    @Column(nullable = false)
     private String receiverEmail;
 
+    @Column(
+            nullable = false,
+            precision = 19,
+            scale = 2
+    )
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TransactionStatus status;
 
     @Enumerated(EnumType.STRING)
@@ -29,11 +57,13 @@ public class Transaction {
     @Column(nullable = false)
     private TransactionCategory category;
 
+    @Column(nullable = false)
     private LocalDateTime timestamp;
 
     // Required by Hibernate
-      public Transaction() {
+    public Transaction() {
     }
+
     public Transaction(
             String senderEmail,
             String receiverEmail,

@@ -1,17 +1,43 @@
 package com.smartwallet.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 @Service
-
-//This class remove old wallet data from redis cache.
-
-//we clear cache after transaction
 public class WalletCacheService {
-    //Remove old cache data
-    @CacheEvict(value = "myWallet", key = "#email")
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(
+                    WalletCacheService.class
+            );
+
+    /**
+     * Removes stale wallet data from the cache
+     * after a wallet balance-changing operation.
+     *
+     * MySQL remains the source of truth.
+     */
+    @CacheEvict(
+            value = "myWallet",
+            key = "#email"
+    )
     public void clearWalletCache(String email) {
-        System.out.println("Wallet cache cleared for: " + email);
+
+        if (email == null || email.isBlank()) {
+
+            logger.warn(
+                    "Wallet cache eviction skipped because email is missing"
+            );
+
+            return;
+        }
+
+        logger.debug(
+                "Wallet cache cleared for user: {}",
+                email
+        );
     }
 }

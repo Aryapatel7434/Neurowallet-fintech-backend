@@ -108,7 +108,7 @@ public class WalletService {
 
 
 
-        logger.info("Fetching wallet from MySQL for: {}", email);
+        logger.info("Fetching wallet from MySQL");
 
 
 
@@ -120,7 +120,7 @@ public class WalletService {
 
 
 
-            logger.warn("Wallet not found for user: {}", email);
+            logger.warn("Wallet not found");
 
 
 
@@ -130,7 +130,7 @@ public class WalletService {
 
 
 
-        logger.info("Wallet fetched successfully for user: {}", email);
+        logger.info("Wallet fetched successfully");
 
 
 
@@ -148,7 +148,7 @@ public class WalletService {
 
 
 
-        logger.info("Get my wallet request received for user: {}", email);
+        logger.info("Get my wallet request received");
 
 
 
@@ -202,7 +202,7 @@ public class WalletService {
 
 
 
-            logger.warn("Add money failed. Wallet not found for user: {}", email);
+            logger.warn("Add money failed. Wallet not found");
 
 
 
@@ -847,7 +847,7 @@ public WalletSummaryResponse getWalletSummary() {
 
 
 
-    logger.info("Generating wallet summary for user: {}", email);
+    logger.info("Generating wallet summary");
 
 
 
@@ -955,7 +955,7 @@ long successfulTransfers = 0;
 
                 );
 
-logger.info("Logged in user = {}", email);
+logger.info("Wallet summary transaction data loaded");
 
 
 
@@ -1065,7 +1065,7 @@ for (Transaction transfer : transferTransactions) {
 
 
 
-    logger.info("Wallet summary generated successfully for {}", email);
+    logger.info("Wallet summary generated successfully");
 
 
 

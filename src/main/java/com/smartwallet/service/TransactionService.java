@@ -76,18 +76,47 @@ public class TransactionService {
     @Transactional
     public String sendMoney(TransactionRequest request) {
 
+        // --------------------------------------------------------
+        // FINANCIAL VALIDATION
+        // --------------------------------------------------------
+
+        if (request == null) {
+
+            logger.warn(
+                    "Transaction failed because request is null"
+            );
+
+            throw new BadRequestException(
+                    "Transaction request cannot be null"
+            );
+        }
+
         if (request.getAmount() == null
                 || request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
 
             logger.warn(
-                    "Transaction failed due to invalid amount: {}",
-                    request.getAmount()
+                    "Transaction failed due to invalid amount"
             );
 
             throw new BadRequestException(
                     "Amount must be greater than zero"
             );
         }
+
+        if (request.getReceiverEmail() == null
+                || request.getReceiverEmail().isBlank()) {
+
+            logger.warn(
+                    "Transaction failed because receiver email is missing"
+            );
+
+            throw new BadRequestException(
+                    "Receiver email is required"
+            );
+        }
+
+        String receiverEmail =
+                request.getReceiverEmail().trim();
 
         String senderEmail =
                 SecurityContextHolder
@@ -96,11 +125,12 @@ public class TransactionService {
                         .getName();
 
         logger.info(
-                "Transaction started from {} to {} amount {}",
-                senderEmail,
-                request.getReceiverEmail(),
-                request.getAmount()
+                "Transaction processing started"
         );
+
+        // --------------------------------------------------------
+        // USER VALIDATION
+        // --------------------------------------------------------
 
         User sender =
                 userRepository.findByEmail(senderEmail);
@@ -108,8 +138,7 @@ public class TransactionService {
         if (sender == null) {
 
             logger.warn(
-                    "Transaction failed. Sender not found: {}",
-                    senderEmail
+                    "Transaction failed. Sender not found"
             );
 
             throw new ResourceNotFoundException(
@@ -119,19 +148,18 @@ public class TransactionService {
 
         User receiver =
                 userRepository.findByEmail(
-                        request.getReceiverEmail()
+                        receiverEmail
                 );
 
         if (receiver == null) {
 
             logger.warn(
-                    "Transaction failed. Receiver not found: {}",
-                    request.getReceiverEmail()
+                    "Transaction failed. Receiver not found"
             );
 
             transactionAuditService.saveFailedTransaction(
                     senderEmail,
-                    request.getReceiverEmail(),
+                    receiverEmail,
                     request.getAmount()
             );
 
@@ -140,11 +168,14 @@ public class TransactionService {
             );
         }
 
+        // --------------------------------------------------------
+        // SELF TRANSFER VALIDATION
+        // --------------------------------------------------------
+
         if (sender.getEmail().equals(receiver.getEmail())) {
 
             logger.warn(
-                    "Transaction failed. User tried to send money to self: {}",
-                    sender.getEmail()
+                    "Transaction failed. Self-transfer attempted"
             );
 
             transactionAuditService.saveFailedTransaction(
@@ -157,6 +188,10 @@ public class TransactionService {
                     "Cannot send money to yourself"
             );
         }
+
+        // --------------------------------------------------------
+        // WALLET VALIDATION
+        // --------------------------------------------------------
 
         Wallet senderWallet =
                 walletRepository.findByUserEmail(
@@ -171,8 +206,7 @@ public class TransactionService {
         if (senderWallet == null) {
 
             logger.warn(
-                    "Transaction failed. Sender wallet not found: {}",
-                    sender.getEmail()
+                    "Transaction failed. Sender wallet not found"
             );
 
             throw new ResourceNotFoundException(
@@ -183,8 +217,7 @@ public class TransactionService {
         if (receiverWallet == null) {
 
             logger.warn(
-                    "Transaction failed. Receiver wallet not found: {}",
-                    receiver.getEmail()
+                    "Transaction failed. Receiver wallet not found"
             );
 
             throw new ResourceNotFoundException(
@@ -192,14 +225,65 @@ public class TransactionService {
             );
         }
 
+        // --------------------------------------------------------
+        // WALLET BALANCE INTEGRITY VALIDATION
+        // --------------------------------------------------------
+
+        if (senderWallet.getBalance() == null) {
+
+            logger.error(
+                    "Transaction blocked because sender wallet balance is null"
+            );
+
+            throw new BadRequestException(
+                    "Sender wallet balance is invalid"
+            );
+        }
+
+        if (receiverWallet.getBalance() == null) {
+
+            logger.error(
+                    "Transaction blocked because receiver wallet balance is null"
+            );
+
+            throw new BadRequestException(
+                    "Receiver wallet balance is invalid"
+            );
+        }
+
+        if (senderWallet.getBalance()
+                .compareTo(BigDecimal.ZERO) < 0) {
+
+            logger.error(
+                    "Transaction blocked because sender wallet has negative balance"
+            );
+
+            throw new BadRequestException(
+                    "Sender wallet balance is invalid"
+            );
+        }
+
+        if (receiverWallet.getBalance()
+                .compareTo(BigDecimal.ZERO) < 0) {
+
+            logger.error(
+                    "Transaction blocked because receiver wallet has negative balance"
+            );
+
+            throw new BadRequestException(
+                    "Receiver wallet balance is invalid"
+            );
+        }
+
+        // --------------------------------------------------------
+        // INSUFFICIENT BALANCE VALIDATION
+        // --------------------------------------------------------
+
         if (senderWallet.getBalance()
                 .compareTo(request.getAmount()) < 0) {
 
             logger.warn(
-                    "Transaction failed due to insufficient balance. "
-                    + "Sender: {}, Amount: {}",
-                    sender.getEmail(),
-                    request.getAmount()
+                    "Transaction failed due to insufficient balance"
             );
 
             transactionAuditService.saveFailedTransaction(
@@ -212,6 +296,10 @@ public class TransactionService {
                     "Insufficient balance"
             );
         }
+
+        // --------------------------------------------------------
+        // CREATE TRANSACTION
+        // --------------------------------------------------------
 
         Transaction transaction =
                 new Transaction(
@@ -230,6 +318,10 @@ public class TransactionService {
                 "Transaction saved with PENDING status"
         );
 
+        // --------------------------------------------------------
+        // UPDATE WALLET BALANCES
+        // --------------------------------------------------------
+
         senderWallet.setBalance(
                 senderWallet.getBalance()
                         .subtract(request.getAmount())
@@ -240,8 +332,40 @@ public class TransactionService {
                         .add(request.getAmount())
         );
 
+        // --------------------------------------------------------
+        // POST-UPDATE BALANCE INTEGRITY CHECK
+        // --------------------------------------------------------
+
+        if (senderWallet.getBalance()
+                .compareTo(BigDecimal.ZERO) < 0) {
+
+            logger.error(
+                    "Transaction blocked because sender balance became negative"
+            );
+
+            throw new BadRequestException(
+                    "Transaction would result in negative sender balance"
+            );
+        }
+
+        if (receiverWallet.getBalance()
+                .compareTo(BigDecimal.ZERO) < 0) {
+
+            logger.error(
+                    "Transaction blocked because receiver balance became invalid"
+            );
+
+            throw new BadRequestException(
+                    "Transaction would result in invalid receiver balance"
+            );
+        }
+
         walletRepository.save(senderWallet);
         walletRepository.save(receiverWallet);
+
+        // --------------------------------------------------------
+        // SENDER LEDGER
+        // --------------------------------------------------------
 
         WalletTransaction senderLedger =
                 new WalletTransaction();
@@ -252,6 +376,10 @@ public class TransactionService {
         senderLedger.setCreatedAt(LocalDateTime.now());
 
         walletTransactionRepository.save(senderLedger);
+
+        // --------------------------------------------------------
+        // RECEIVER LEDGER
+        // --------------------------------------------------------
 
         WalletTransaction receiverLedger =
                 new WalletTransaction();
@@ -268,6 +396,10 @@ public class TransactionService {
                 + "for sender and receiver"
         );
 
+        // --------------------------------------------------------
+        // MARK TRANSACTION SUCCESS
+        // --------------------------------------------------------
+
         transaction.setStatus(
                 TransactionStatus.SUCCESS
         );
@@ -277,6 +409,10 @@ public class TransactionService {
         logger.info(
                 "Transaction status updated to SUCCESS"
         );
+
+        // --------------------------------------------------------
+        // CLEAR WALLET CACHE
+        // --------------------------------------------------------
 
         walletCacheService.clearWalletCache(
                 sender.getEmail()
@@ -290,6 +426,10 @@ public class TransactionService {
                 "Wallet cache cleared for sender and receiver"
         );
 
+        // --------------------------------------------------------
+        // PUBLISH KAFKA EVENT
+        // --------------------------------------------------------
+
         TransactionEvent event =
                 new TransactionEvent(
                         sender.getEmail(),
@@ -299,12 +439,21 @@ public class TransactionService {
                         LocalDateTime.now()
                 );
 
-        transactionEventProducer
-                .publishTransactionEvent(event);
+     transactionEventProducer
+        .publishTransactionEvent(event)
+        .thenAccept(published -> {
 
-        logger.info(
-                "Transaction successful and Kafka event published"
-        );
+            if (published) {
+                logger.info(
+                        "Transaction event successfully published to Kafka"
+                );
+            } else {
+                logger.warn(
+                        "Transaction completed successfully, but Kafka event publication failed"
+                );
+            }
+
+        });
 
         return "Transaction Successful";
     }
@@ -319,8 +468,7 @@ public class TransactionService {
             int size) {
 
         logger.info(
-                "Fetching transaction history for email: {}, page: {}, size: {}",
-                email,
+                "Fetching transaction history. Page: {}, Size: {}",
                 page,
                 size
         );
@@ -364,8 +512,7 @@ public class TransactionService {
             int size) {
 
         logger.info(
-                "Fetching sent transactions for email: {}",
-                email
+                "Fetching sent transactions"
         );
 
         Pageable pageable =
@@ -404,8 +551,7 @@ public class TransactionService {
             int size) {
 
         logger.info(
-                "Fetching received transactions for email: {}",
-                email
+                "Fetching received transactions"
         );
 
         Pageable pageable =
@@ -458,8 +604,7 @@ public class TransactionService {
             int size) {
 
         logger.info(
-                "Searching transactions by email keyword: {}",
-                email
+                "Searching transactions by email keyword"
         );
 
         Pageable pageable =
@@ -488,9 +633,7 @@ public class TransactionService {
             int size) {
 
         logger.info(
-                "Fetching transactions by amount range. Min: {}, Max: {}",
-                minAmount,
-                maxAmount
+                "Fetching transactions by amount range"
         );
 
         Pageable pageable =
@@ -520,8 +663,7 @@ public class TransactionService {
                         .getName();
 
         logger.info(
-                "Generating dashboard insights for user: {}",
-                email
+                "Generating dashboard insights"
         );
 
         List<Transaction> transactions =
@@ -644,6 +786,8 @@ public class TransactionService {
     }
 
     public TransactionAnalyticsResponse getTransactionAnalytics() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException(
+                "Not supported yet."
+        );
     }
 }

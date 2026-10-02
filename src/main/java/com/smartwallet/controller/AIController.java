@@ -3,6 +3,7 @@ package com.smartwallet.controller;
 import com.smartwallet.dto.AIInsightResponse;
 import com.smartwallet.dto.AIAssistantRequest;
 import com.smartwallet.dto.AIAssistantResponse;
+import com.smartwallet.dto.ApiResponse;
 import com.smartwallet.dto.BudgetAdvisorResponse;
 import com.smartwallet.dto.BudgetHealthResponse;
 import com.smartwallet.dto.CategorySpendingResponse;
@@ -300,12 +301,17 @@ public class AIController {
     )
     @GetMapping("/intelligence")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public FinancialIntelligenceResponse getFinancialIntelligence(
-            Authentication authentication) {
+    public ApiResponse<FinancialIntelligenceResponse>
+            getFinancialIntelligence(
+                    Authentication authentication) {
 
-        return financialIntelligenceService
-                .getFinancialIntelligence(
-                        authentication.getName()
-                );
+        return new ApiResponse<>(
+                true,
+                "Financial intelligence retrieved successfully.",
+                financialIntelligenceService
+                        .getFinancialIntelligence(
+                                authentication.getName()
+                        )
+        );
     }
 }

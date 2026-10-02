@@ -2,85 +2,113 @@ package com.smartwallet.model;
 
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import java.io.Serializable;
 @Entity
 @Table(
-name = "users",
-indexes = {
-@Index(
-name = "idx_user_email",
-columnList = "email"
+        name = "users",
+        indexes = {
+                @Index(
+                        name = "idx_user_email",
+                        columnList = "email"
+                )
+        }
 )
-}
-)
-public class User {
+public class User implements Serializable {
 
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private int userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int userId;
 
-private String name;
+    @Column(
+            nullable = false,
+            length = 100
+    )
+    private String name;
 
-@Column(unique = true, nullable = false)
-private String email;
+    @Column(
+            unique = true,
+            nullable = false,
+            length = 255
+    )
+    private String email;
 
-private String role;
+    @Column(
+            nullable = false,
+            length = 30
+    )
+    private String role;
 
-@JsonIgnore
-private String password;
+    @JsonIgnore
+    @Column(
+            nullable = false,
+            length = 255
+    )
+    private String password;
+private static final long serialVersionUID = 1L;
+    // ============================================================
+    // DEFAULT CONSTRUCTOR
+    // ============================================================
 
-// Default Constructor
-public User() {
-}
+    public User() {
+    }
 
-// Parameterized Constructor
-public User(String name, String email, String password, String role) {
-    this.name = name;
-    this.email = email;
-    this.password = password;
-    this.role = role;
-}
+    // ============================================================
+    // PARAMETERIZED CONSTRUCTOR
+    // ============================================================
 
-// Getters and Setters
+    public User(
+            String name,
+            String email,
+            String password,
+            String role) {
 
-public int getUserId() {
-    return userId;
-}
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 
-public void setUserId(int userId) {
-    this.userId = userId;
-}
+    // ============================================================
+    // GETTERS AND SETTERS
+    // ============================================================
 
-public String getName() {
-    return name;
-}
+    public int getUserId() {
+        return userId;
+    }
 
-public void setName(String name) {
-    this.name = name;
-}
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
-public String getEmail() {
-    return email;
-}
+    public String getName() {
+        return name;
+    }
 
-public void setEmail(String email) {
-    this.email = email;
-}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-public String getPassword() {
-    return password;
-}
+    public String getEmail() {
+        return email;
+    }
 
-public void setPassword(String password) {
-    this.password = password;
-}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-public String getRole() {
-    return role;
-}
+    public String getPassword() {
+        return password;
+    }
 
-public void setRole(String role) {
-    this.role = role;
-}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }
