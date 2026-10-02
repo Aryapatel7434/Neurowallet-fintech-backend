@@ -34,6 +34,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 import com.smartwallet.dto.BudgetAdvisorResponse;
+
+import com.smartwallet.dto.FinancialIntelligenceContext;
+import com.smartwallet.dto.SmartInsightResponse;
+import com.smartwallet.dto.UnifiedAIInsightResponse;
 @Service
 public class AIService {
 
@@ -1395,4 +1399,171 @@ public class AIService {
         );
     }
 }
+ public UnifiedAIInsightResponse getUnifiedAIInsight(
+        String email,
+        FinancialIntelligenceContext context,
+        List<SmartInsightResponse> insights) {
+
+    if (email == null || email.isBlank()) {
+        throw new AIServiceException(
+                "User identity is required for AI intelligence."
+        );
+    }
+
+    if (context == null) {
+        throw new AIServiceException(
+                "Financial intelligence context is unavailable."
+        );
+    }
+
+    if (insights == null) {
+        throw new AIServiceException(
+                "Smart financial insights are unavailable."
+        );
+    }
+
+    try {
+
+        String prompt =
+                promptBuilder.buildUnifiedIntelligencePrompt(
+                        context,
+                        insights
+                );
+
+        String rawResponse =
+                chatClient
+                        .prompt()
+                        .user(prompt)
+                        .call()
+                        .content();
+
+        String cleanedResponse =
+                cleanJsonResponse(rawResponse);
+
+        if (cleanedResponse == null
+                || cleanedResponse.isBlank()) {
+
+            throw new AIServiceException(
+                    "AI returned an empty unified intelligence response."
+            );
+        }
+
+        UnifiedAIInsightResponse response =
+                objectMapper.readValue(
+                        cleanedResponse,
+                        UnifiedAIInsightResponse.class
+                );
+
+        validateUnifiedAIInsight(response);
+
+        return response;
+
+    } catch (AIServiceException ex) {
+
+        throw ex;
+
+    } catch (Exception ex) {
+
+        logger.error(
+                "Unified AI insight generation failed for user: {}",
+                email,
+                ex
+        );
+
+        throw new AIServiceException(
+                "AI service failed to generate unified financial intelligence.",
+                ex
+        );
+    }
+}
+
+    // ============================================================
+    // UNIFIED AI INSIGHT VALIDATION
+    // ============================================================
+
+    private void validateUnifiedAIInsight(
+            UnifiedAIInsightResponse response) {
+
+        if (response == null) {
+            throw new AIServiceException(
+                    "AI returned an empty unified intelligence response."
+            );
+        }
+
+        validateText(
+                response.getOverview(),
+                "overview",
+                1000
+        );
+
+        validateText(
+                response.getFinancialHealthExplanation(),
+                "financialHealthExplanation",
+                1000
+        );
+
+        validateText(
+                response.getKeyObservation(),
+                "keyObservation",
+                1000
+        );
+
+        validateText(
+                response.getPriorityAction(),
+                "priorityAction",
+                1000
+        );
+
+        List<String> recommendations =
+                response.getRecommendations();
+
+        if (recommendations == null
+                || recommendations.isEmpty()) {
+
+            throw new AIServiceException(
+                    "AI returned no financial recommendations."
+            );
+        }
+
+        if (recommendations.size() > 5) {
+
+            throw new AIServiceException(
+                    "AI returned too many financial recommendations."
+            );
+        }
+
+        for (String recommendation : recommendations) {
+
+            validateText(
+                    recommendation,
+                    "recommendation",
+                    500
+            );
+        }
+    }
+
+    // ============================================================
+    // UNIFIED AI TEXT VALIDATION
+    // ============================================================
+
+    private void validateText(
+            String value,
+            String fieldName,
+            int maxLength) {
+
+        if (value == null || value.isBlank()) {
+
+            throw new AIServiceException(
+                    "AI response field is empty: " + fieldName
+            );
+        }
+
+        if (value.length() > maxLength) {
+
+            throw new AIServiceException(
+                    "AI response field is too long: " + fieldName
+            );
+        }
+    }
+
 }
