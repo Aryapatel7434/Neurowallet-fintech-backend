@@ -12,6 +12,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import com.smartwallet.dto.TransactionResponseDTO;
+import com.smartwallet.model.TransactionCategory;
+import com.smartwallet.model.TransactionType;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import org.springframework.format.annotation.DateTimeFormat;
 @RestController
 @RequestMapping("/api/transactions")
 public class TransactionController {
@@ -136,4 +142,56 @@ public Page<TransactionResponseDTO> getHistory(
                 size
         );
     }
+    
+    @GetMapping("/history/filter")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public Page<TransactionResponseDTO> getFilteredHistory(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) TransactionStatus status,
+            @RequestParam(required = false) TransactionType type,
+            @RequestParam(required = false) TransactionCategory category,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fromDate,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate toDate,
+            @RequestParam(defaultValue = "timestamp") String sortBy,
+            @RequestParam(defaultValue = "DESC") String direction) {
+
+        if (fromDate != null && toDate != null && fromDate.isAfter(toDate)) {
+            throw new com.smartwallet.exception.BadRequestException(
+                    "fromDate must not be after toDate");
+        }
+
+        LocalDateTime from = fromDate == null
+                ? null
+                : fromDate.atStartOfDay();
+
+        // Exclusive upper bound includes the entire selected toDate.
+        LocalDateTime toExclusive = toDate == null
+                ? null
+                : toDate.plusDays(1).atStartOfDay();
+
+        String email = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+
+        return transactionService.getFilteredTransactionHistory(
+                email,
+                page,
+                size,
+                keyword,
+                status,
+                type,
+                category,
+                from,
+                toExclusive,
+                sortBy,
+                direction
+        );
+    }
+
 }

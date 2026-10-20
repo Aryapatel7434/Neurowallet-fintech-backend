@@ -1,3 +1,4 @@
+
 package com.smartwallet.service;
 
 import com.smartwallet.dto.DashboardInsightResponse;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,384 +78,209 @@ public class TransactionService {
     @Transactional
     public String sendMoney(TransactionRequest request) {
 
-        // --------------------------------------------------------
-        // FINANCIAL VALIDATION
-        // --------------------------------------------------------
-
         if (request == null) {
-
-            logger.warn(
-                    "Transaction failed because request is null"
-            );
-
+            logger.warn("Transaction failed because request is null");
             throw new BadRequestException(
-                    "Transaction request cannot be null"
-            );
+                    "Transaction request cannot be null");
         }
 
         if (request.getAmount() == null
                 || request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-
-            logger.warn(
-                    "Transaction failed due to invalid amount"
-            );
-
+            logger.warn("Transaction failed due to invalid amount");
             throw new BadRequestException(
-                    "Amount must be greater than zero"
-            );
+                    "Amount must be greater than zero");
         }
 
         if (request.getReceiverEmail() == null
                 || request.getReceiverEmail().isBlank()) {
-
             logger.warn(
-                    "Transaction failed because receiver email is missing"
-            );
-
+                    "Transaction failed because receiver email is missing");
             throw new BadRequestException(
-                    "Receiver email is required"
-            );
+                    "Receiver email is required");
         }
 
-        String receiverEmail =
-                request.getReceiverEmail().trim();
+        String receiverEmail = request.getReceiverEmail().trim();
 
-        String senderEmail =
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getName();
+        String senderEmail = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
 
-        logger.info(
-                "Transaction processing started"
-        );
+        logger.info("Transaction processing started");
 
-        // --------------------------------------------------------
-        // USER VALIDATION
-        // --------------------------------------------------------
-
-        User sender =
-                userRepository.findByEmail(senderEmail);
+        // User validation
+        User sender = userRepository.findByEmail(senderEmail);
 
         if (sender == null) {
-
-            logger.warn(
-                    "Transaction failed. Sender not found"
-            );
-
-            throw new ResourceNotFoundException(
-                    "Sender not found"
-            );
+            logger.warn("Transaction failed. Sender not found");
+            throw new ResourceNotFoundException("Sender not found");
         }
 
-        User receiver =
-                userRepository.findByEmail(
-                        receiverEmail
-                );
+        User receiver = userRepository.findByEmail(receiverEmail);
 
         if (receiver == null) {
-
-            logger.warn(
-                    "Transaction failed. Receiver not found"
-            );
-
+            logger.warn("Transaction failed. Receiver not found");
             transactionAuditService.saveFailedTransaction(
-                    senderEmail,
-                    receiverEmail,
-                    request.getAmount()
-            );
-
-            throw new ResourceNotFoundException(
-                    "Receiver not found"
-            );
+                    senderEmail, receiverEmail, request.getAmount());
+            throw new ResourceNotFoundException("Receiver not found");
         }
 
-        // --------------------------------------------------------
-        // SELF TRANSFER VALIDATION
-        // --------------------------------------------------------
-
+        // Self-transfer validation
         if (sender.getEmail().equals(receiver.getEmail())) {
-
-            logger.warn(
-                    "Transaction failed. Self-transfer attempted"
-            );
-
+            logger.warn("Transaction failed. Self-transfer attempted");
             transactionAuditService.saveFailedTransaction(
                     sender.getEmail(),
                     receiver.getEmail(),
-                    request.getAmount()
-            );
-
+                    request.getAmount());
             throw new BadRequestException(
-                    "Cannot send money to yourself"
-            );
+                    "Cannot send money to yourself");
         }
 
-        // --------------------------------------------------------
-        // WALLET VALIDATION
-        // --------------------------------------------------------
-
+        // Wallet validation
         Wallet senderWallet =
-                walletRepository.findByUserEmail(
-                        sender.getEmail()
-                );
+                walletRepository.findByUserEmail(sender.getEmail());
 
         Wallet receiverWallet =
-                walletRepository.findByUserEmail(
-                        receiver.getEmail()
-                );
+                walletRepository.findByUserEmail(receiver.getEmail());
 
         if (senderWallet == null) {
-
-            logger.warn(
-                    "Transaction failed. Sender wallet not found"
-            );
-
+            logger.warn("Transaction failed. Sender wallet not found");
             throw new ResourceNotFoundException(
-                    "Sender wallet not found"
-            );
+                    "Sender wallet not found");
         }
 
         if (receiverWallet == null) {
-
-            logger.warn(
-                    "Transaction failed. Receiver wallet not found"
-            );
-
+            logger.warn("Transaction failed. Receiver wallet not found");
             throw new ResourceNotFoundException(
-                    "Receiver wallet not found"
-            );
+                    "Receiver wallet not found");
         }
 
-        // --------------------------------------------------------
-        // WALLET BALANCE INTEGRITY VALIDATION
-        // --------------------------------------------------------
-
+        // Wallet balance integrity validation
         if (senderWallet.getBalance() == null) {
-
             logger.error(
-                    "Transaction blocked because sender wallet balance is null"
-            );
-
+                    "Transaction blocked because sender wallet balance is null");
             throw new BadRequestException(
-                    "Sender wallet balance is invalid"
-            );
+                    "Sender wallet balance is invalid");
         }
 
         if (receiverWallet.getBalance() == null) {
-
             logger.error(
-                    "Transaction blocked because receiver wallet balance is null"
-            );
-
+                    "Transaction blocked because receiver wallet balance is null");
             throw new BadRequestException(
-                    "Receiver wallet balance is invalid"
-            );
+                    "Receiver wallet balance is invalid");
         }
 
-        if (senderWallet.getBalance()
-                .compareTo(BigDecimal.ZERO) < 0) {
-
+        if (senderWallet.getBalance().compareTo(BigDecimal.ZERO) < 0) {
             logger.error(
-                    "Transaction blocked because sender wallet has negative balance"
-            );
-
+                    "Transaction blocked because sender wallet has negative balance");
             throw new BadRequestException(
-                    "Sender wallet balance is invalid"
-            );
+                    "Sender wallet balance is invalid");
         }
 
-        if (receiverWallet.getBalance()
-                .compareTo(BigDecimal.ZERO) < 0) {
-
+        if (receiverWallet.getBalance().compareTo(BigDecimal.ZERO) < 0) {
             logger.error(
-                    "Transaction blocked because receiver wallet has negative balance"
-            );
-
+                    "Transaction blocked because receiver wallet has negative balance");
             throw new BadRequestException(
-                    "Receiver wallet balance is invalid"
-            );
+                    "Receiver wallet balance is invalid");
         }
 
-        // --------------------------------------------------------
-        // INSUFFICIENT BALANCE VALIDATION
-        // --------------------------------------------------------
-
-        if (senderWallet.getBalance()
-                .compareTo(request.getAmount()) < 0) {
-
+        // Insufficient balance validation
+        if (senderWallet.getBalance().compareTo(request.getAmount()) < 0) {
             logger.warn(
-                    "Transaction failed due to insufficient balance"
-            );
-
+                    "Transaction failed due to insufficient balance");
             transactionAuditService.saveFailedTransaction(
                     sender.getEmail(),
                     receiver.getEmail(),
-                    request.getAmount()
-            );
-
-            throw new BadRequestException(
-                    "Insufficient balance"
-            );
+                    request.getAmount());
+            throw new BadRequestException("Insufficient balance");
         }
 
-        // --------------------------------------------------------
-        // CREATE TRANSACTION
-        // --------------------------------------------------------
-
-        Transaction transaction =
-                new Transaction(
-                        sender.getEmail(),
-                        receiver.getEmail(),
-                        request.getAmount(),
-                        TransactionStatus.PENDING,
-                        TransactionType.TRANSFER,
-                        request.getCategory(),
-                        LocalDateTime.now()
-                );
+        // Create transaction
+        Transaction transaction = new Transaction(
+                sender.getEmail(),
+                receiver.getEmail(),
+                request.getAmount(),
+                TransactionStatus.PENDING,
+                TransactionType.TRANSFER,
+                request.getCategory(),
+                LocalDateTime.now());
 
         transactionRepository.save(transaction);
+        logger.info("Transaction saved with PENDING status");
 
-        logger.info(
-                "Transaction saved with PENDING status"
-        );
-
-        // --------------------------------------------------------
-        // UPDATE WALLET BALANCES
-        // --------------------------------------------------------
-
+        // Update wallet balances
         senderWallet.setBalance(
-                senderWallet.getBalance()
-                        .subtract(request.getAmount())
-        );
+                senderWallet.getBalance().subtract(request.getAmount()));
 
         receiverWallet.setBalance(
-                receiverWallet.getBalance()
-                        .add(request.getAmount())
-        );
+                receiverWallet.getBalance().add(request.getAmount()));
 
-        // --------------------------------------------------------
-        // POST-UPDATE BALANCE INTEGRITY CHECK
-        // --------------------------------------------------------
-
-        if (senderWallet.getBalance()
-                .compareTo(BigDecimal.ZERO) < 0) {
-
+        // Post-update balance integrity checks
+        if (senderWallet.getBalance().compareTo(BigDecimal.ZERO) < 0) {
             logger.error(
-                    "Transaction blocked because sender balance became negative"
-            );
-
+                    "Transaction blocked because sender balance became negative");
             throw new BadRequestException(
-                    "Transaction would result in negative sender balance"
-            );
+                    "Transaction would result in negative sender balance");
         }
 
-        if (receiverWallet.getBalance()
-                .compareTo(BigDecimal.ZERO) < 0) {
-
+        if (receiverWallet.getBalance().compareTo(BigDecimal.ZERO) < 0) {
             logger.error(
-                    "Transaction blocked because receiver balance became invalid"
-            );
-
+                    "Transaction blocked because receiver balance became invalid");
             throw new BadRequestException(
-                    "Transaction would result in invalid receiver balance"
-            );
+                    "Transaction would result in invalid receiver balance");
         }
 
         walletRepository.save(senderWallet);
         walletRepository.save(receiverWallet);
 
-        // --------------------------------------------------------
-        // SENDER LEDGER
-        // --------------------------------------------------------
-
-        WalletTransaction senderLedger =
-                new WalletTransaction();
-
+        // Sender ledger
+        WalletTransaction senderLedger = new WalletTransaction();
         senderLedger.setWallet(senderWallet);
         senderLedger.setAmount(request.getAmount());
         senderLedger.setType("DEBIT");
         senderLedger.setCreatedAt(LocalDateTime.now());
-
         walletTransactionRepository.save(senderLedger);
 
-        // --------------------------------------------------------
-        // RECEIVER LEDGER
-        // --------------------------------------------------------
-
-        WalletTransaction receiverLedger =
-                new WalletTransaction();
-
+        // Receiver ledger
+        WalletTransaction receiverLedger = new WalletTransaction();
         receiverLedger.setWallet(receiverWallet);
         receiverLedger.setAmount(request.getAmount());
         receiverLedger.setType("CREDIT");
         receiverLedger.setCreatedAt(LocalDateTime.now());
-
         walletTransactionRepository.save(receiverLedger);
 
         logger.info(
-                "Wallet balances updated successfully "
-                + "for sender and receiver"
-        );
+                "Wallet balances updated successfully for sender and receiver");
 
-        // --------------------------------------------------------
-        // MARK TRANSACTION SUCCESS
-        // --------------------------------------------------------
-
-        transaction.setStatus(
-                TransactionStatus.SUCCESS
-        );
-
+        // Mark transaction successful
+        transaction.setStatus(TransactionStatus.SUCCESS);
         transactionRepository.save(transaction);
+        logger.info("Transaction status updated to SUCCESS");
 
-        logger.info(
-                "Transaction status updated to SUCCESS"
-        );
+        // Clear wallet cache
+        walletCacheService.clearWalletCache(sender.getEmail());
+        walletCacheService.clearWalletCache(receiver.getEmail());
+        logger.info("Wallet cache cleared for sender and receiver");
 
-        // --------------------------------------------------------
-        // CLEAR WALLET CACHE
-        // --------------------------------------------------------
+        // Publish Kafka event
+        TransactionEvent event = new TransactionEvent(
+                sender.getEmail(),
+                receiver.getEmail(),
+                request.getAmount(),
+                "SUCCESS",
+                LocalDateTime.now());
 
-        walletCacheService.clearWalletCache(
-                sender.getEmail()
-        );
-
-        walletCacheService.clearWalletCache(
-                receiver.getEmail()
-        );
-
-        logger.info(
-                "Wallet cache cleared for sender and receiver"
-        );
-
-        // --------------------------------------------------------
-        // PUBLISH KAFKA EVENT
-        // --------------------------------------------------------
-
-        TransactionEvent event =
-                new TransactionEvent(
-                        sender.getEmail(),
-                        receiver.getEmail(),
-                        request.getAmount(),
-                        "SUCCESS",
-                        LocalDateTime.now()
-                );
-
-     transactionEventProducer
-        .publishTransactionEvent(event)
-        .thenAccept(published -> {
-
-            if (published) {
-                logger.info(
-                        "Transaction event successfully published to Kafka"
-                );
-            } else {
-                logger.warn(
-                        "Transaction completed successfully, but Kafka event publication failed"
-                );
-            }
-
-        });
+        transactionEventProducer
+                .publishTransactionEvent(event)
+                .thenAccept(published -> {
+                    if (published) {
+                        logger.info(
+                                "Transaction event successfully published to Kafka");
+                    } else {
+                        logger.warn(
+                                "Transaction completed successfully, but Kafka event publication failed");
+                    }
+                });
 
         return "Transaction Successful";
     }
@@ -469,37 +296,24 @@ public class TransactionService {
 
         logger.info(
                 "Fetching transaction history. Page: {}, Size: {}",
-                page,
-                size
-        );
+                page, size);
 
-        Pageable pageable =
-                PageRequest.of(
-                        page,
-                        size,
-                        Sort.by("timestamp").descending()
-                );
+        Pageable pageable = PageRequest.of(
+                page, size, Sort.by("timestamp").descending());
 
         Page<Transaction> transactions =
-                transactionRepository
-                        .findBySenderEmailOrReceiverEmail(
-                                email,
-                                email,
-                                pageable
-                        );
+                transactionRepository.findBySenderEmailOrReceiverEmail(
+                        email, email, pageable);
 
-        return transactions.map(tx ->
-                new TransactionResponseDTO(
-                        tx.getTransactionId(),
-                        tx.getSenderEmail(),
-                        tx.getReceiverEmail(),
-                        tx.getAmount(),
-                        tx.getStatus().name(),
-                        tx.getType(),
-                        tx.getCategory(),
-                        tx.getTimestamp()
-                )
-        );
+        return transactions.map(tx -> new TransactionResponseDTO(
+                tx.getTransactionId(),
+                tx.getSenderEmail(),
+                tx.getReceiverEmail(),
+                tx.getAmount(),
+                tx.getStatus().name(),
+                tx.getType(),
+                tx.getCategory(),
+                tx.getTimestamp()));
     }
 
     // ============================================================
@@ -511,34 +325,22 @@ public class TransactionService {
             int page,
             int size) {
 
-        logger.info(
-                "Fetching sent transactions"
-        );
+        logger.info("Fetching sent transactions");
 
-        Pageable pageable =
-                PageRequest.of(
-                        page,
-                        size,
-                        Sort.by("timestamp").descending()
-                );
+        Pageable pageable = PageRequest.of(
+                page, size, Sort.by("timestamp").descending());
 
         Page<Transaction> transactions =
-                transactionRepository.findBySenderEmail(
-                        email,
-                        pageable
-                );
+                transactionRepository.findBySenderEmail(email, pageable);
 
-        return transactions.map(tx ->
-                new TransactionResponseDTO(
-                        tx.getTransactionId(),
-                        tx.getSenderEmail(),
-                        tx.getReceiverEmail(),
-                        tx.getAmount(),
-                        tx.getStatus().name(),
-                        tx.getCategory(),
-                        tx.getTimestamp()
-                )
-        );
+        return transactions.map(tx -> new TransactionResponseDTO(
+                tx.getTransactionId(),
+                tx.getSenderEmail(),
+                tx.getReceiverEmail(),
+                tx.getAmount(),
+                tx.getStatus().name(),
+                tx.getCategory(),
+                tx.getTimestamp()));
     }
 
     // ============================================================
@@ -550,21 +352,12 @@ public class TransactionService {
             int page,
             int size) {
 
-        logger.info(
-                "Fetching received transactions"
-        );
+        logger.info("Fetching received transactions");
 
-        Pageable pageable =
-                PageRequest.of(
-                        page,
-                        size,
-                        Sort.by("timestamp").descending()
-                );
+        Pageable pageable = PageRequest.of(
+                page, size, Sort.by("timestamp").descending());
 
-        return transactionRepository.findByReceiverEmail(
-                email,
-                pageable
-        );
+        return transactionRepository.findByReceiverEmail(email, pageable);
     }
 
     // ============================================================
@@ -576,22 +369,12 @@ public class TransactionService {
             int page,
             int size) {
 
-        logger.info(
-                "Fetching transactions by status: {}",
-                status
-        );
+        logger.info("Fetching transactions by status: {}", status);
 
-        Pageable pageable =
-                PageRequest.of(
-                        page,
-                        size,
-                        Sort.by("timestamp").descending()
-                );
+        Pageable pageable = PageRequest.of(
+                page, size, Sort.by("timestamp").descending());
 
-        return transactionRepository.findByStatus(
-                status,
-                pageable
-        );
+        return transactionRepository.findByStatus(status, pageable);
     }
 
     // ============================================================
@@ -603,23 +386,14 @@ public class TransactionService {
             int page,
             int size) {
 
-        logger.info(
-                "Searching transactions by email keyword"
-        );
+        logger.info("Searching transactions by email keyword");
 
-        Pageable pageable =
-                PageRequest.of(
-                        page,
-                        size,
-                        Sort.by("timestamp").descending()
-                );
+        Pageable pageable = PageRequest.of(
+                page, size, Sort.by("timestamp").descending());
 
         return transactionRepository
                 .findBySenderEmailContainingOrReceiverEmailContaining(
-                        email,
-                        email,
-                        pageable
-                );
+                        email, email, pageable);
     }
 
     // ============================================================
@@ -632,22 +406,13 @@ public class TransactionService {
             int page,
             int size) {
 
-        logger.info(
-                "Fetching transactions by amount range"
-        );
+        logger.info("Fetching transactions by amount range");
 
-        Pageable pageable =
-                PageRequest.of(
-                        page,
-                        size,
-                        Sort.by("timestamp").descending()
-                );
+        Pageable pageable = PageRequest.of(
+                page, size, Sort.by("timestamp").descending());
 
         return transactionRepository.findByAmountBetween(
-                minAmount,
-                maxAmount,
-                pageable
-        );
+                minAmount, maxAmount, pageable);
     }
 
     // ============================================================
@@ -656,28 +421,19 @@ public class TransactionService {
 
     public DashboardInsightResponse getDashboardInsights() {
 
-        String email =
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getName();
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
 
-        logger.info(
-                "Generating dashboard insights"
-        );
+        logger.info("Generating dashboard insights");
 
         List<Transaction> transactions =
-                transactionRepository
-                        .findBySenderEmailOrReceiverEmail(
-                                email,
-                                email
-                        );
+                transactionRepository.findBySenderEmailOrReceiverEmail(
+                        email, email);
 
-        BigDecimal totalIncome =
-                BigDecimal.ZERO;
-
-        BigDecimal totalExpense =
-                BigDecimal.ZERO;
+        BigDecimal totalIncome = BigDecimal.ZERO;
+        BigDecimal totalExpense = BigDecimal.ZERO;
 
         Map<TransactionCategory, BigDecimal> categoryTotals =
                 new HashMap<>();
@@ -685,95 +441,57 @@ public class TransactionService {
         long transactionCount = 0;
 
         for (Transaction tx : transactions) {
-
             if (tx == null
                     || tx.getAmount() == null
                     || tx.getStatus() == null) {
-
                 continue;
             }
 
-            if (tx.getStatus()
-                    != TransactionStatus.SUCCESS) {
-
+            if (tx.getStatus() != TransactionStatus.SUCCESS) {
                 continue;
             }
 
-            BigDecimal amount =
-                    tx.getAmount().abs();
+            BigDecimal amount = tx.getAmount().abs();
 
-            boolean isReceiver =
-                    email.equals(
-                            tx.getReceiverEmail()
-                    );
-
-            boolean isSender =
-                    email.equals(
-                            tx.getSenderEmail()
-                    );
+            boolean isReceiver = email.equals(tx.getReceiverEmail());
+            boolean isSender = email.equals(tx.getSenderEmail());
 
             if (isReceiver) {
-
-                totalIncome =
-                        totalIncome.add(amount);
-
+                totalIncome = totalIncome.add(amount);
                 transactionCount++;
             }
 
             if (isSender) {
-
-                totalExpense =
-                        totalExpense.add(amount);
-
+                totalExpense = totalExpense.add(amount);
                 transactionCount++;
 
-                TransactionCategory category =
-                        tx.getCategory();
+                TransactionCategory category = tx.getCategory();
 
                 if (category != null) {
-
                     categoryTotals.put(
                             category,
                             categoryTotals.getOrDefault(
-                                    category,
-                                    BigDecimal.ZERO
-                            ).add(amount)
-                    );
+                                    category, BigDecimal.ZERO).add(amount));
                 }
             }
         }
 
-        BigDecimal netCashFlow =
-                totalIncome.subtract(totalExpense);
-
-        TransactionCategory topCategory =
-                null;
-
-        BigDecimal topCategoryAmount =
-                BigDecimal.ZERO;
+        BigDecimal netCashFlow = totalIncome.subtract(totalExpense);
+        TransactionCategory topCategory = null;
+        BigDecimal topCategoryAmount = BigDecimal.ZERO;
 
         for (Map.Entry<TransactionCategory, BigDecimal> entry
                 : categoryTotals.entrySet()) {
-
-            if (entry.getValue()
-                    .compareTo(topCategoryAmount) > 0) {
-
-                topCategory =
-                        entry.getKey();
-
-                topCategoryAmount =
-                        entry.getValue();
+            if (entry.getValue().compareTo(topCategoryAmount) > 0) {
+                topCategory = entry.getKey();
+                topCategoryAmount = entry.getValue();
             }
         }
 
         String topCategoryName =
-                topCategory != null
-                        ? topCategory.name()
-                        : null;
+                topCategory != null ? topCategory.name() : null;
 
-        logger.info(
-                "Dashboard insights generated successfully"
-        );
+        logger.info("Dashboard insights generated successfully");
 
         return new DashboardInsightResponse(
                 totalIncome,
@@ -781,13 +499,165 @@ public class TransactionService {
                 netCashFlow,
                 transactionCount,
                 topCategoryName,
-                topCategoryAmount
-        );
+                topCategoryAmount);
     }
 
     public TransactionAnalyticsResponse getTransactionAnalytics() {
-        throw new UnsupportedOperationException(
-                "Not supported yet."
-        );
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    // ============================================================
+    // FILTERED USER TRANSACTION HISTORY
+    // ============================================================
+
+    public Page<TransactionResponseDTO> getFilteredTransactionHistory(
+            String email,
+            int page,
+            int size,
+            String keyword,
+            TransactionStatus status,
+            TransactionType type,
+            TransactionCategory category,
+            LocalDateTime fromDate,
+            LocalDateTime toDateExclusive,
+            String sortBy,
+            String direction) {
+
+        if (page < 0) {
+            throw new BadRequestException(
+                    "Page must be zero or greater");
+        }
+
+        if (size < 1 || size > 100) {
+            throw new BadRequestException(
+                    "Page size must be between 1 and 100");
+        }
+
+        if (fromDate != null
+                && toDateExclusive != null
+                && !fromDate.isBefore(toDateExclusive)) {
+            throw new BadRequestException(
+                    "Invalid transaction date range");
+        }
+
+        String normalizedKeyword =
+                keyword == null || keyword.isBlank()
+                        ? null
+                        : keyword.trim();
+
+        Long transactionId = null;
+
+        if (normalizedKeyword != null) {
+            try {
+                transactionId = Long.valueOf(normalizedKeyword);
+            } catch (NumberFormatException ignored) {
+                // Non-numeric keywords may match email or enum fields.
+            }
+        }
+
+        String requestedSortBy =
+                sortBy == null ? "timestamp" : sortBy;
+
+        String safeSortBy = switch (requestedSortBy) {
+            case "timestamp", "amount" -> requestedSortBy;
+            default -> throw new BadRequestException(
+                    "Sort field must be timestamp or amount");
+        };
+
+        Sort.Direction sortDirection;
+
+        try {
+            sortDirection = Sort.Direction.fromString(
+                    direction == null ? "DESC" : direction);
+        } catch (IllegalArgumentException ex) {
+            throw new BadRequestException(
+                    "Sort direction must be ASC or DESC");
+        }
+
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by(sortDirection, safeSortBy));
+
+        TransactionCategory keywordCategory = null;
+        TransactionType keywordType = null;
+        TransactionStatus keywordStatus = null;
+
+        if (normalizedKeyword != null) {
+            String normalizedEnumKeyword =
+                    normalizedKeyword.toUpperCase(Locale.ROOT);
+
+            try {
+                keywordCategory =
+                        TransactionCategory.valueOf(normalizedEnumKeyword);
+            } catch (IllegalArgumentException ignored) {
+                // Not a category.
+            }
+
+            try {
+                keywordType =
+                        TransactionType.valueOf(normalizedEnumKeyword);
+            } catch (IllegalArgumentException ignored) {
+                // Not a transaction type.
+            }
+
+            try {
+                keywordStatus =
+                        TransactionStatus.valueOf(normalizedEnumKeyword);
+            } catch (IllegalArgumentException ignored) {
+                // Not a transaction status.
+            }
+        }
+
+        // Temporary diagnostic logging for search investigation.
+        logger.info(
+                "Transaction search debug | email={}, keyword={}, "
+                        + "keywordCategory={}, keywordType={}, "
+                        + "keywordStatus={}, transactionId={}, "
+                        + "statusFilter={}, typeFilter={}, categoryFilter={}",
+                email,
+                normalizedKeyword,
+                keywordCategory,
+                keywordType,
+                keywordStatus,
+                transactionId,
+                status,
+                type,
+                category);
+
+        Page<Transaction> transactions =
+                transactionRepository.findFilteredUserHistory(
+                        email,
+                        status,
+                        type,
+                        category,
+                        fromDate,
+                        toDateExclusive,
+                        normalizedKeyword,
+                        transactionId,
+                        keywordCategory,
+                        keywordType,
+                        keywordStatus,
+                        pageable);
+
+        logger.info(
+                "Transaction search result | email={}, keyword={}, "
+                        + "page={}, size={}, totalElements={}, returnedElements={}",
+                email,
+                normalizedKeyword,
+                page,
+                size,
+                transactions.getTotalElements(),
+                transactions.getNumberOfElements());
+
+        return transactions.map(tx -> new TransactionResponseDTO(
+                tx.getTransactionId(),
+                tx.getSenderEmail(),
+                tx.getReceiverEmail(),
+                tx.getAmount(),
+                tx.getStatus().name(),
+                tx.getType(),
+                tx.getCategory(),
+                tx.getTimestamp()));
     }
 }

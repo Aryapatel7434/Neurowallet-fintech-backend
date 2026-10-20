@@ -1,3 +1,4 @@
+
 package com.smartwallet.dto;
 
 public class AuthResponse {
@@ -6,6 +7,7 @@ public class AuthResponse {
     private String refreshToken;
     private String email;
     private String name;
+    private String role;
 
     public AuthResponse() {
     }
@@ -16,10 +18,21 @@ public class AuthResponse {
             String email,
             String name) {
 
+        this(accessToken, refreshToken, email, name, null);
+    }
+
+    public AuthResponse(
+            String accessToken,
+            String refreshToken,
+            String email,
+            String name,
+            String role) {
+
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.email = email;
         this.name = name;
+        this.role = role;
     }
 
     public String getAccessToken() {
@@ -52,5 +65,13 @@ public class AuthResponse {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

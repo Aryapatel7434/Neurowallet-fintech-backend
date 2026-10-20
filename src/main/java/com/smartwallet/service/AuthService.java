@@ -168,12 +168,13 @@ public class AuthService {
         // Return authentication response
         // --------------------------------------------------------
 
-        return new AuthResponse(
-                accessToken,
-                refreshToken.getToken(),
-                user.getEmail(),
-                user.getName()
-        );
+      return new AuthResponse(
+        accessToken,
+        refreshToken.getToken(),
+        user.getEmail(),
+        user.getName(),
+        user.getRole()
+);
     }
 
     // ============================================================
@@ -234,10 +235,11 @@ public class AuthService {
         // --------------------------------------------------------
 
         return new AuthResponse(
-                accessToken,
-                refreshToken.getToken(),
-                user.getEmail(),
-                user.getName()
-        );
+        accessToken,
+        refreshToken.getToken(),
+        user.getEmail(),
+        user.getName(),
+        user.getRole()
+);
     }
 }
