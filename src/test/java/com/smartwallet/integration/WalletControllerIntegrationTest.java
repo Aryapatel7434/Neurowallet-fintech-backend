@@ -1,4 +1,4 @@
-package com.smartwallet.controller;
+package com.smartwallet.integration;
 
 import com.smartwallet.model.User;
 import com.smartwallet.model.Wallet;
@@ -112,7 +112,7 @@ public class WalletControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
         )
-        .andExpect(status().isForbidden());
+        .andExpect(status().isUnauthorized());
     }
 
     @Test

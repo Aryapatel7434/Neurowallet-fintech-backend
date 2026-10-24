@@ -13,7 +13,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
+import org.springframework.web.server.ResponseStatusException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -218,4 +218,30 @@ public class GlobalExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
+    // ============================================================
+// HTTP STATUS EXCEPTIONS
+// ============================================================
+
+@ExceptionHandler(ResponseStatusException.class)
+public ResponseEntity<ApiResponse<Void>>
+handleResponseStatusException(
+        ResponseStatusException ex) {
+
+    HttpStatus status = HttpStatus.valueOf(
+            ex.getStatusCode().value()
+    );
+
+    String message = ex.getReason() != null
+            ? ex.getReason()
+            : "Request could not be processed.";
+
+    ApiResponse<Void> response =
+            new ApiResponse<>(
+                    false,
+                    message,
+                    null
+            );
+
+    return new ResponseEntity<>(response, status);
+}
 }

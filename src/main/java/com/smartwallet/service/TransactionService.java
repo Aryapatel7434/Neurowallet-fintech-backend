@@ -502,9 +502,102 @@ public class TransactionService {
                 topCategoryAmount);
     }
 
-    public TransactionAnalyticsResponse getTransactionAnalytics() {
-        throw new UnsupportedOperationException("Not supported yet.");
+   
+public TransactionAnalyticsResponse getTransactionAnalytics() {
+
+    List<Transaction> transactions = transactionRepository.findAll();
+
+    long totalTransactions = transactions.size();
+    long successfulTransactions = 0;
+    long failedTransactions = 0;
+
+    BigDecimal totalIncome = BigDecimal.ZERO;
+    BigDecimal totalExpense = BigDecimal.ZERO;
+    BigDecimal totalTransfer = BigDecimal.ZERO;
+    BigDecimal totalSuccessfulAmount = BigDecimal.ZERO;
+    BigDecimal largestTransaction = BigDecimal.ZERO;
+
+    for (Transaction transaction : transactions) {
+
+        if (transaction == null
+                || transaction.getAmount() == null
+                || transaction.getStatus() == null
+                || transaction.getType() == null) {
+            continue;
+        }
+
+        TransactionStatus status = transaction.getStatus();
+
+        if (status == TransactionStatus.SUCCESS) {
+            successfulTransactions++;
+
+            BigDecimal amount = transaction.getAmount().abs();
+            totalSuccessfulAmount = totalSuccessfulAmount.add(amount);
+
+            if (amount.compareTo(largestTransaction) > 0) {
+                largestTransaction = amount;
+            }
+
+            switch (transaction.getType()) {
+                case CREDIT ->
+                    totalIncome = totalIncome.add(amount);
+
+                case DEBIT ->
+                    totalExpense = totalExpense.add(amount);
+
+                case TRANSFER -> {
+                    totalTransfer = totalTransfer.add(amount);
+
+                    // Internal transfers affect both sides of global cash flow.
+                    totalIncome = totalIncome.add(amount);
+                    totalExpense = totalExpense.add(amount);
+                }
+            }
+
+        } else if (status == TransactionStatus.FAILED
+                || status == TransactionStatus.FAILD) {
+            failedTransactions++;
+        }
     }
+
+    BigDecimal savings = totalIncome.subtract(totalExpense);
+
+    BigDecimal savingsRatio = BigDecimal.ZERO;
+
+    if (totalIncome.compareTo(BigDecimal.ZERO) > 0) {
+        savingsRatio = savings
+                .multiply(new BigDecimal("100"))
+                .divide(
+                        totalIncome,
+                        2,
+                        java.math.RoundingMode.HALF_UP
+                );
+    }
+
+    BigDecimal averageTransaction = BigDecimal.ZERO;
+
+    if (successfulTransactions > 0) {
+        averageTransaction = totalSuccessfulAmount.divide(
+                BigDecimal.valueOf(successfulTransactions),
+                2,
+                java.math.RoundingMode.HALF_UP
+        );
+    }
+
+    return new TransactionAnalyticsResponse(
+            totalTransactions,
+            successfulTransactions,
+            failedTransactions,
+            totalIncome,
+            totalExpense,
+            totalTransfer,
+            averageTransaction,
+            largestTransaction,
+            savings,
+            savingsRatio
+    );
+}
+
 
     // ============================================================
     // FILTERED USER TRANSACTION HISTORY

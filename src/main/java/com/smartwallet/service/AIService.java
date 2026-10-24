@@ -116,132 +116,159 @@ public class AIService {
      * AIInsightResponse
      */
 
-    public AIInsightResponse getAIInsights(String email) {
+public AIInsightResponse getAIInsights(String email) {
 
-        logger.info(
-                "Generating AI insights for user: {}",
-                email
+    logger.info("Generating AI insights for user: {}", email);
+
+    Wallet wallet = walletRepository.findByUserEmail(email);
+
+    if (wallet == null) {
+        throw new WalletNotFoundException(
+                "Wallet not found for email: " + email
+        );
+    }
+
+    List<Transaction> transactions =
+            transactionRepository.findBySenderEmailOrReceiverEmail(
+                    email, email
+            );
+
+    FinancialSummary summary = calculateFinancialSummary(
+            wallet, transactions, email
+    );
+
+    FinancialContext context = buildFinancialContext(summary);
+
+    String prompt = promptBuilder.buildFinancialInsightPrompt(context);
+
+    try {
+        String aiResponse = chatClient
+                .prompt()
+                .user(prompt)
+                .call()
+                .content();
+
+        if (aiResponse == null || aiResponse.isBlank()) {
+            logger.warn(
+                    "AI provider returned an empty insight response."
+            );
+            return buildDeterministicAIInsightResponse(summary);
+        }
+
+        String cleanedResponse = cleanJsonResponse(aiResponse);
+
+        AIInsightResponse response = objectMapper.readValue(
+                cleanedResponse,
+                AIInsightResponse.class
         );
 
-        Wallet wallet =
-                walletRepository.findByUserEmail(email);
-
-        if (wallet == null) {
-
-            logger.error(
-                    "Wallet not found for user: {}",
-                    email
-            );
-
-            throw new WalletNotFoundException(
-                    "Wallet not found for email: " + email
-            );
-        }
-
-        List<Transaction> transactions =
-                transactionRepository
-                        .findBySenderEmailOrReceiverEmail(
-                                email,
-                                email
-                        );
-
-        FinancialSummary summary =
-                calculateFinancialSummary(
-                        wallet,
-                        transactions,
-                        email
-                );
-
-        /*
-         * Convert deterministic financial data
-         * into AI-safe financial context.
-         */
-        FinancialContext context =
-                buildFinancialContext(summary);
-
-        /*
-         * Build prompt for Gemini.
-         */
-        String prompt =
-                promptBuilder.buildFinancialInsightPrompt(
-                        context
-                );
-
-        logger.debug(
-                "Financial AI prompt prepared for user: {}",
-                email
-        );
-
-        String aiResponse;
-
-        try {
-
-            aiResponse =
-                    chatClient
-                            .prompt()
-                            .user(prompt)
-                            .call()
-                            .content();
-
-        } catch (Exception e) {
-
-            logger.error(
-                    "AI provider failure while generating insights",
-                    e
-            );
-
-            throw new AIServiceException(
-                    "AI service is temporarily unavailable.",
-                    e
-            );
-        }
-
-        AIInsightResponse aiInsightResponse;
-
-        try {
-
-            if (aiResponse == null
-                    || aiResponse.isBlank()) {
-
-                throw new AIServiceException(
-                        "AI service returned an empty response."
-                );
-            }
-
-            String cleanedResponse =
-                    cleanJsonResponse(aiResponse);
-
-            aiInsightResponse =
-                    objectMapper.readValue(
-                            cleanedResponse,
-                            AIInsightResponse.class
-                    );
-
-            validateAIInsightResponse(
-                    aiInsightResponse
-            );
-
-        } catch (JsonProcessingException e) {
-
-            logger.error(
-                    "Invalid structured response received from AI",
-                    e
-            );
-
-            throw new AIServiceException(
-                    "AI service returned an invalid response.",
-                    e
-            );
-        }
+        validateAIInsightResponse(response);
 
         logger.info(
                 "AI insights generated successfully for user: {}",
                 email
         );
 
-        return aiInsightResponse;
+        return response;
+
+    } catch (Exception e) {
+        logger.warn(
+                "AI insights generation failed; using data-derived fallback. Cause: {}",
+                e.getMessage()
+        );
+
+        return buildDeterministicAIInsightResponse(summary);
+    }
+}
+
+private AIInsightResponse buildDeterministicAIInsightResponse(
+        FinancialSummary summary) {
+
+    BigDecimal income = summary.getTotalIncome();
+    BigDecimal expense = summary.getTotalExpense();
+    BigDecimal savings = summary.getSavings();
+    BigDecimal balance = summary.getBalance();
+
+    if (income == null) income = BigDecimal.ZERO;
+    if (expense == null) expense = BigDecimal.ZERO;
+    if (savings == null) savings = BigDecimal.ZERO;
+    if (balance == null) balance = BigDecimal.ZERO;
+
+    String savingOpportunity;
+
+    if (income.signum() <= 0) {
+        savingOpportunity =
+                "Insufficient recorded income to estimate a savings opportunity. "
+                + "Record income transactions to improve this assessment.";
+    } else if (savings.signum() > 0) {
+        savingOpportunity =
+                "Recorded income exceeds expenses by ₹"
+                + savings.toPlainString()
+                + ". Review recurring expenses to identify additional savings.";
+    } else {
+        savingOpportunity =
+                "Recorded expenses meet or exceed income. Review discretionary "
+                + "spending and recurring payments to identify potential savings.";
     }
 
+    String budgetAlert;
+
+    if (income.signum() <= 0 && expense.signum() > 0) {
+        budgetAlert =
+                "Expenses are recorded without positive recorded income. "
+                + "Review your transactions and budget.";
+    } else if (income.signum() > 0
+            && expense.compareTo(income) > 0) {
+        budgetAlert =
+                "Recorded expenses exceed income. Review spending and "
+                + "prioritize essential costs.";
+    } else {
+        budgetAlert =
+                "Recorded income is ₹" + income.toPlainString()
+                + " and recorded expenses are ₹" + expense.toPlainString()
+                + ". Review these figures against your planned budget.";
+    }
+
+    String investmentSuggestion;
+
+    if (balance.signum() <= 0) {
+        investmentSuggestion =
+                "Review cash flow and establish an emergency reserve "
+                + "before considering investment commitments.";
+    } else {
+        investmentSuggestion =
+                "Your recorded wallet balance is ₹" + balance.toPlainString()
+                + ". Assess emergency savings, near-term obligations, "
+                + "and risk tolerance before choosing any investment.";
+    }
+
+    String financialRisk;
+
+    if (income.signum() <= 0 && expense.signum() > 0) {
+        financialRisk =
+                "Recorded spending without positive recorded income may "
+                + "indicate cash-flow risk. Verify transaction completeness.";
+    } else if (income.signum() > 0
+            && expense.compareTo(income) > 0) {
+        financialRisk =
+                "Recorded expenses exceed income, which may create "
+                + "cash-flow pressure if the pattern continues.";
+    } else {
+        financialRisk =
+                "This assessment uses recorded income, expenses, and balance "
+                + "only. It does not assess credit, debt, or external obligations.";
+    }
+
+    return new AIInsightResponse(
+            calculateConfidence(summary),
+            savingOpportunity,
+            budgetAlert,
+            investmentSuggestion,
+            financialRisk
+    );
+}
+
+   
     // ============================================================
     // FINANCIAL ANALYSIS
     // ============================================================
