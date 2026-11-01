@@ -1,3 +1,4 @@
+
 package com.smartwallet.repository;
 
 import com.smartwallet.model.Transaction;
@@ -17,6 +18,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface TransactionRepository
         extends JpaRepository<Transaction, Long> {
+
+    // ============================================================
+    // BASIC TRANSACTION QUERIES
+    // ============================================================
 
     Page<Transaction> findBySenderEmailOrReceiverEmail(
             String senderEmail,
@@ -58,11 +63,9 @@ public interface TransactionRepository
             String receiverEmail
     );
 
-    /*
-     * ============================================================
-     * FRAUD DETECTION QUERIES
-     * ============================================================
-     */
+    // ============================================================
+    // FRAUD DETECTION QUERIES
+    // ============================================================
 
     /**
      * Retrieves a user's transactions since a given timestamp.
@@ -117,23 +120,52 @@ public interface TransactionRepository
             @Param("from") LocalDateTime from
     );
 
-    /*
-     * ============================================================
-     * FILTERED USER TRANSACTION HISTORY
-     * ============================================================
-     */
+    // ============================================================
+    // DASHBOARD PERIOD QUERIES
+    // ============================================================
 
     /**
-     * Retrieves a user's transaction history with server-side
-     * pagination, sorting, date filtering, and keyword matching.
+     * Retrieves a user's transactions within an optional date range.
      *
-     * Keyword matching supports:
-     * - Sender email
-     * - Receiver email
-     * - Transaction ID
-     * - Exact category
-     * - Exact transaction type
-     * - Exact transaction status
+     * fromDate is inclusive.
+     * toDateExclusive is exclusive.
+     *
+     * Both null means all-time transaction history.
+     */
+    @Query("""
+            SELECT t
+            FROM Transaction t
+            WHERE (t.senderEmail = :email
+                   OR t.receiverEmail = :email)
+              AND (:fromDate IS NULL
+                   OR t.timestamp >= :fromDate)
+              AND (:toDateExclusive IS NULL
+                   OR t.timestamp < :toDateExclusive)
+            ORDER BY t.timestamp DESC
+            """)
+    List<Transaction> findUserTransactionsInPeriod(
+            @Param("email") String email,
+            @Param("fromDate") LocalDateTime fromDate,
+            @Param("toDateExclusive") LocalDateTime toDateExclusive
+    );
+
+    // ============================================================
+    // FILTERED USER TRANSACTION HISTORY
+    // ============================================================
+
+    /**
+     * Retrieves a user's transaction history with:
+     *
+     * - User-scoped access
+     * - Server-side pagination
+     * - Sorting
+     * - Date filtering
+     * - Sender/receiver email search
+     * - Transaction ID search
+     * - Amount search
+     * - Category search
+     * - Transaction type search
+     * - Transaction status search
      */
     @Query(
             value = """
@@ -141,55 +173,112 @@ public interface TransactionRepository
                     FROM Transaction t
                     WHERE (t.senderEmail = :email
                            OR t.receiverEmail = :email)
-                      AND (:status IS NULL OR t.status = :status)
-                      AND (:type IS NULL OR t.type = :type)
-                      AND (:category IS NULL OR t.category = :category)
+
+                      AND (:status IS NULL
+                           OR t.status = :status)
+
+                      AND (:type IS NULL
+                           OR t.type = :type)
+
+                      AND (:category IS NULL
+                           OR t.category = :category)
+
                       AND (:fromDate IS NULL
                            OR t.timestamp >= :fromDate)
+
                       AND (:toDateExclusive IS NULL
                            OR t.timestamp < :toDateExclusive)
+
                       AND (
                             :keyword IS NULL
+
                             OR LOWER(t.senderEmail)
                                LIKE LOWER(CONCAT('%', :keyword, '%'))
+
                             OR LOWER(t.receiverEmail)
                                LIKE LOWER(CONCAT('%', :keyword, '%'))
-                            OR (:transactionId IS NOT NULL
-                                AND t.transactionId = :transactionId)
-                            OR (:keywordCategory IS NOT NULL
-                                AND t.category = :keywordCategory)
-                            OR (:keywordType IS NOT NULL
-                                AND t.type = :keywordType)
-                            OR (:keywordStatus IS NOT NULL
-                                AND t.status = :keywordStatus)
+
+                            OR (
+                                :transactionId IS NOT NULL
+                                AND t.transactionId = :transactionId
+                            )
+
+                            OR (
+                                :keywordAmount IS NOT NULL
+                                AND t.amount = :keywordAmount
+                            )
+
+                            OR (
+                                :keywordCategory IS NOT NULL
+                                AND t.category = :keywordCategory
+                            )
+
+                            OR (
+                                :keywordType IS NOT NULL
+                                AND t.type = :keywordType
+                            )
+
+                            OR (
+                                :keywordStatus IS NOT NULL
+                                AND t.status = :keywordStatus
+                            )
                           )
                     """,
+
             countQuery = """
                     SELECT COUNT(t)
                     FROM Transaction t
                     WHERE (t.senderEmail = :email
                            OR t.receiverEmail = :email)
-                      AND (:status IS NULL OR t.status = :status)
-                      AND (:type IS NULL OR t.type = :type)
-                      AND (:category IS NULL OR t.category = :category)
+
+                      AND (:status IS NULL
+                           OR t.status = :status)
+
+                      AND (:type IS NULL
+                           OR t.type = :type)
+
+                      AND (:category IS NULL
+                           OR t.category = :category)
+
                       AND (:fromDate IS NULL
                            OR t.timestamp >= :fromDate)
+
                       AND (:toDateExclusive IS NULL
                            OR t.timestamp < :toDateExclusive)
+
                       AND (
                             :keyword IS NULL
+
                             OR LOWER(t.senderEmail)
                                LIKE LOWER(CONCAT('%', :keyword, '%'))
+
                             OR LOWER(t.receiverEmail)
                                LIKE LOWER(CONCAT('%', :keyword, '%'))
-                            OR (:transactionId IS NOT NULL
-                                AND t.transactionId = :transactionId)
-                            OR (:keywordCategory IS NOT NULL
-                                AND t.category = :keywordCategory)
-                            OR (:keywordType IS NOT NULL
-                                AND t.type = :keywordType)
-                            OR (:keywordStatus IS NOT NULL
-                                AND t.status = :keywordStatus)
+
+                            OR (
+                                :transactionId IS NOT NULL
+                                AND t.transactionId = :transactionId
+                            )
+
+                            OR (
+                                :keywordAmount IS NOT NULL
+                                AND t.amount = :keywordAmount
+                            )
+
+                            OR (
+                                :keywordCategory IS NOT NULL
+                                AND t.category = :keywordCategory
+                            )
+
+                            OR (
+                                :keywordType IS NOT NULL
+                                AND t.type = :keywordType
+                            )
+
+                            OR (
+                                :keywordStatus IS NOT NULL
+                                AND t.status = :keywordStatus
+                            )
                           )
                     """
     )
@@ -202,6 +291,7 @@ public interface TransactionRepository
             @Param("toDateExclusive") LocalDateTime toDateExclusive,
             @Param("keyword") String keyword,
             @Param("transactionId") Long transactionId,
+            @Param("keywordAmount") BigDecimal keywordAmount,
             @Param("keywordCategory") TransactionCategory keywordCategory,
             @Param("keywordType") TransactionType keywordType,
             @Param("keywordStatus") TransactionStatus keywordStatus,

@@ -357,7 +357,8 @@ public class TransactionService {
         Pageable pageable = PageRequest.of(
                 page, size, Sort.by("timestamp").descending());
 
-        return transactionRepository.findByReceiverEmail(email, pageable);
+        return transactionRepository.findByReceiverEmail(
+                email, pageable);
     }
 
     // ============================================================
@@ -419,18 +420,47 @@ public class TransactionService {
     // DASHBOARD INSIGHTS
     // ============================================================
 
+    /**
+     * Maintains backward compatibility with existing callers.
+     * No date boundaries means all-time dashboard insights.
+     */
     public DashboardInsightResponse getDashboardInsights() {
+        return getDashboardInsights(null, null);
+    }
+
+    /**
+     * Generates dashboard insights for an optional date range.
+     *
+     * fromDate is inclusive.
+     * toDateExclusive is exclusive.
+     */
+    public DashboardInsightResponse getDashboardInsights(
+            LocalDateTime fromDate,
+            LocalDateTime toDateExclusive) {
+
+        if (fromDate != null
+                && toDateExclusive != null
+                && !fromDate.isBefore(toDateExclusive)) {
+
+            throw new BadRequestException(
+                    "Invalid dashboard date range");
+        }
 
         String email = SecurityContextHolder
                 .getContext()
                 .getAuthentication()
                 .getName();
 
-        logger.info("Generating dashboard insights");
+        logger.info(
+                "Generating dashboard insights. From: {}, To: {}",
+                fromDate,
+                toDateExclusive);
 
         List<Transaction> transactions =
-                transactionRepository.findBySenderEmailOrReceiverEmail(
-                        email, email);
+                transactionRepository.findUserTransactionsInPeriod(
+                        email,
+                        fromDate,
+                        toDateExclusive);
 
         BigDecimal totalIncome = BigDecimal.ZERO;
         BigDecimal totalExpense = BigDecimal.ZERO;
@@ -441,20 +471,20 @@ public class TransactionService {
         long transactionCount = 0;
 
         for (Transaction tx : transactions) {
+
             if (tx == null
                     || tx.getAmount() == null
-                    || tx.getStatus() == null) {
-                continue;
-            }
-
-            if (tx.getStatus() != TransactionStatus.SUCCESS) {
+                    || tx.getStatus() != TransactionStatus.SUCCESS) {
                 continue;
             }
 
             BigDecimal amount = tx.getAmount().abs();
 
-            boolean isReceiver = email.equals(tx.getReceiverEmail());
-            boolean isSender = email.equals(tx.getSenderEmail());
+            boolean isReceiver =
+                    email.equals(tx.getReceiverEmail());
+
+            boolean isSender =
+                    email.equals(tx.getSenderEmail());
 
             if (isReceiver) {
                 totalIncome = totalIncome.add(amount);
@@ -471,17 +501,22 @@ public class TransactionService {
                     categoryTotals.put(
                             category,
                             categoryTotals.getOrDefault(
-                                    category, BigDecimal.ZERO).add(amount));
+                                    category,
+                                    BigDecimal.ZERO
+                            ).add(amount));
                 }
             }
         }
 
-        BigDecimal netCashFlow = totalIncome.subtract(totalExpense);
+        BigDecimal netCashFlow =
+                totalIncome.subtract(totalExpense);
+
         TransactionCategory topCategory = null;
         BigDecimal topCategoryAmount = BigDecimal.ZERO;
 
         for (Map.Entry<TransactionCategory, BigDecimal> entry
                 : categoryTotals.entrySet()) {
+
             if (entry.getValue().compareTo(topCategoryAmount) > 0) {
                 topCategory = entry.getKey();
                 topCategoryAmount = entry.getValue();
@@ -489,7 +524,9 @@ public class TransactionService {
         }
 
         String topCategoryName =
-                topCategory != null ? topCategory.name() : null;
+                topCategory != null
+                        ? topCategory.name()
+                        : null;
 
         logger.info("Dashboard insights generated successfully");
 
@@ -502,102 +539,104 @@ public class TransactionService {
                 topCategoryAmount);
     }
 
-   
-public TransactionAnalyticsResponse getTransactionAnalytics() {
+    // ============================================================
+    // TRANSACTION ANALYTICS
+    // ============================================================
 
-    List<Transaction> transactions = transactionRepository.findAll();
+    public TransactionAnalyticsResponse getTransactionAnalytics() {
 
-    long totalTransactions = transactions.size();
-    long successfulTransactions = 0;
-    long failedTransactions = 0;
+        List<Transaction> transactions = transactionRepository.findAll();
 
-    BigDecimal totalIncome = BigDecimal.ZERO;
-    BigDecimal totalExpense = BigDecimal.ZERO;
-    BigDecimal totalTransfer = BigDecimal.ZERO;
-    BigDecimal totalSuccessfulAmount = BigDecimal.ZERO;
-    BigDecimal largestTransaction = BigDecimal.ZERO;
+        long totalTransactions = transactions.size();
+        long successfulTransactions = 0;
+        long failedTransactions = 0;
 
-    for (Transaction transaction : transactions) {
+        BigDecimal totalIncome = BigDecimal.ZERO;
+        BigDecimal totalExpense = BigDecimal.ZERO;
+        BigDecimal totalTransfer = BigDecimal.ZERO;
+        BigDecimal totalSuccessfulAmount = BigDecimal.ZERO;
+        BigDecimal largestTransaction = BigDecimal.ZERO;
 
-        if (transaction == null
-                || transaction.getAmount() == null
-                || transaction.getStatus() == null
-                || transaction.getType() == null) {
-            continue;
-        }
+        for (Transaction transaction : transactions) {
 
-        TransactionStatus status = transaction.getStatus();
-
-        if (status == TransactionStatus.SUCCESS) {
-            successfulTransactions++;
-
-            BigDecimal amount = transaction.getAmount().abs();
-            totalSuccessfulAmount = totalSuccessfulAmount.add(amount);
-
-            if (amount.compareTo(largestTransaction) > 0) {
-                largestTransaction = amount;
+            if (transaction == null
+                    || transaction.getAmount() == null
+                    || transaction.getStatus() == null
+                    || transaction.getType() == null) {
+                continue;
             }
 
-            switch (transaction.getType()) {
-                case CREDIT ->
-                    totalIncome = totalIncome.add(amount);
+            TransactionStatus status = transaction.getStatus();
 
-                case DEBIT ->
-                    totalExpense = totalExpense.add(amount);
+            if (status == TransactionStatus.SUCCESS) {
+                successfulTransactions++;
 
-                case TRANSFER -> {
-                    totalTransfer = totalTransfer.add(amount);
+                BigDecimal amount = transaction.getAmount().abs();
+                totalSuccessfulAmount =
+                        totalSuccessfulAmount.add(amount);
 
-                    // Internal transfers affect both sides of global cash flow.
-                    totalIncome = totalIncome.add(amount);
-                    totalExpense = totalExpense.add(amount);
+                if (amount.compareTo(largestTransaction) > 0) {
+                    largestTransaction = amount;
                 }
+
+                switch (transaction.getType()) {
+                    case CREDIT ->
+                        totalIncome = totalIncome.add(amount);
+
+                    case DEBIT ->
+                        totalExpense = totalExpense.add(amount);
+
+                    case TRANSFER -> {
+                        totalTransfer = totalTransfer.add(amount);
+
+                        totalIncome = totalIncome.add(amount);
+                        totalExpense = totalExpense.add(amount);
+                    }
+                }
+
+            } else if (status == TransactionStatus.FAILED
+                    || status == TransactionStatus.FAILD) {
+                failedTransactions++;
             }
-
-        } else if (status == TransactionStatus.FAILED
-                || status == TransactionStatus.FAILD) {
-            failedTransactions++;
         }
-    }
 
-    BigDecimal savings = totalIncome.subtract(totalExpense);
+        BigDecimal savings = totalIncome.subtract(totalExpense);
 
-    BigDecimal savingsRatio = BigDecimal.ZERO;
+        BigDecimal savingsRatio = BigDecimal.ZERO;
 
-    if (totalIncome.compareTo(BigDecimal.ZERO) > 0) {
-        savingsRatio = savings
-                .multiply(new BigDecimal("100"))
-                .divide(
-                        totalIncome,
-                        2,
-                        java.math.RoundingMode.HALF_UP
-                );
-    }
+        if (totalIncome.compareTo(BigDecimal.ZERO) > 0) {
+            savingsRatio = savings
+                    .multiply(new BigDecimal("100"))
+                    .divide(
+                            totalIncome,
+                            2,
+                            java.math.RoundingMode.HALF_UP
+                    );
+        }
 
-    BigDecimal averageTransaction = BigDecimal.ZERO;
+        BigDecimal averageTransaction = BigDecimal.ZERO;
 
-    if (successfulTransactions > 0) {
-        averageTransaction = totalSuccessfulAmount.divide(
-                BigDecimal.valueOf(successfulTransactions),
-                2,
-                java.math.RoundingMode.HALF_UP
+        if (successfulTransactions > 0) {
+            averageTransaction = totalSuccessfulAmount.divide(
+                    BigDecimal.valueOf(successfulTransactions),
+                    2,
+                    java.math.RoundingMode.HALF_UP
+            );
+        }
+
+        return new TransactionAnalyticsResponse(
+                totalTransactions,
+                successfulTransactions,
+                failedTransactions,
+                totalIncome,
+                totalExpense,
+                totalTransfer,
+                averageTransaction,
+                largestTransaction,
+                savings,
+                savingsRatio
         );
     }
-
-    return new TransactionAnalyticsResponse(
-            totalTransactions,
-            successfulTransactions,
-            failedTransactions,
-            totalIncome,
-            totalExpense,
-            totalTransfer,
-            averageTransaction,
-            largestTransaction,
-            savings,
-            savingsRatio
-    );
-}
-
 
     // ============================================================
     // FILTERED USER TRANSACTION HISTORY
@@ -638,16 +677,32 @@ public TransactionAnalyticsResponse getTransactionAnalytics() {
                         ? null
                         : keyword.trim();
 
+        // Transaction ID search
         Long transactionId = null;
 
+        // Amount search
+        BigDecimal keywordAmount = null;
+
         if (normalizedKeyword != null) {
+
             try {
                 transactionId = Long.valueOf(normalizedKeyword);
             } catch (NumberFormatException ignored) {
-                // Non-numeric keywords may match email or enum fields.
+                // Keyword is not a transaction ID.
+            }
+
+            try {
+                keywordAmount = new BigDecimal(normalizedKeyword);
+
+                if (keywordAmount.compareTo(BigDecimal.ZERO) < 0) {
+                    keywordAmount = null;
+                }
+            } catch (NumberFormatException ignored) {
+                // Keyword is not a transaction amount.
             }
         }
 
+        // Sorting validation
         String requestedSortBy =
                 sortBy == null ? "timestamp" : sortBy;
 
@@ -672,11 +727,13 @@ public TransactionAnalyticsResponse getTransactionAnalytics() {
                 size,
                 Sort.by(sortDirection, safeSortBy));
 
+        // Enum keyword matching
         TransactionCategory keywordCategory = null;
         TransactionType keywordType = null;
         TransactionStatus keywordStatus = null;
 
         if (normalizedKeyword != null) {
+
             String normalizedEnumKeyword =
                     normalizedKeyword.toUpperCase(Locale.ROOT);
 
@@ -702,22 +759,19 @@ public TransactionAnalyticsResponse getTransactionAnalytics() {
             }
         }
 
-        // Temporary diagnostic logging for search investigation.
         logger.info(
-                "Transaction search debug | email={}, keyword={}, "
-                        + "keywordCategory={}, keywordType={}, "
-                        + "keywordStatus={}, transactionId={}, "
-                        + "statusFilter={}, typeFilter={}, categoryFilter={}",
+                "Transaction search | email={}, keyword={}, "
+                        + "transactionId={}, keywordAmount={}, "
+                        + "category={}, type={}, status={}",
                 email,
                 normalizedKeyword,
+                transactionId,
+                keywordAmount,
                 keywordCategory,
                 keywordType,
-                keywordStatus,
-                transactionId,
-                status,
-                type,
-                category);
+                keywordStatus);
 
+        // Execute user-scoped filtered query
         Page<Transaction> transactions =
                 transactionRepository.findFilteredUserHistory(
                         email,
@@ -728,6 +782,7 @@ public TransactionAnalyticsResponse getTransactionAnalytics() {
                         toDateExclusive,
                         normalizedKeyword,
                         transactionId,
+                        keywordAmount,
                         keywordCategory,
                         keywordType,
                         keywordStatus,
