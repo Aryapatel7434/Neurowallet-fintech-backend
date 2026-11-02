@@ -136,12 +136,44 @@ public class TransactionService {
                     "Cannot send money to yourself");
         }
 
-        // Wallet validation
-        Wallet senderWallet =
-                walletRepository.findByUserEmail(sender.getEmail());
+        // ============================================================
+        // WALLET VALIDATION + CONCURRENCY CONTROL
+        // ============================================================
 
-        Wallet receiverWallet =
-                walletRepository.findByUserEmail(receiver.getEmail());
+        Wallet senderWallet;
+        Wallet receiverWallet;
+
+        String normalizedSenderEmail = sender.getEmail();
+        String normalizedReceiverEmail = receiver.getEmail();
+
+        /*
+         * Acquire both wallet locks in a consistent order.
+         * This reduces deadlock risk during concurrent transfers.
+         */
+        if (normalizedSenderEmail.compareTo(normalizedReceiverEmail) < 0) {
+
+            senderWallet =
+                    walletRepository.findByUserEmailForUpdate(
+                            normalizedSenderEmail
+                    );
+
+            receiverWallet =
+                    walletRepository.findByUserEmailForUpdate(
+                            normalizedReceiverEmail
+                    );
+
+        } else {
+
+            receiverWallet =
+                    walletRepository.findByUserEmailForUpdate(
+                            normalizedReceiverEmail
+                    );
+
+            senderWallet =
+                    walletRepository.findByUserEmailForUpdate(
+                            normalizedSenderEmail
+                    );
+        }
 
         if (senderWallet == null) {
             logger.warn("Transaction failed. Sender wallet not found");
@@ -594,8 +626,7 @@ public class TransactionService {
                     }
                 }
 
-            } else if (status == TransactionStatus.FAILED
-                    || status == TransactionStatus.FAILD) {
+            } else if (status == TransactionStatus.FAILED) {
                 failedTransactions++;
             }
         }

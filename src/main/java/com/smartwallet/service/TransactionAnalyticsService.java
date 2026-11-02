@@ -72,11 +72,10 @@ public class TransactionAnalyticsService {
 
                 successfulTransactions++;
 
-            } else if (status == TransactionStatus.FAILED
-                    || status == TransactionStatus.FAILD) {
+            }else if (status == TransactionStatus.FAILED) {
 
-                failedTransactions++;
-            }
+    failedTransactions++;
+}
 
             // Only successful transactions contribute
             // to financial calculations.

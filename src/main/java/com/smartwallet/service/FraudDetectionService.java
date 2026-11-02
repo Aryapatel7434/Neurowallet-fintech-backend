@@ -1,3 +1,4 @@
+
 package com.smartwallet.service;
 
 import com.smartwallet.dto.FraudAIAnalysisResponse;
@@ -22,9 +23,7 @@ import org.springframework.stereotype.Service;
 public class FraudDetectionService {
 
     private static final Logger logger =
-            LoggerFactory.getLogger(
-                    FraudDetectionService.class
-            );
+            LoggerFactory.getLogger(FraudDetectionService.class);
 
     private static final BigDecimal HIGH_AMOUNT =
             new BigDecimal("50000");
@@ -36,140 +35,87 @@ public class FraudDetectionService {
             new BigDecimal("3");
 
     private static final int RAPID_TRANSACTION_LIMIT = 3;
-
     private static final int FAILED_TRANSACTION_LIMIT = 3;
 
     private final TransactionRepository transactionRepository;
-
     private final FraudAIAnalysisService fraudAIAnalysisService;
 
     public FraudDetectionService(
             TransactionRepository transactionRepository,
             FraudAIAnalysisService fraudAIAnalysisService) {
 
-        this.transactionRepository =
-                transactionRepository;
-
-        this.fraudAIAnalysisService =
-                fraudAIAnalysisService;
+        this.transactionRepository = transactionRepository;
+        this.fraudAIAnalysisService = fraudAIAnalysisService;
     }
+
+    // ============================================================
+    // FRAUD DETECTION
+    // ============================================================
 
     public FraudDetectionResponse detectFraud(
             Long transactionId,
             String email) {
 
-        Transaction transaction =
-                transactionRepository
-                        .findById(transactionId)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Transaction not found"
-                                )
-                        );
+        Transaction transaction = transactionRepository
+                .findById(transactionId)
+                .orElseThrow(() ->
+                        new RuntimeException("Transaction not found"));
 
-        validateOwnership(
+        validateOwnership(transaction, email);
+
+        // Load successful transaction history
+        List<Transaction> successfulHistory =
+                transactionRepository.findUserTransactionsByStatus(
+                        email,
+                        TransactionStatus.SUCCESS
+                );
+
+        // Load recent transaction history
+        List<Transaction> recentHistory =
+                loadRecentHistory(transaction, email);
+
+        // Load recent failed transaction history
+        List<Transaction> recentFailedHistory =
+                loadRecentFailedHistory(transaction, email);
+
+        // Rule-based fraud analysis
+        BigDecimal riskScore = calculateRiskScore(
                 transaction,
-                email
+                successfulHistory,
+                recentHistory,
+                recentFailedHistory
         );
 
-        /*
-         * ============================================================
-         * LOAD ONLY THE HISTORY REQUIRED BY EACH FRAUD RULE
-         * ============================================================
-         */
-
-        List<Transaction> successfulHistory =
-                transactionRepository
-                        .findUserTransactionsByStatus(
-                                email,
-                                TransactionStatus.SUCCESS
-                        );
-
-        List<Transaction> recentHistory =
-                loadRecentHistory(
-                        transaction,
-                        email
-                );
-
-        List<Transaction> recentFailedHistory =
-                loadRecentFailedHistory(
-                        transaction,
-                        email
-                );
-
-        /*
-         * ============================================================
-         * RULE-BASED FRAUD ANALYSIS
-         * ============================================================
-         */
-
-        BigDecimal riskScore =
-                calculateRiskScore(
-                        transaction,
-                        successfulHistory,
-                        recentHistory,
-                        recentFailedHistory
-                );
-
         FraudRiskLevel riskLevel =
-                determineRiskLevel(
-                        riskScore
-                );
+                determineRiskLevel(riskScore);
 
-        List<String> riskFactors =
-                identifyRiskFactors(
-                        transaction,
-                        successfulHistory,
-                        recentHistory,
-                        recentFailedHistory
-                );
+        List<String> riskFactors = identifyRiskFactors(
+                transaction,
+                successfulHistory,
+                recentHistory,
+                recentFailedHistory
+        );
 
-        String reason =
-                buildReason(
-                        riskLevel,
-                        riskFactors
-                );
+        String reason = buildReason(riskLevel, riskFactors);
 
-        String recommendation =
-                buildRecommendation(
-                        riskLevel
-                );
+        String recommendation = buildRecommendation(riskLevel);
 
-        /*
-         * ============================================================
-         * AI FRAUD ANALYSIS
-         *
-         * AI is an enhancement layer.
-         *
-         * The deterministic rule engine remains the
-         * source of truth for risk score and risk level.
-         * ============================================================
-         */
+        // ========================================================
+        // AI FRAUD ANALYSIS
+        // ========================================================
 
         FraudAIAnalysisResponse aiAnalysis = null;
 
         try {
 
-            aiAnalysis =
-                    fraudAIAnalysisService.analyze(
-                            riskLevel.name(),
-                            riskScore.toPlainString(),
-                            reason,
-                            String.join(
-                                    ", ",
-                                    riskFactors
-                            )
-                    );
+            aiAnalysis = fraudAIAnalysisService.analyze(
+                    riskLevel.name(),
+                    riskScore.toPlainString(),
+                    reason,
+                    String.join(", ", riskFactors)
+            );
 
         } catch (Exception ex) {
-
-            /*
-             * Gemini failure must not make the
-             * fraud detection engine unavailable.
-             *
-             * The rule-based fraud result remains
-             * valid and will still be returned.
-             */
 
             logger.warn(
                     "AI fraud analysis unavailable. "
@@ -177,11 +123,9 @@ public class FraudDetectionService {
             );
         }
 
-        /*
-         * ============================================================
-         * FINAL RESPONSE
-         * ============================================================
-         */
+        // ========================================================
+        // FINAL RESPONSE
+        // ========================================================
 
         FraudDetectionResponse response =
                 new FraudDetectionResponse(
@@ -193,31 +137,30 @@ public class FraudDetectionService {
                         riskFactors
                 );
 
-        response.setAiAnalysis(
-                aiAnalysis
-        );
+        response.setAiAnalysis(aiAnalysis);
 
         return response;
     }
+
+    // ============================================================
+    // LOAD TRANSACTION HISTORY
+    // ============================================================
 
     private List<Transaction> loadRecentHistory(
             Transaction transaction,
             String email) {
 
         if (transaction.getTimestamp() == null) {
-
             return new ArrayList<>();
         }
 
         LocalDateTime from =
-                transaction.getTimestamp()
-                        .minusMinutes(10);
+                transaction.getTimestamp().minusMinutes(10);
 
-        return transactionRepository
-                .findUserTransactionsSince(
-                        email,
-                        from
-                );
+        return transactionRepository.findUserTransactionsSince(
+                email,
+                from
+        );
     }
 
     private List<Transaction> loadRecentFailedHistory(
@@ -225,44 +168,43 @@ public class FraudDetectionService {
             String email) {
 
         if (transaction.getTimestamp() == null) {
-
             return new ArrayList<>();
         }
 
         LocalDateTime from =
-                transaction.getTimestamp()
-                        .minusMinutes(60);
+                transaction.getTimestamp().minusMinutes(60);
 
-        return transactionRepository
-                .findRecentFailedTransactions(
-                        email,
-                        TransactionStatus.FAILED,
-                        TransactionStatus.FAILD,
-                        from
-                );
+        // Only the standardized FAILED status is queried.
+        return transactionRepository.findRecentFailedTransactions(
+                email,
+                TransactionStatus.FAILED,
+                from
+        );
     }
+
+    // ============================================================
+    // OWNERSHIP VALIDATION
+    // ============================================================
 
     private void validateOwnership(
             Transaction transaction,
             String email) {
 
         boolean sender =
-                email.equals(
-                        transaction.getSenderEmail()
-                );
+                email.equals(transaction.getSenderEmail());
 
         boolean receiver =
-                email.equals(
-                        transaction.getReceiverEmail()
-                );
+                email.equals(transaction.getReceiverEmail());
 
         if (!sender && !receiver) {
-
             throw new RuntimeException(
-                    "Transaction access denied"
-            );
+                    "Transaction access denied");
         }
     }
+
+    // ============================================================
+    // RISK SCORE CALCULATION
+    // ============================================================
 
     private BigDecimal calculateRiskScore(
             Transaction transaction,
@@ -270,71 +212,45 @@ public class FraudDetectionService {
             List<Transaction> recentHistory,
             List<Transaction> recentFailedHistory) {
 
-        BigDecimal score =
-                BigDecimal.ZERO;
+        BigDecimal score = BigDecimal.ZERO;
 
         if (isHighAmount(transaction)) {
-
-            score = score.add(
-                    new BigDecimal("20")
-            );
+            score = score.add(new BigDecimal("20"));
         }
 
         if (isVeryHighAmount(transaction)) {
-
-            score = score.add(
-                    new BigDecimal("15")
-            );
+            score = score.add(new BigDecimal("15"));
         }
 
-        if (isAmountAnomaly(
-                transaction,
-                successfulHistory)) {
-
-            score = score.add(
-                    new BigDecimal("25")
-            );
+        if (isAmountAnomaly(transaction, successfulHistory)) {
+            score = score.add(new BigDecimal("25"));
         }
 
-        if (hasRapidTransactions(
-                transaction,
-                recentHistory)) {
-
-            score = score.add(
-                    new BigDecimal("20")
-            );
+        if (hasRapidTransactions(transaction, recentHistory)) {
+            score = score.add(new BigDecimal("20"));
         }
 
         if (hasRecentFailedTransactions(
                 transaction,
                 recentFailedHistory)) {
 
-            score = score.add(
-                    new BigDecimal("15")
-            );
+            score = score.add(new BigDecimal("15"));
         }
 
-        if (isUnusualCategory(
-                transaction,
-                successfulHistory)) {
-
-            score = score.add(
-                    new BigDecimal("10")
-            );
+        if (isUnusualCategory(transaction, successfulHistory)) {
+            score = score.add(new BigDecimal("10"));
         }
 
-        if (score.compareTo(
-                new BigDecimal("100")
-        ) > 0) {
-
+        if (score.compareTo(new BigDecimal("100")) > 0) {
             score = new BigDecimal("100");
         }
 
-        return score.setScale(
-                2,
-                RoundingMode.HALF_UP
-        );
+        return score.setScale(2, RoundingMode.HALF_UP);
     }
+
+    // ============================================================
+    // IDENTIFY RISK FACTORS
+    // ============================================================
 
     private List<String> identifyRiskFactors(
             Transaction transaction,
@@ -342,39 +258,26 @@ public class FraudDetectionService {
             List<Transaction> recentHistory,
             List<Transaction> recentFailedHistory) {
 
-        List<String> factors =
-                new ArrayList<>();
+        List<String> factors = new ArrayList<>();
 
         if (isHighAmount(transaction)) {
-
-            factors.add(
-                    "High transaction amount"
-            );
+            factors.add("High transaction amount");
         }
 
         if (isVeryHighAmount(transaction)) {
-
-            factors.add(
-                    "Very high transaction amount"
-            );
+            factors.add("Very high transaction amount");
         }
 
-        if (isAmountAnomaly(
-                transaction,
-                successfulHistory)) {
-
+        if (isAmountAnomaly(transaction, successfulHistory)) {
             factors.add(
-                    "Transaction amount is significantly higher than the user's historical average"
-            );
+                    "Transaction amount is significantly higher "
+                    + "than the user's historical average");
         }
 
-        if (hasRapidTransactions(
-                transaction,
-                recentHistory)) {
-
+        if (hasRapidTransactions(transaction, recentHistory)) {
             factors.add(
-                    "Multiple transactions detected within a short time window"
-            );
+                    "Multiple transactions detected within a "
+                    + "short time window");
         }
 
         if (hasRecentFailedTransactions(
@@ -382,31 +285,28 @@ public class FraudDetectionService {
                 recentFailedHistory)) {
 
             factors.add(
-                    "Multiple recent failed transactions detected"
-            );
+                    "Multiple recent failed transactions detected");
         }
 
-        if (isUnusualCategory(
-                transaction,
-                successfulHistory)) {
-
+        if (isUnusualCategory(transaction, successfulHistory)) {
             factors.add(
-                    "Transaction category is unusual compared with historical spending"
-            );
+                    "Transaction category is unusual compared "
+                    + "with historical spending");
         }
 
         if (factors.isEmpty()) {
-
             factors.add(
-                    "No significant rule-based risk factor detected"
-            );
+                    "No significant rule-based risk factor detected");
         }
 
         return factors;
     }
 
-    private boolean isHighAmount(
-            Transaction transaction) {
+    // ============================================================
+    // AMOUNT RULES
+    // ============================================================
+
+    private boolean isHighAmount(Transaction transaction) {
 
         return transaction.getAmount() != null
                 && transaction.getAmount()
@@ -414,8 +314,7 @@ public class FraudDetectionService {
                         .compareTo(HIGH_AMOUNT) > 0;
     }
 
-    private boolean isVeryHighAmount(
-            Transaction transaction) {
+    private boolean isVeryHighAmount(Transaction transaction) {
 
         return transaction.getAmount() != null
                 && transaction.getAmount()
@@ -434,55 +333,41 @@ public class FraudDetectionService {
             return false;
         }
 
-        BigDecimal total =
-                BigDecimal.ZERO;
-
+        BigDecimal total = BigDecimal.ZERO;
         int count = 0;
 
-        for (Transaction historical :
-                history) {
+        for (Transaction historical : history) {
 
             if (historical == null
                     || historical.getAmount() == null
                     || historical.getStatus()
-                    != TransactionStatus.SUCCESS) {
+                            != TransactionStatus.SUCCESS) {
 
                 continue;
             }
 
-            if (historical.getTransactionId()
-                    != null
-                    && historical.getTransactionId()
-                    .equals(
-                            transaction.getTransactionId()
-                    )) {
+            if (historical.getTransactionId() != null
+                    && historical.getTransactionId().equals(
+                            transaction.getTransactionId())) {
 
                 continue;
             }
 
-            total = total.add(
-                    historical.getAmount().abs()
-            );
-
+            total = total.add(historical.getAmount().abs());
             count++;
         }
 
         if (count == 0) {
-
             return false;
         }
 
-        BigDecimal average =
-                total.divide(
-                        BigDecimal.valueOf(count),
-                        2,
-                        RoundingMode.HALF_UP
-                );
+        BigDecimal average = total.divide(
+                BigDecimal.valueOf(count),
+                2,
+                RoundingMode.HALF_UP
+        );
 
-        if (average.compareTo(
-                BigDecimal.ZERO
-        ) <= 0) {
-
+        if (average.compareTo(BigDecimal.ZERO) <= 0) {
             return false;
         }
 
@@ -490,11 +375,13 @@ public class FraudDetectionService {
                 transaction.getAmount().abs();
 
         return currentAmount.compareTo(
-                average.multiply(
-                        AMOUNT_RATIO_THRESHOLD
-                )
+                average.multiply(AMOUNT_RATIO_THRESHOLD)
         ) > 0;
     }
+
+    // ============================================================
+    // RAPID TRANSACTION DETECTION
+    // ============================================================
 
     private boolean hasRapidTransactions(
             Transaction transaction,
@@ -508,21 +395,17 @@ public class FraudDetectionService {
 
         int count = 0;
 
-        for (Transaction historical :
-                recentHistory) {
+        for (Transaction historical : recentHistory) {
 
             if (historical == null
                     || historical.getTimestamp() == null
-                    || historical.getTransactionId()
-                    == null) {
+                    || historical.getTransactionId() == null) {
 
                 continue;
             }
 
-            if (historical.getTransactionId()
-                    .equals(
-                            transaction.getTransactionId()
-                    )) {
+            if (historical.getTransactionId().equals(
+                    transaction.getTransactionId())) {
 
                 continue;
             }
@@ -539,6 +422,10 @@ public class FraudDetectionService {
         return count >= RAPID_TRANSACTION_LIMIT;
     }
 
+    // ============================================================
+    // FAILED TRANSACTION DETECTION
+    // ============================================================
+
     private boolean hasRecentFailedTransactions(
             Transaction transaction,
             List<Transaction> recentFailedHistory) {
@@ -551,20 +438,16 @@ public class FraudDetectionService {
 
         int count = 0;
 
-        for (Transaction historical :
-                recentFailedHistory) {
+        for (Transaction historical : recentFailedHistory) {
 
             if (historical == null
-                    || historical.getTransactionId()
-                    == null) {
+                    || historical.getTransactionId() == null) {
 
                 continue;
             }
 
-            if (historical.getTransactionId()
-                    .equals(
-                            transaction.getTransactionId()
-                    )) {
+            if (historical.getTransactionId().equals(
+                    transaction.getTransactionId())) {
 
                 continue;
             }
@@ -574,6 +457,10 @@ public class FraudDetectionService {
 
         return count >= FAILED_TRANSACTION_LIMIT;
     }
+
+    // ============================================================
+    // UNUSUAL CATEGORY DETECTION
+    // ============================================================
 
     private boolean isUnusualCategory(
             Transaction transaction,
@@ -587,27 +474,21 @@ public class FraudDetectionService {
         }
 
         long categoryCount = 0;
-
         long successfulCount = 0;
 
-        for (Transaction historical :
-                history) {
+        for (Transaction historical : history) {
 
             if (historical == null
                     || historical.getStatus()
-                    != TransactionStatus.SUCCESS
-                    || historical.getCategory()
-                    == null) {
+                            != TransactionStatus.SUCCESS
+                    || historical.getCategory() == null) {
 
                 continue;
             }
 
-            if (historical.getTransactionId()
-                    != null
-                    && historical.getTransactionId()
-                    .equals(
-                            transaction.getTransactionId()
-                    )) {
+            if (historical.getTransactionId() != null
+                    && historical.getTransactionId().equals(
+                            transaction.getTransactionId())) {
 
                 continue;
             }
@@ -622,51 +503,46 @@ public class FraudDetectionService {
         }
 
         if (successfulCount < 5) {
-
             return false;
         }
 
         BigDecimal categoryRatio =
-                BigDecimal.valueOf(categoryCount)
-                        .divide(
-                                BigDecimal.valueOf(
-                                        successfulCount
-                                ),
-                                4,
-                                RoundingMode.HALF_UP
-                        );
+                BigDecimal.valueOf(categoryCount).divide(
+                        BigDecimal.valueOf(successfulCount),
+                        4,
+                        RoundingMode.HALF_UP
+                );
 
         return categoryRatio.compareTo(
                 new BigDecimal("0.05")
         ) < 0;
     }
 
+    // ============================================================
+    // RISK LEVEL
+    // ============================================================
+
     private FraudRiskLevel determineRiskLevel(
             BigDecimal score) {
 
-        if (score.compareTo(
-                new BigDecimal("85")
-        ) >= 0) {
-
+        if (score.compareTo(new BigDecimal("85")) >= 0) {
             return FraudRiskLevel.CRITICAL;
         }
 
-        if (score.compareTo(
-                new BigDecimal("60")
-        ) >= 0) {
-
+        if (score.compareTo(new BigDecimal("60")) >= 0) {
             return FraudRiskLevel.HIGH;
         }
 
-        if (score.compareTo(
-                new BigDecimal("30")
-        ) >= 0) {
-
+        if (score.compareTo(new BigDecimal("30")) >= 0) {
             return FraudRiskLevel.MEDIUM;
         }
 
         return FraudRiskLevel.LOW;
     }
+
+    // ============================================================
+    // REASON
+    // ============================================================
 
     private String buildReason(
             FraudRiskLevel riskLevel,
@@ -675,11 +551,12 @@ public class FraudDetectionService {
         return "Transaction classified as "
                 + riskLevel
                 + " based on detected risk factors: "
-                + String.join(
-                        ", ",
-                        riskFactors
-                );
+                + String.join(", ", riskFactors);
     }
+
+    // ============================================================
+    // RECOMMENDATION
+    // ============================================================
 
     private String buildRecommendation(
             FraudRiskLevel riskLevel) {

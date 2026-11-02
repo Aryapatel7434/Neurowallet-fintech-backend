@@ -1,77 +1,185 @@
+
 package com.smartwallet.service;
 
 import com.smartwallet.model.ScheduledTransaction;
 import com.smartwallet.model.TransactionStatus;
-import com.smartwallet.model.Wallet;
 import com.smartwallet.repository.ScheduledTransactionRepository;
-import com.smartwallet.repository.WalletRepository;
+
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ScheduledTransactionProcessor {
 
+    private static final Logger logger =
+            LoggerFactory.getLogger(
+                    ScheduledTransactionProcessor.class
+            );
+
     private final ScheduledTransactionRepository repository;
-    private final WalletRepository walletRepository;
+
+    private final ScheduledTransactionExecutionService executionService;
 
     public ScheduledTransactionProcessor(
             ScheduledTransactionRepository repository,
-            WalletRepository walletRepository) {
+            ScheduledTransactionExecutionService executionService) {
 
         this.repository = repository;
-        this.walletRepository = walletRepository;
+        this.executionService = executionService;
     }
 
+    /**
+     * Checks for due scheduled payments every 30 seconds.
+     *
+     * Each payment is executed through a separate transactional
+     * service method. The execution service locks the scheduled
+     * transaction and both wallets before processing the payment.
+     */
     @Scheduled(fixedRate = 30000)
-    @Transactional
     public void processScheduledTransactions() {
 
-        List<ScheduledTransaction> transactions =
-                repository.findByStatusAndScheduledTimeBefore(
-                        TransactionStatus.PENDING,
-                        LocalDateTime.now()
+        LocalDateTime processingTime = LocalDateTime.now();
+
+        logger.info(
+                "Scheduled transaction processor started at {}",
+                processingTime
+        );
+
+        int processedCount = 0;
+        int successfulCount = 0;
+        int skippedCount = 0;
+        int errorCount = 0;
+
+        try {
+
+            // ========================================================
+            // STEP 1: FETCH DUE PENDING TRANSACTIONS
+            // ========================================================
+
+            List<ScheduledTransaction> dueTransactions =
+                    repository.findByStatusAndScheduledTimeBefore(
+                            TransactionStatus.PENDING,
+                            processingTime.plusNanos(1)
+                    );
+
+            if (dueTransactions == null || dueTransactions.isEmpty()) {
+
+                logger.debug(
+                        "No scheduled transactions are due"
                 );
 
-        for (ScheduledTransaction tx : transactions) {
-
-            Wallet senderWallet =
-                    walletRepository.findByUserEmail(tx.getSenderEmail());
-
-            Wallet receiverWallet =
-                    walletRepository.findByUserEmail(tx.getReceiverEmail());
-
-            if (senderWallet == null || receiverWallet == null) {
-                tx.setStatus(TransactionStatus.FAILED);
-                repository.save(tx);
-                continue;
+                return;
             }
 
-            if (senderWallet.getBalance()
-                    .compareTo(tx.getAmount()) >= 0) {
+            logger.info(
+                    "Found {} scheduled transactions for processing",
+                    dueTransactions.size()
+            );
 
-                senderWallet.setBalance(
-                        senderWallet.getBalance()
-                                .subtract(tx.getAmount())
-                );
+            // ========================================================
+            // STEP 2: PROCESS EACH PAYMENT INDEPENDENTLY
+            // ========================================================
 
-                receiverWallet.setBalance(
-                        receiverWallet.getBalance()
-                                .add(tx.getAmount())
-                );
+            for (ScheduledTransaction scheduledTransaction : dueTransactions) {
 
-                walletRepository.save(senderWallet);
-                walletRepository.save(receiverWallet);
+                if (scheduledTransaction == null) {
 
-                tx.setStatus(TransactionStatus.SUCCESS);
+                    logger.warn(
+                            "Skipping null scheduled transaction record"
+                    );
 
-            } else {
-                tx.setStatus(TransactionStatus.FAILED);
+                    skippedCount++;
+                    continue;
+                }
+
+                Long scheduledTransactionId =
+                        scheduledTransaction.getScheduledTransactionId();
+
+                if (scheduledTransactionId == null
+                        || scheduledTransactionId <= 0) {
+
+                    logger.warn(
+                            "Skipping scheduled transaction with invalid ID"
+                    );
+
+                    skippedCount++;
+                    continue;
+                }
+
+                processedCount++;
+
+                try {
+
+                    logger.info(
+                            "Processing scheduled transaction ID: {}",
+                            scheduledTransactionId
+                    );
+
+                    boolean executed =
+                            executionService.executeScheduledTransaction(
+                                    scheduledTransactionId
+                            );
+
+                    if (executed) {
+
+                        successfulCount++;
+
+                        logger.info(
+                                "Scheduled transaction {} executed successfully",
+                                scheduledTransactionId
+                        );
+
+                    } else {
+
+                        skippedCount++;
+
+                        logger.warn(
+                                "Scheduled transaction {} was not executed. "
+                                + "Check its current status or failure reason.",
+                                scheduledTransactionId
+                        );
+                    }
+
+                } catch (Exception exception) {
+
+                    errorCount++;
+
+                    // Continue processing the remaining transactions.
+                    logger.error(
+                            "Error processing scheduled transaction ID: {}",
+                            scheduledTransactionId,
+                            exception
+                    );
+                }
             }
 
-            repository.save(tx);
+        } catch (Exception exception) {
+
+            logger.error(
+                    "Scheduled transaction processor encountered an error",
+                    exception
+            );
+
+        } finally {
+
+            // ========================================================
+            // STEP 3: PROCESSING SUMMARY
+            // ========================================================
+
+            logger.info(
+                    "Scheduled transaction processor completed. "
+                    + "Candidates={}, Successful={}, Skipped={}, Errors={}",
+                    processedCount,
+                    successfulCount,
+                    skippedCount,
+                    errorCount
+            );
         }
     }
 }

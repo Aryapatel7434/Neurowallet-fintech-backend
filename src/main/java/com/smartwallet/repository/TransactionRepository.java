@@ -67,9 +67,6 @@ public interface TransactionRepository
     // FRAUD DETECTION QUERIES
     // ============================================================
 
-    /**
-     * Retrieves a user's transactions since a given timestamp.
-     */
     @Query("""
             SELECT t
             FROM Transaction t
@@ -83,9 +80,6 @@ public interface TransactionRepository
             @Param("from") LocalDateTime from
     );
 
-    /**
-     * Retrieves a user's transactions for a specified status.
-     */
     @Query("""
             SELECT t
             FROM Transaction t
@@ -99,24 +93,20 @@ public interface TransactionRepository
             @Param("status") TransactionStatus status
     );
 
-    /**
-     * Retrieves recent failed transactions, including the legacy
-     * FAILD status, for user-scoped fraud analysis.
-     */
+    // Only FAILED transactions are queried.
+    // Legacy FAILD enum dependency has been removed.
     @Query("""
             SELECT t
             FROM Transaction t
             WHERE (t.senderEmail = :email
                    OR t.receiverEmail = :email)
-              AND (t.status = :failedStatus
-                   OR t.status = :legacyFailedStatus)
+              AND t.status = :failedStatus
               AND t.timestamp >= :from
             ORDER BY t.timestamp DESC
             """)
     List<Transaction> findRecentFailedTransactions(
             @Param("email") String email,
             @Param("failedStatus") TransactionStatus failedStatus,
-            @Param("legacyFailedStatus") TransactionStatus legacyFailedStatus,
             @Param("from") LocalDateTime from
     );
 
@@ -124,14 +114,6 @@ public interface TransactionRepository
     // DASHBOARD PERIOD QUERIES
     // ============================================================
 
-    /**
-     * Retrieves a user's transactions within an optional date range.
-     *
-     * fromDate is inclusive.
-     * toDateExclusive is exclusive.
-     *
-     * Both null means all-time transaction history.
-     */
     @Query("""
             SELECT t
             FROM Transaction t
@@ -153,20 +135,6 @@ public interface TransactionRepository
     // FILTERED USER TRANSACTION HISTORY
     // ============================================================
 
-    /**
-     * Retrieves a user's transaction history with:
-     *
-     * - User-scoped access
-     * - Server-side pagination
-     * - Sorting
-     * - Date filtering
-     * - Sender/receiver email search
-     * - Transaction ID search
-     * - Amount search
-     * - Category search
-     * - Transaction type search
-     * - Transaction status search
-     */
     @Query(
             value = """
                     SELECT t
