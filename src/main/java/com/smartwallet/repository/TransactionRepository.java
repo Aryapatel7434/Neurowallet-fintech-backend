@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -95,6 +96,7 @@ public interface TransactionRepository
 
     // Only FAILED transactions are queried.
     // Legacy FAILD enum dependency has been removed.
+
     @Query("""
             SELECT t
             FROM Transaction t
@@ -264,5 +266,30 @@ public interface TransactionRepository
             @Param("keywordType") TransactionType keywordType,
             @Param("keywordStatus") TransactionStatus keywordStatus,
             Pageable pageable
+    );
+
+    // ============================================================
+    // BUDGET MODULE — CATEGORY SPENDING AGGREGATION
+    // ============================================================
+
+    @Query("""
+            SELECT
+                t.category,
+                SUM(t.amount)
+            FROM Transaction t
+            WHERE t.senderEmail = :email
+              AND t.status = :status
+              AND t.type IN :types
+              AND t.timestamp >= :fromDate
+              AND t.timestamp < :toDateExclusive
+            GROUP BY t.category
+            ORDER BY SUM(t.amount) DESC
+            """)
+    List<Object[]> getBudgetCategorySpending(
+            @Param("email") String email,
+            @Param("status") TransactionStatus status,
+            @Param("types") List<TransactionType> types,
+            @Param("fromDate") LocalDateTime fromDate,
+            @Param("toDateExclusive") LocalDateTime toDateExclusive
     );
 }
