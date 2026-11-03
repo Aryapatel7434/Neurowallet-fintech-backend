@@ -397,4 +397,62 @@ public class GoalService {
 
         return response;
     }
+    // =====================================================
+// GOAL LIFECYCLE MANAGEMENT
+// =====================================================
+
+@Transactional
+public GoalResponse updateGoalStatus(
+        Long goalId,
+        String newStatus) {
+
+    Goal goal = getOwnedGoalForUpdate(goalId);
+
+    if (newStatus == null || newStatus.isBlank()) {
+        throw new BadRequestException(
+                "Goal status is required"
+        );
+    }
+
+    String status = newStatus.trim().toUpperCase();
+
+    if (!status.equals("ACTIVE")
+            && !status.equals("PAUSED")
+            && !status.equals("CANCELLED")) {
+
+        throw new BadRequestException(
+                "Allowed statuses: ACTIVE, PAUSED, CANCELLED"
+        );
+    }
+
+    if ("COMPLETED".equals(goal.getStatus())
+            || "CANCELLED".equals(goal.getStatus())) {
+
+        throw new BadRequestException(
+                "Completed or cancelled goals cannot be changed"
+        );
+    }
+
+    if ("PAUSED".equals(status)
+            && !"ACTIVE".equals(goal.getStatus())) {
+
+        throw new BadRequestException(
+                "Only active goals can be paused"
+        );
+    }
+
+    if ("ACTIVE".equals(status)
+            && !"PAUSED".equals(goal.getStatus())) {
+
+        throw new BadRequestException(
+                "Only paused goals can be resumed"
+        );
+    }
+
+    goal.setStatus(status);
+
+    return mapToGoalResponse(
+            goalRepository.save(goal)
+    );
+}
 }

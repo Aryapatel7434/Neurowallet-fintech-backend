@@ -39,7 +39,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.smartwallet.dto.GoalAdvisorResponse;
+import com.smartwallet.service.GoalAdvisorService;
 @Tag(
         name = "AI APIs",
         description = "AI-powered financial analysis and recommendation endpoints"
@@ -55,7 +56,7 @@ public class AIController {
     private final AIAssistantService aiAssistantService;
     private final FraudDetectionService fraudDetectionService;
     private final FinancialIntelligenceService financialIntelligenceService;
-
+private final GoalAdvisorService goalAdvisorService;
     public AIController(
             AIService aiService,
             TransactionAnalyticsService transactionAnalyticsService,
@@ -63,7 +64,7 @@ public class AIController {
             SpendingPatternService spendingPatternService,
             AIAssistantService aiAssistantService,
             FraudDetectionService fraudDetectionService,
-            FinancialIntelligenceService financialIntelligenceService) {
+            FinancialIntelligenceService financialIntelligenceService,GoalAdvisorService goalAdvisorService) {
 
         this.aiService = aiService;
 
@@ -84,6 +85,8 @@ public class AIController {
 
         this.financialIntelligenceService =
                 financialIntelligenceService;
+        
+        this.goalAdvisorService = goalAdvisorService;
     }
 
     // ============================================================
@@ -314,4 +317,23 @@ public class AIController {
                         )
         );
     }
+            // ============================================================
+// AI GOAL ADVISOR
+// ============================================================
+
+@Operation(
+        summary = "AI Goal Advisor",
+        description = "Analyzes the authenticated user's financial goals, "
+                + "transaction history and savings feasibility using "
+                + "deterministic financial calculations and Google Gemini."
+)
+@GetMapping("/goal-advisor")
+@PreAuthorize("hasAnyRole('USER','ADMIN')")
+public GoalAdvisorResponse getGoalAdvisor(
+        Authentication authentication) {
+
+    return goalAdvisorService.getGoalAdvisor(
+            authentication.getName()
+    );
+}
 }

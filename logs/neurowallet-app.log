@@ -4666,3 +4666,669 @@
 2026-11-03 10:33:25 - INFO - [] - o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-11-03 10:33:25 - INFO - [] - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 2026-11-03 10:33:25 - INFO - [] - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-11-03 10:55:30 - INFO - [] - c.s.SmartwalletRestApiApplication - Starting SmartwalletRestApiApplication using Java 17.0.20.1 with PID 3536 (C:\Projects\Neurowallet-fintech-backend\target\classes started by DELL in C:\Projects\Neurowallet-fintech-backend)
+2026-11-03 10:55:30 - DEBUG - [] - c.s.SmartwalletRestApiApplication - Running with Spring Boot v3.4.12, Spring v6.2.14
+2026-11-03 10:55:30 - INFO - [] - c.s.SmartwalletRestApiApplication - No active profile set, falling back to 1 default profile: "default"
+2026-11-03 10:55:42 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-11-03 10:55:42 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 970 ms. Found 15 JPA repository interfaces.
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.AIConversationMessageRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.AIConversationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.AuditLogRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.NotificationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.OtpRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.OutboxEventRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.PasswordResetTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.RefreshTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.ScheduledTransactionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.TransactionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.UserNotificationPreferencesRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.UserPreferencesRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.WalletRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.WalletTransactionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 10:55:43 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 80 ms. Found 0 Redis repository interfaces.
+2026-11-03 10:55:46 - INFO - [] - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-11-03 10:55:46 - INFO - [] - o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-11-03 10:55:46 - INFO - [] - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.49]
+2026-11-03 10:55:47 - INFO - [] - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-11-03 10:55:47 - INFO - [] - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 16921 ms
+2026-11-03 10:55:50 - INFO - [] - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-11-03 10:55:51 - INFO - [] - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.36.Final
+2026-11-03 10:55:51 - INFO - [] - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-11-03 10:55:52 - INFO - [] - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-03 10:55:53 - INFO - [] - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-11-03 10:55:54 - INFO - [] - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@707b38a1
+2026-11-03 10:55:54 - INFO - [] - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-11-03 10:55:55 - INFO - [] - o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.4.11
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-03 10:56:00 - INFO - [] - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-03 10:56:01 - INFO - [] - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-03 10:56:03 - DEBUG - [] - com.smartwallet.security.JwtFilter - Filter 'jwtFilter' configured for use
+2026-11-03 10:56:03 - DEBUG - [] - c.s.f.RequestResponseLoggingFilter - Filter 'requestResponseLoggingFilter' configured for use
+2026-11-03 10:56:04 - INFO - [] - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-03 10:56:16 - INFO - [] - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-11-03 10:56:17 - INFO - [] - o.s.b.a.e.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+2026-11-03 10:56:22 - INFO - [] - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-11-03 10:56:23 - INFO - [] - c.s.SmartwalletRestApiApplication - Started SmartwalletRestApiApplication in 55.317 seconds (process running for 57.25)
+2026-11-03 10:56:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T10:56:23.633993600
+2026-11-03 10:56:24 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 10:56:24 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 10:56:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T10:56:53.525594
+2026-11-03 10:56:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 10:56:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 10:57:03 - INFO - [] - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-11-03 10:57:03 - INFO - [] - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-11-03 10:57:03 - INFO - [] - o.s.web.servlet.DispatcherServlet - Completed initialization in 19 ms
+2026-11-03 10:57:04 - INFO - [116c6746-efe0-4dcc-96f0-95941cf79fa0] - c.s.f.RequestResponseLoggingFilter - Request started: POST /api/auth/login
+2026-11-03 10:57:04 - INFO - [116c6746-efe0-4dcc-96f0-95941cf79fa0] - com.smartwallet.service.AuthService - Login request received
+2026-11-03 10:57:05 - INFO - [116c6746-efe0-4dcc-96f0-95941cf79fa0] - com.smartwallet.service.AuthService - Login successful
+2026-11-03 10:57:06 - INFO - [116c6746-efe0-4dcc-96f0-95941cf79fa0] - c.s.f.RequestResponseLoggingFilter - Request completed: POST /api/auth/login - Status: 200 - Duration: 2097 ms
+2026-11-03 10:57:07 - INFO - [db888413-f34d-459b-b8bd-0abda6b50c2d] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-03 10:57:08 - INFO - [a1a86690-c94e-488c-9ca0-24d466ae511a] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/goals
+2026-11-03 10:57:08 - INFO - [d7963117-4d8a-47e8-b3a5-d19ad6bb9635] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/wallet/me
+2026-11-03 10:57:08 - INFO - [db888413-f34d-459b-b8bd-0abda6b50c2d] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 75 ms
+2026-11-03 10:57:08 - INFO - [f70f12bc-aee7-4df2-ade0-781fda2849c6] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/transactions/history/filter
+2026-11-03 10:57:08 - INFO - [45c57ec7-86c6-4aa3-9396-990727f8a932] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/budget-health
+2026-11-03 10:57:08 - INFO - [8e5a0b57-157d-4551-a000-f6d7e792a357] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/insights
+2026-11-03 10:57:08 - INFO - [96722c9d-0280-437e-9450-001ae61fab16] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/financial-score
+2026-11-03 10:57:08 - INFO - [45c57ec7-86c6-4aa3-9396-990727f8a932] - com.smartwallet.service.AIService - Calculating budget health for user: arypatel913@gmail.com
+2026-11-03 10:57:08 - INFO - [8e5a0b57-157d-4551-a000-f6d7e792a357] - com.smartwallet.service.AIService - Generating AI insights for user: arypatel913@gmail.com
+2026-11-03 10:57:08 - INFO - [a1a86690-c94e-488c-9ca0-24d466ae511a] - com.smartwallet.service.AIService - Generating goal recommendation for user: arypatel913@gmail.com
+2026-11-03 10:57:08 - INFO - [96722c9d-0280-437e-9450-001ae61fab16] - com.smartwallet.service.AIService - Calculating financial score for user: arypatel913@gmail.com
+2026-11-03 10:57:08 - INFO - [f70f12bc-aee7-4df2-ade0-781fda2849c6] - c.s.service.TransactionService - Transaction search | email=arypatel913@gmail.com, keyword=null, transactionId=null, keywordAmount=null, category=null, type=null, status=null
+2026-11-03 10:57:08 - INFO - [45c57ec7-86c6-4aa3-9396-990727f8a932] - com.smartwallet.service.AIService - Budget health calculated successfully for user: arypatel913@gmail.com
+2026-11-03 10:57:08 - INFO - [45c57ec7-86c6-4aa3-9396-990727f8a932] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/budget-health - Status: 200 - Duration: 709 ms
+2026-11-03 10:57:08 - INFO - [96722c9d-0280-437e-9450-001ae61fab16] - com.smartwallet.service.AIService - Financial score calculated successfully for user: arypatel913@gmail.com
+2026-11-03 10:57:08 - INFO - [96722c9d-0280-437e-9450-001ae61fab16] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/financial-score - Status: 200 - Duration: 788 ms
+2026-11-03 10:57:08 - INFO - [26517d0d-e99b-490b-8c5f-78c0dc881ae5] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/dashboard/insights
+2026-11-03 10:57:08 - INFO - [26517d0d-e99b-490b-8c5f-78c0dc881ae5] - c.s.service.TransactionService - Generating dashboard insights. From: 2026-11-03T00:00, To: 2026-11-04T00:00
+2026-11-03 10:57:08 - INFO - [a1a86690-c94e-488c-9ca0-24d466ae511a] - com.smartwallet.service.AIService - Goal recommendation generated successfully for user: arypatel913@gmail.com
+2026-11-03 10:57:09 - INFO - [26517d0d-e99b-490b-8c5f-78c0dc881ae5] - c.s.service.TransactionService - Dashboard insights generated successfully
+2026-11-03 10:57:09 - INFO - [26517d0d-e99b-490b-8c5f-78c0dc881ae5] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/dashboard/insights - Status: 200 - Duration: 73 ms
+2026-11-03 10:57:09 - INFO - [a1a86690-c94e-488c-9ca0-24d466ae511a] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/goals - Status: 200 - Duration: 1024 ms
+2026-11-03 10:57:09 - INFO - [4a793409-3743-4e7b-a42b-bc1cb5f1dc73] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/users/me/preferences
+2026-11-03 10:57:09 - INFO - [7880fca5-4fdb-4291-bba2-af80a6d7b791] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-03 10:57:09 - INFO - [7880fca5-4fdb-4291-bba2-af80a6d7b791] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 19 ms
+2026-11-03 10:57:09 - INFO - [4a793409-3743-4e7b-a42b-bc1cb5f1dc73] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/users/me/preferences - Status: 200 - Duration: 65 ms
+2026-11-03 10:57:09 - INFO - [8930fae2-ea8c-4d73-afb1-bad4404483fb] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/budget-health
+2026-11-03 10:57:09 - INFO - [8930fae2-ea8c-4d73-afb1-bad4404483fb] - com.smartwallet.service.AIService - Calculating budget health for user: arypatel913@gmail.com
+2026-11-03 10:57:09 - INFO - [8007cf29-130e-46eb-a57e-e172b890964c] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/financial-score
+2026-11-03 10:57:09 - INFO - [8007cf29-130e-46eb-a57e-e172b890964c] - com.smartwallet.service.AIService - Calculating financial score for user: arypatel913@gmail.com
+2026-11-03 10:57:09 - INFO - [8007cf29-130e-46eb-a57e-e172b890964c] - com.smartwallet.service.AIService - Financial score calculated successfully for user: arypatel913@gmail.com
+2026-11-03 10:57:09 - INFO - [8007cf29-130e-46eb-a57e-e172b890964c] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/financial-score - Status: 200 - Duration: 536 ms
+2026-11-03 10:57:09 - INFO - [65664c3d-e078-4717-a9b1-b98534450b47] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/dashboard/insights
+2026-11-03 10:57:09 - INFO - [65664c3d-e078-4717-a9b1-b98534450b47] - c.s.service.TransactionService - Generating dashboard insights. From: 2026-11-03T00:00, To: 2026-11-04T00:00
+2026-11-03 10:57:09 - INFO - [65664c3d-e078-4717-a9b1-b98534450b47] - c.s.service.TransactionService - Dashboard insights generated successfully
+2026-11-03 10:57:09 - INFO - [65664c3d-e078-4717-a9b1-b98534450b47] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/dashboard/insights - Status: 200 - Duration: 12 ms
+2026-11-03 10:57:09 - INFO - [175c0708-7ada-4406-be15-ba2621312c30] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/users/me/preferences
+2026-11-03 10:57:09 - INFO - [175c0708-7ada-4406-be15-ba2621312c30] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/users/me/preferences - Status: 200 - Duration: 16 ms
+2026-11-03 10:57:09 - INFO - [d8032bb5-bfaf-4592-93da-c616eb3ea667] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/goals
+2026-11-03 10:57:09 - INFO - [d8032bb5-bfaf-4592-93da-c616eb3ea667] - com.smartwallet.service.AIService - Generating goal recommendation for user: arypatel913@gmail.com
+2026-11-03 10:57:09 - INFO - [f70f12bc-aee7-4df2-ade0-781fda2849c6] - c.s.service.TransactionService - Transaction search result | email=arypatel913@gmail.com, keyword=null, page=0, size=100, totalElements=0, returnedElements=0
+2026-11-03 10:57:09 - INFO - [d8032bb5-bfaf-4592-93da-c616eb3ea667] - com.smartwallet.service.AIService - Goal recommendation generated successfully for user: arypatel913@gmail.com
+2026-11-03 10:57:09 - WARN - [f70f12bc-aee7-4df2-ade0-781fda2849c6] - o.s.d.w.c.SpringDataJacksonConfiguration$PageModule$WarningLoggingModifier - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-11-03 10:57:09 - INFO - [d8032bb5-bfaf-4592-93da-c616eb3ea667] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/goals - Status: 200 - Duration: 31 ms
+2026-11-03 10:57:09 - INFO - [f70f12bc-aee7-4df2-ade0-781fda2849c6] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/transactions/history/filter - Status: 200 - Duration: 1745 ms
+2026-11-03 10:57:09 - INFO - [8930fae2-ea8c-4d73-afb1-bad4404483fb] - com.smartwallet.service.AIService - Budget health calculated successfully for user: arypatel913@gmail.com
+2026-11-03 10:57:09 - INFO - [dfadbdb4-0f54-4023-bd57-7a4b14dd3155] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/transactions/history/filter
+2026-11-03 10:57:09 - INFO - [8930fae2-ea8c-4d73-afb1-bad4404483fb] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/budget-health - Status: 200 - Duration: 805 ms
+2026-11-03 10:57:09 - INFO - [dfadbdb4-0f54-4023-bd57-7a4b14dd3155] - c.s.service.TransactionService - Transaction search | email=arypatel913@gmail.com, keyword=null, transactionId=null, keywordAmount=null, category=null, type=null, status=null
+2026-11-03 10:57:09 - INFO - [dfadbdb4-0f54-4023-bd57-7a4b14dd3155] - c.s.service.TransactionService - Transaction search result | email=arypatel913@gmail.com, keyword=null, page=0, size=100, totalElements=0, returnedElements=0
+2026-11-03 10:57:09 - INFO - [dfadbdb4-0f54-4023-bd57-7a4b14dd3155] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/transactions/history/filter - Status: 200 - Duration: 38 ms
+2026-11-03 10:57:11 - INFO - [d7963117-4d8a-47e8-b3a5-d19ad6bb9635] - c.smartwallet.service.WalletService - Fetching wallet from MySQL
+2026-11-03 10:57:11 - INFO - [d7963117-4d8a-47e8-b3a5-d19ad6bb9635] - c.smartwallet.service.WalletService - Wallet fetched successfully
+2026-11-03 10:57:11 - INFO - [d7963117-4d8a-47e8-b3a5-d19ad6bb9635] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/wallet/me - Status: 200 - Duration: 3497 ms
+2026-11-03 10:57:11 - INFO - [8142b058-fbc2-4dae-a477-13f73970af8d] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/wallet/me
+2026-11-03 10:57:11 - INFO - [8142b058-fbc2-4dae-a477-13f73970af8d] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/wallet/me - Status: 200 - Duration: 229 ms
+2026-11-03 10:57:13 - INFO - [8e5a0b57-157d-4551-a000-f6d7e792a357] - com.smartwallet.service.AIService - AI insights generated successfully for user: arypatel913@gmail.com
+2026-11-03 10:57:13 - INFO - [8e5a0b57-157d-4551-a000-f6d7e792a357] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/insights - Status: 200 - Duration: 5223 ms
+2026-11-03 10:57:13 - INFO - [13cdd773-84c7-4c3a-b53e-30920681c9db] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/insights
+2026-11-03 10:57:13 - INFO - [13cdd773-84c7-4c3a-b53e-30920681c9db] - com.smartwallet.service.AIService - Generating AI insights for user: arypatel913@gmail.com
+2026-11-03 10:57:15 - INFO - [13cdd773-84c7-4c3a-b53e-30920681c9db] - com.smartwallet.service.AIService - AI insights generated successfully for user: arypatel913@gmail.com
+2026-11-03 10:57:15 - INFO - [13cdd773-84c7-4c3a-b53e-30920681c9db] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/insights - Status: 200 - Duration: 2192 ms
+2026-11-03 10:57:21 - INFO - [b825a3fc-36a3-4141-ae55-848161bd9d3d] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/transactions/history/filter
+2026-11-03 10:57:21 - INFO - [2ec40833-ed6d-4ce6-95b4-2c129c962f1f] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/wallet/me
+2026-11-03 10:57:21 - INFO - [b825a3fc-36a3-4141-ae55-848161bd9d3d] - c.s.service.TransactionService - Transaction search | email=arypatel913@gmail.com, keyword=null, transactionId=null, keywordAmount=null, category=null, type=null, status=null
+2026-11-03 10:57:21 - INFO - [b825a3fc-36a3-4141-ae55-848161bd9d3d] - c.s.service.TransactionService - Transaction search result | email=arypatel913@gmail.com, keyword=null, page=0, size=100, totalElements=2, returnedElements=2
+2026-11-03 10:57:21 - INFO - [2d60fdb8-60ca-4a0b-ac76-40a0a2925e56] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/dashboard/insights
+2026-11-03 10:57:21 - INFO - [2d60fdb8-60ca-4a0b-ac76-40a0a2925e56] - c.s.service.TransactionService - Generating dashboard insights. From: 2026-11-02T00:00, To: 2026-11-04T00:00
+2026-11-03 10:57:21 - INFO - [2d60fdb8-60ca-4a0b-ac76-40a0a2925e56] - c.s.service.TransactionService - Dashboard insights generated successfully
+2026-11-03 10:57:21 - INFO - [2d60fdb8-60ca-4a0b-ac76-40a0a2925e56] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/dashboard/insights - Status: 200 - Duration: 15 ms
+2026-11-03 10:57:21 - INFO - [b825a3fc-36a3-4141-ae55-848161bd9d3d] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/transactions/history/filter - Status: 200 - Duration: 38 ms
+2026-11-03 10:57:21 - INFO - [2ec40833-ed6d-4ce6-95b4-2c129c962f1f] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/wallet/me - Status: 200 - Duration: 56 ms
+2026-11-03 10:57:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T10:57:23.526010100
+2026-11-03 10:57:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 10:57:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 10:57:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T10:57:53.524945100
+2026-11-03 10:57:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 10:57:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 10:58:07 - INFO - [ccb9dcf7-ccfd-47fb-b6cf-e76e37edfbf0] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-03 10:58:07 - INFO - [ccb9dcf7-ccfd-47fb-b6cf-e76e37edfbf0] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 17 ms
+2026-11-03 10:58:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T10:58:23.523835600
+2026-11-03 10:58:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 10:58:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 10:58:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T10:58:53.525270600
+2026-11-03 10:58:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 10:58:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 10:59:07 - INFO - [7f999fbf-079e-4d8b-9926-fefb6756afe7] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-03 10:59:07 - INFO - [7f999fbf-079e-4d8b-9926-fefb6756afe7] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 22 ms
+2026-11-03 10:59:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T10:59:23.524222500
+2026-11-03 10:59:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 10:59:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 10:59:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T10:59:53.527137400
+2026-11-03 10:59:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 10:59:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:00:07 - INFO - [204b6834-86dd-4576-9df7-b1e63a3f42b4] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-03 11:00:07 - INFO - [204b6834-86dd-4576-9df7-b1e63a3f42b4] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 15 ms
+2026-11-03 11:00:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:00:23.529859800
+2026-11-03 11:00:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:00:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:00:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:00:53.525320200
+2026-11-03 11:00:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:00:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:01:07 - INFO - [69504421-a594-4b3e-a830-1e6eb45dfc98] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-03 11:01:07 - INFO - [69504421-a594-4b3e-a830-1e6eb45dfc98] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 12 ms
+2026-11-03 11:01:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:01:23.524031
+2026-11-03 11:01:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:01:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:01:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:01:53.523346500
+2026-11-03 11:01:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:01:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:02:07 - INFO - [47b45b4f-87c0-495d-a76e-791ec98bf7e2] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-03 11:02:07 - INFO - [47b45b4f-87c0-495d-a76e-791ec98bf7e2] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 27 ms
+2026-11-03 11:02:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:02:23.530327700
+2026-11-03 11:02:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:02:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:02:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:02:53.530993600
+2026-11-03 11:02:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:02:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:03:07 - INFO - [eea93c3c-130c-4a64-b180-341da4079298] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-03 11:03:07 - INFO - [eea93c3c-130c-4a64-b180-341da4079298] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 14 ms
+2026-11-03 11:03:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:03:23.526622200
+2026-11-03 11:03:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:03:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:03:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:03:53.805717900
+2026-11-03 11:03:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:03:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:04:08 - INFO - [232b1ec8-5204-4707-892c-11d3fb0d0b26] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-03 11:04:08 - INFO - [232b1ec8-5204-4707-892c-11d3fb0d0b26] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 18 ms
+2026-11-03 11:04:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:04:23.530273700
+2026-11-03 11:04:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:04:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:04:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:04:53.528802500
+2026-11-03 11:04:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:04:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:05:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:05:23.537354800
+2026-11-03 11:05:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:05:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:05:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:05:53.534387100
+2026-11-03 11:05:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:05:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:06:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:06:23.525642500
+2026-11-03 11:06:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:06:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:06:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:06:53.527743300
+2026-11-03 11:06:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:06:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:07:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:07:23.523871
+2026-11-03 11:07:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:07:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:07:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:07:53.533450100
+2026-11-03 11:07:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:07:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:08:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:08:23.524977300
+2026-11-03 11:08:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:08:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:08:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:08:53.528030200
+2026-11-03 11:08:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:08:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:09:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:09:23.534512500
+2026-11-03 11:09:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:09:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:09:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:09:53.525850200
+2026-11-03 11:09:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:09:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:10:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:10:23.527334100
+2026-11-03 11:10:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:10:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:10:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:10:53.535721
+2026-11-03 11:10:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:10:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:11:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:11:23.535798800
+2026-11-03 11:11:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:11:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:11:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:11:53.531373200
+2026-11-03 11:11:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:11:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:12:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:12:23.534710100
+2026-11-03 11:12:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:12:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:12:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:12:53.529004600
+2026-11-03 11:12:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:12:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:13:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:13:23.532376100
+2026-11-03 11:13:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:13:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:13:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:13:53.530647
+2026-11-03 11:13:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:13:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:14:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:14:23.532853600
+2026-11-03 11:14:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:14:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:14:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:14:53.533615100
+2026-11-03 11:14:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:14:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:15:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:15:23.523973300
+2026-11-03 11:15:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:15:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:15:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:15:53.528071700
+2026-11-03 11:15:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:15:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:16:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:16:23.534932400
+2026-11-03 11:16:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:16:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:16:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:16:53.542710300
+2026-11-03 11:16:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:16:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:17:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:17:23.530858800
+2026-11-03 11:17:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:17:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:17:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:17:53.525977100
+2026-11-03 11:17:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:17:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:18:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:18:23.532774800
+2026-11-03 11:18:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:18:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:18:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:18:53.537098700
+2026-11-03 11:18:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:18:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:19:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:19:23.535242200
+2026-11-03 11:19:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:19:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:19:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:19:53.525320400
+2026-11-03 11:19:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:19:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:20:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:20:23.529671100
+2026-11-03 11:20:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:20:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:20:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:20:53.539108600
+2026-11-03 11:20:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:20:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:21:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:21:23.531659700
+2026-11-03 11:21:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:21:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:21:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:21:53.534231300
+2026-11-03 11:21:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:21:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:22:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:22:23.530264300
+2026-11-03 11:22:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:22:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:22:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:22:53.539099200
+2026-11-03 11:22:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:22:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:23:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:23:23.529735300
+2026-11-03 11:23:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:23:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:23:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:23:53.547939500
+2026-11-03 11:23:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:23:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:24:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:24:23.534866600
+2026-11-03 11:24:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:24:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:24:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:24:53.537901
+2026-11-03 11:24:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:24:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:25:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:25:23.526667
+2026-11-03 11:25:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:25:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:25:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:25:53.528279600
+2026-11-03 11:25:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:25:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:26:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:26:23.537732100
+2026-11-03 11:26:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:26:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:26:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:26:53.537225700
+2026-11-03 11:26:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:26:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:27:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:27:23.522657800
+2026-11-03 11:27:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:27:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:27:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:27:53.534601
+2026-11-03 11:27:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:27:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:28:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:28:23.523267100
+2026-11-03 11:28:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:28:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:28:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:28:53.530479100
+2026-11-03 11:28:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:28:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:29:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:29:23.536919500
+2026-11-03 11:29:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:29:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:29:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:29:53.522265
+2026-11-03 11:29:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:29:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:30:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:30:23.533088
+2026-11-03 11:30:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:30:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:30:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:30:53.532804400
+2026-11-03 11:30:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:30:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:31:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:31:23.522672300
+2026-11-03 11:31:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:31:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:31:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:31:53.524885200
+2026-11-03 11:31:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:31:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:32:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:32:23.527840100
+2026-11-03 11:32:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:32:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:32:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:32:53.526586900
+2026-11-03 11:32:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:32:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:33:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:33:23.528304300
+2026-11-03 11:33:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:33:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:33:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:33:53.533053900
+2026-11-03 11:33:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:33:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:34:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:34:23.527384800
+2026-11-03 11:34:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:34:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:34:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:34:53.526222700
+2026-11-03 11:34:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:34:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:35:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:35:23.542814600
+2026-11-03 11:35:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:35:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:35:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:35:53.534126900
+2026-11-03 11:35:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:35:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:36:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:36:23.536334
+2026-11-03 11:36:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:36:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:36:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:36:53.523081700
+2026-11-03 11:36:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:36:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:37:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:37:23.530915100
+2026-11-03 11:37:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:37:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:37:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:37:53.576535800
+2026-11-03 11:37:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:37:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:38:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:38:23.528208600
+2026-11-03 11:38:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:38:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:38:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:38:53.530906500
+2026-11-03 11:38:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:38:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:39:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:39:23.537279300
+2026-11-03 11:39:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:39:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:39:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:39:53.537168200
+2026-11-03 11:39:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:39:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:40:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:40:23.535829700
+2026-11-03 11:40:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:40:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:40:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:40:53.539219
+2026-11-03 11:40:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:40:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:41:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:41:23.532263900
+2026-11-03 11:41:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:41:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:41:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:41:53.537865300
+2026-11-03 11:41:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:41:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:42:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:42:23.535908600
+2026-11-03 11:42:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:42:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:42:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:42:53.532270200
+2026-11-03 11:42:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:42:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:43:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:43:23.523376900
+2026-11-03 11:43:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:43:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:43:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:43:53.529637700
+2026-11-03 11:43:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:43:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:44:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:44:23.536506300
+2026-11-03 11:44:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:44:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:44:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:44:53.529057600
+2026-11-03 11:44:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:44:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:45:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:45:23.533960300
+2026-11-03 11:45:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:45:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:45:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:45:53.537125800
+2026-11-03 11:45:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:45:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:46:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:46:23.532729500
+2026-11-03 11:46:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:46:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:46:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:46:53.532557500
+2026-11-03 11:46:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:46:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:47:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:47:23.524491300
+2026-11-03 11:47:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:47:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:47:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:47:53.523702800
+2026-11-03 11:47:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:47:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:48:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:48:23.524370
+2026-11-03 11:48:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:48:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:48:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:48:53.538038200
+2026-11-03 11:48:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:48:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:49:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:49:23.534881200
+2026-11-03 11:49:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:49:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:49:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:49:53.525363700
+2026-11-03 11:49:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:49:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:50:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:50:23.537896900
+2026-11-03 11:50:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:50:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:50:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:50:53.526316900
+2026-11-03 11:50:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:50:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:51:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:51:23.523645
+2026-11-03 11:51:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:51:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:51:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:51:53.525158400
+2026-11-03 11:51:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:51:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:52:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:52:23.532002100
+2026-11-03 11:52:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:52:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:52:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:52:53.533268800
+2026-11-03 11:52:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:52:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:53:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:53:23.526942500
+2026-11-03 11:53:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:53:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:53:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:53:53.535253
+2026-11-03 11:53:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:53:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:54:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:54:23.529500700
+2026-11-03 11:54:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:54:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:54:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:54:53.535977200
+2026-11-03 11:54:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:54:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:55:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:55:23.523161700
+2026-11-03 11:55:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:55:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:55:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:55:53.526803500
+2026-11-03 11:55:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:55:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:56:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:56:23.529643100
+2026-11-03 11:56:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:56:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:56:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:56:53.531538700
+2026-11-03 11:56:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:56:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:57:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:57:23.538520400
+2026-11-03 11:57:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:57:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:57:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:57:53.527557600
+2026-11-03 11:57:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:57:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:58:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:58:23.525822800
+2026-11-03 11:58:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:58:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:58:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:58:53.536890700
+2026-11-03 11:58:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:58:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:59:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:59:23.534067500
+2026-11-03 11:59:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:59:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 11:59:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T11:59:53.529050900
+2026-11-03 11:59:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 11:59:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 12:00:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T12:00:23.528849500
+2026-11-03 12:00:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 12:00:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 12:00:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T12:00:53.530384100
+2026-11-03 12:00:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 12:00:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 12:01:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T12:01:23.526185200
+2026-11-03 12:01:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 12:01:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 12:01:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T12:01:53.523266800
+2026-11-03 12:01:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 12:01:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 12:02:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T12:02:23.523119300
+2026-11-03 12:02:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 12:02:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 12:02:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T12:02:53.528611400
+2026-11-03 12:02:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 12:02:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 12:03:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T12:03:23.531267500
+2026-11-03 12:03:23 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 12:03:23 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 12:03:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T12:03:53.556578400
+2026-11-03 12:03:53 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 12:03:53 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 12:04:45 - INFO - [] - c.s.i.AuthControllerIntegrationTest - Starting AuthControllerIntegrationTest using Java 17.0.20.1 with PID 24688 (started by DELL in C:\Projects\Neurowallet-fintech-backend)
+2026-11-03 12:04:45 - DEBUG - [] - c.s.i.AuthControllerIntegrationTest - Running with Spring Boot v3.4.12, Spring v6.2.14
+2026-11-03 12:04:45 - INFO - [] - c.s.i.AuthControllerIntegrationTest - No active profile set, falling back to 1 default profile: "default"
+2026-11-03 12:04:52 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-11-03 12:04:52 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-03 12:04:52 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 497 ms. Found 17 JPA repository interfaces.
+2026-11-03 12:04:52 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-11-03 12:04:52 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.AIConversationMessageRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.AIConversationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.AuditLogRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.GoalContributionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.GoalRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.NotificationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.OtpRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.OutboxEventRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.PasswordResetTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.RefreshTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.ScheduledTransactionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.TransactionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.UserNotificationPreferencesRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.UserPreferencesRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.WalletRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.WalletTransactionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-03 12:04:53 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 63 ms. Found 0 Redis repository interfaces.
+2026-11-03 12:04:57 - INFO - [] - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-11-03 12:04:57 - INFO - [] - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.36.Final
+2026-11-03 12:04:57 - INFO - [] - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-11-03 12:04:58 - INFO - [] - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-03 12:04:58 - INFO - [] - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-11-03 12:05:00 - INFO - [] - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@63b2418e
+2026-11-03 12:05:00 - INFO - [] - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-11-03 12:05:00 - INFO - [] - o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.4.11
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-03 12:05:07 - INFO - [] - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-03 12:05:09 - INFO - [] - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-03 12:05:11 - INFO - [] - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-03 12:05:23 - INFO - [] - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-11-03 12:05:26 - INFO - [] - o.s.b.a.e.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+2026-11-03 12:05:35 - DEBUG - [] - c.s.f.RequestResponseLoggingFilter - Filter 'requestResponseLoggingFilter' configured for use
+2026-11-03 12:05:35 - DEBUG - [] - com.smartwallet.security.JwtFilter - Filter 'jwtFilter' configured for use
+2026-11-03 12:05:35 - INFO - [] - o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-11-03 12:05:35 - INFO - [] - o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-11-03 12:05:35 - INFO - [] - o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2026-11-03 12:05:37 - INFO - [] - c.s.i.AuthControllerIntegrationTest - Started AuthControllerIntegrationTest in 53.179 seconds (process running for 57.396)
+2026-11-03 12:05:38 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T12:05:38.278170900
+2026-11-03 12:05:39 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 12:05:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 12:05:41 - INFO - [95f3f637-b1d9-454b-9957-9e4e42310531] - c.s.f.RequestResponseLoggingFilter - Request started: POST /api/wallet/add-money
+2026-11-03 12:05:42 - INFO - [95f3f637-b1d9-454b-9957-9e4e42310531] - c.smartwallet.service.WalletService - Add money request received for user: integration@test.com, amount: 500
+2026-11-03 12:05:42 - DEBUG - [95f3f637-b1d9-454b-9957-9e4e42310531] - c.s.service.WalletCacheService - Wallet cache cleared for user: integration@test.com
+2026-11-03 12:05:44 - INFO - [95f3f637-b1d9-454b-9957-9e4e42310531] - c.smartwallet.service.WalletService - Money added successfully for user: integration@test.com, new balance: 42600.00
+2026-11-03 12:05:44 - INFO - [95f3f637-b1d9-454b-9957-9e4e42310531] - c.s.f.RequestResponseLoggingFilter - Request completed: POST /api/wallet/add-money - Status: 200 - Duration: 2728 ms
+2026-11-03 12:05:44 - INFO - [292b1fb5-d57f-44b1-b1e9-24ef2c71f224] - c.s.f.RequestResponseLoggingFilter - Request started: GET /swagger-ui/index.html
+2026-11-03 12:05:44 - INFO - [292b1fb5-d57f-44b1-b1e9-24ef2c71f224] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /swagger-ui/index.html - Status: 200 - Duration: 80 ms
+2026-11-03 12:05:44 - INFO - [] - o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.smartwallet.integration.LoginControllerIntegrationTest]: LoginControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-03 12:05:44 - INFO - [] - o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.smartwallet.SmartwalletRestApiApplication for test class com.smartwallet.integration.LoginControllerIntegrationTest
+2026-11-03 12:05:44 - INFO - [0b0871c5-e920-4a9c-ba2a-e966f0ce1deb] - c.s.f.RequestResponseLoggingFilter - Request started: POST /api/auth/login
+2026-11-03 12:05:45 - INFO - [0b0871c5-e920-4a9c-ba2a-e966f0ce1deb] - com.smartwallet.service.AuthService - Login request received
+2026-11-03 12:05:45 - INFO - [0b0871c5-e920-4a9c-ba2a-e966f0ce1deb] - com.smartwallet.service.AuthService - Login successful
+2026-11-03 12:05:45 - INFO - [0b0871c5-e920-4a9c-ba2a-e966f0ce1deb] - c.s.f.RequestResponseLoggingFilter - Request completed: POST /api/auth/login - Status: 200 - Duration: 714 ms
+2026-11-03 12:05:45 - INFO - [] - o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.smartwallet.integration.TransactionControllerIntegrationTest]: TransactionControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-03 12:05:45 - INFO - [] - o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.smartwallet.SmartwalletRestApiApplication for test class com.smartwallet.integration.TransactionControllerIntegrationTest
+2026-11-03 12:05:46 - INFO - [a3db85ff-209b-4a58-b218-76c33fbef82b] - c.s.f.RequestResponseLoggingFilter - Request started: POST /api/transactions/send
+2026-11-03 12:05:46 - INFO - [a3db85ff-209b-4a58-b218-76c33fbef82b] - c.s.service.TransactionService - Transaction processing started
+2026-11-03 12:05:46 - INFO - [a3db85ff-209b-4a58-b218-76c33fbef82b] - c.s.service.TransactionService - Transaction saved with PENDING status
+2026-11-03 12:05:46 - INFO - [a3db85ff-209b-4a58-b218-76c33fbef82b] - c.s.service.TransactionService - Wallet balances updated successfully for sender and receiver
+2026-11-03 12:05:46 - INFO - [a3db85ff-209b-4a58-b218-76c33fbef82b] - c.s.service.TransactionService - Transaction status updated to SUCCESS
+2026-11-03 12:05:46 - DEBUG - [a3db85ff-209b-4a58-b218-76c33fbef82b] - c.s.service.WalletCacheService - Wallet cache cleared for user: integration@test.com
+2026-11-03 12:05:46 - DEBUG - [a3db85ff-209b-4a58-b218-76c33fbef82b] - c.s.service.WalletCacheService - Wallet cache cleared for user: rahul@gmail.com
+2026-11-03 12:05:46 - INFO - [a3db85ff-209b-4a58-b218-76c33fbef82b] - c.s.service.TransactionService - Wallet cache cleared for sender and receiver
+2026-11-03 12:05:46 - INFO - [a3db85ff-209b-4a58-b218-76c33fbef82b] - c.s.kafka.TransactionEventProducer - Preparing Kafka transaction event for publishing
+2026-11-03 12:05:47 - INFO - [a3db85ff-209b-4a58-b218-76c33fbef82b] - c.s.f.RequestResponseLoggingFilter - Request completed: POST /api/transactions/send - Status: 200 - Duration: 1891 ms
+2026-11-03 12:05:47 - INFO - [7123afa4-7ed6-472a-be2a-730e3864e989] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/transactions/history
+2026-11-03 12:05:47 - INFO - [7123afa4-7ed6-472a-be2a-730e3864e989] - c.s.service.TransactionService - Fetching transaction history. Page: 0, Size: 5
+2026-11-03 12:05:48 - WARN - [7123afa4-7ed6-472a-be2a-730e3864e989] - o.s.d.w.c.SpringDataJacksonConfiguration$PageModule$WarningLoggingModifier - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-11-03 12:05:48 - INFO - [7123afa4-7ed6-472a-be2a-730e3864e989] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/transactions/history - Status: 200 - Duration: 77 ms
+2026-11-03 12:05:48 - INFO - [] - o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.smartwallet.integration.UserControllerIntegrationTest]: UserControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-03 12:05:48 - INFO - [] - o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.smartwallet.SmartwalletRestApiApplication for test class com.smartwallet.integration.UserControllerIntegrationTest
+2026-11-03 12:05:48 - INFO - [d146f031-7a54-4767-97e4-128a710a0514] - c.s.f.RequestResponseLoggingFilter - Request started: POST /api/users/register
+2026-11-03 12:05:48 - INFO - [d146f031-7a54-4767-97e4-128a710a0514] - c.s.f.RequestResponseLoggingFilter - Request completed: POST /api/users/register - Status: 200 - Duration: 23 ms
+2026-11-03 12:05:48 - INFO - [] - o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.smartwallet.integration.WalletControllerIntegrationTest]: WalletControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-03 12:05:48 - INFO - [] - o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.smartwallet.SmartwalletRestApiApplication for test class com.smartwallet.integration.WalletControllerIntegrationTest
+2026-11-03 12:05:48 - INFO - [48936f9d-de23-409c-96e0-bca301a9eb2d] - c.s.f.RequestResponseLoggingFilter - Request started: POST /api/wallet/add-money
+2026-11-03 12:05:48 - INFO - [48936f9d-de23-409c-96e0-bca301a9eb2d] - c.smartwallet.service.WalletService - Add money request received for user: testuser@gmail.com, amount: 500
+2026-11-03 12:05:48 - DEBUG - [48936f9d-de23-409c-96e0-bca301a9eb2d] - c.s.service.WalletCacheService - Wallet cache cleared for user: testuser@gmail.com
+2026-11-03 12:05:48 - INFO - [48936f9d-de23-409c-96e0-bca301a9eb2d] - c.smartwallet.service.WalletService - Money added successfully for user: testuser@gmail.com, new balance: 50000.00
+2026-11-03 12:05:48 - INFO - [48936f9d-de23-409c-96e0-bca301a9eb2d] - c.s.f.RequestResponseLoggingFilter - Request completed: POST /api/wallet/add-money - Status: 200 - Duration: 40 ms
+2026-11-03 12:05:57 - ERROR - [] - c.s.kafka.TransactionEventProducer - Failed to publish Kafka transaction event to topic transaction-events: org.springframework.kafka.core.KafkaProducerException: Failed to send
+2026-11-03 12:05:57 - WARN - [] - c.s.service.TransactionService - Transaction completed successfully, but Kafka event publication failed
+2026-11-03 12:05:57 - ERROR - [] - o.s.k.s.LoggingProducerListener - Exception thrown when sending a message with key='null' and payload='{"eventId":null,"scheduledTransactionId":null,"eventType":null,"senderEmail":"integration@test.com",...' to topic transaction-events:
+org.apache.kafka.common.errors.TimeoutException: Expiring 1 record(s) for transaction-events-0:10148 ms has passed since batch creation
+2026-11-03 12:06:07 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-03T12:06:07.869033100
+2026-11-03 12:06:07 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-03 12:06:07 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-03 12:06:27 - INFO - [] - o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-11-03 12:06:27 - INFO - [] - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-11-03 12:06:28 - INFO - [] - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
