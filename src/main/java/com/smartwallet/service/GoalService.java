@@ -20,6 +20,7 @@ import com.smartwallet.repository.UserRepository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class GoalService {
@@ -352,14 +354,14 @@ public class GoalService {
 
         response.setTargetDate(goal.getTargetDate());
 
-        response.setRemainingDays(
-                Math.max(
-                        0,
-                        LocalDate.now().until(
-                                goal.getTargetDate()
-                        ).getDays()
-                )
+        // Correct total-day calculation.
+        // Negative values indicate overdue goals.
+        long remainingDays = ChronoUnit.DAYS.between(
+                LocalDate.now(),
+                goal.getTargetDate()
         );
+
+        response.setRemainingDays(remainingDays);
 
         response.setPriority(goal.getPriority());
         response.setStatus(goal.getStatus());
@@ -397,62 +399,64 @@ public class GoalService {
 
         return response;
     }
+
     // =====================================================
-// GOAL LIFECYCLE MANAGEMENT
-// =====================================================
+    // GOAL LIFECYCLE MANAGEMENT
+    // =====================================================
 
-@Transactional
-public GoalResponse updateGoalStatus(
-        Long goalId,
-        String newStatus) {
+    @Transactional
+    public GoalResponse updateGoalStatus(
+            Long goalId,
+            String newStatus) {
 
-    Goal goal = getOwnedGoalForUpdate(goalId);
+        Goal goal = getOwnedGoalForUpdate(goalId);
 
-    if (newStatus == null || newStatus.isBlank()) {
-        throw new BadRequestException(
-                "Goal status is required"
+        if (newStatus == null || newStatus.isBlank()) {
+
+            throw new BadRequestException(
+                    "Goal status is required"
+            );
+        }
+
+        String status = newStatus.trim().toUpperCase();
+
+        if (!status.equals("ACTIVE")
+                && !status.equals("PAUSED")
+                && !status.equals("CANCELLED")) {
+
+            throw new BadRequestException(
+                    "Allowed statuses: ACTIVE, PAUSED, CANCELLED"
+            );
+        }
+
+        if ("COMPLETED".equals(goal.getStatus())
+                || "CANCELLED".equals(goal.getStatus())) {
+
+            throw new BadRequestException(
+                    "Completed or cancelled goals cannot be changed"
+            );
+        }
+
+        if ("PAUSED".equals(status)
+                && !"ACTIVE".equals(goal.getStatus())) {
+
+            throw new BadRequestException(
+                    "Only active goals can be paused"
+            );
+        }
+
+        if ("ACTIVE".equals(status)
+                && !"PAUSED".equals(goal.getStatus())) {
+
+            throw new BadRequestException(
+                    "Only paused goals can be resumed"
+            );
+        }
+
+        goal.setStatus(status);
+
+        return mapToGoalResponse(
+                goalRepository.save(goal)
         );
     }
-
-    String status = newStatus.trim().toUpperCase();
-
-    if (!status.equals("ACTIVE")
-            && !status.equals("PAUSED")
-            && !status.equals("CANCELLED")) {
-
-        throw new BadRequestException(
-                "Allowed statuses: ACTIVE, PAUSED, CANCELLED"
-        );
-    }
-
-    if ("COMPLETED".equals(goal.getStatus())
-            || "CANCELLED".equals(goal.getStatus())) {
-
-        throw new BadRequestException(
-                "Completed or cancelled goals cannot be changed"
-        );
-    }
-
-    if ("PAUSED".equals(status)
-            && !"ACTIVE".equals(goal.getStatus())) {
-
-        throw new BadRequestException(
-                "Only active goals can be paused"
-        );
-    }
-
-    if ("ACTIVE".equals(status)
-            && !"PAUSED".equals(goal.getStatus())) {
-
-        throw new BadRequestException(
-                "Only paused goals can be resumed"
-        );
-    }
-
-    goal.setStatus(status);
-
-    return mapToGoalResponse(
-            goalRepository.save(goal)
-    );
-}
 }
