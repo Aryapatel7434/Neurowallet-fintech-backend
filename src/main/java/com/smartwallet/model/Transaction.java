@@ -1,3 +1,4 @@
+
 package com.smartwallet.model;
 
 import jakarta.persistence.*;
@@ -59,6 +60,14 @@ public class Transaction {
 
     @Column(nullable = false)
     private LocalDateTime timestamp;
+
+    // Unique reference for scheduled-payment idempotency.
+    // NULL for regular transactions.
+    @Column(
+            name = "scheduled_transaction_id",
+            unique = true
+    )
+    private Long scheduledTransactionId;
 
     // Required by Hibernate
     public Transaction() {
@@ -144,5 +153,13 @@ public class Transaction {
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public Long getScheduledTransactionId() {
+        return scheduledTransactionId;
+    }
+
+    public void setScheduledTransactionId(Long scheduledTransactionId) {
+        this.scheduledTransactionId = scheduledTransactionId;
     }
 }

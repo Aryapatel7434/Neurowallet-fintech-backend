@@ -1,32 +1,60 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.smartwallet.dto;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-/**
- *
- * @author ABC
- */
+
 public class TransactionEvent {
-    
+
+    private String eventId;
+    private Long scheduledTransactionId;
+    private String eventType;
+
     private String senderEmail;
     private String receiverEmail;
     private BigDecimal amount;
     private String status;
     private LocalDateTime timestamp;
-    
-    public TransactionEvent(){
-        
+
+    public TransactionEvent() {
     }
 
-    public TransactionEvent(String senderEmail, String receiverEmail, BigDecimal amount, String status, LocalDateTime timestamp) {
+    public TransactionEvent(
+            String senderEmail,
+            String receiverEmail,
+            BigDecimal amount,
+            String status,
+            LocalDateTime timestamp) {
+
         this.senderEmail = senderEmail;
         this.receiverEmail = receiverEmail;
         this.amount = amount;
         this.status = status;
         this.timestamp = timestamp;
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
+    public Long getScheduledTransactionId() {
+        return scheduledTransactionId;
+    }
+
+    public void setScheduledTransactionId(Long scheduledTransactionId) {
+        this.scheduledTransactionId = scheduledTransactionId;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
     }
 
     public String getSenderEmail() {
@@ -68,6 +96,4 @@ public class TransactionEvent {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
-    
-    
 }

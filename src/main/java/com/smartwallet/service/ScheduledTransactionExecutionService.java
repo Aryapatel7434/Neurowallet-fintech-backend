@@ -1,8 +1,6 @@
 
 package com.smartwallet.service;
 
-import com.smartwallet.dto.TransactionEvent;
-import com.smartwallet.kafka.TransactionEventProducer;
 import com.smartwallet.model.ScheduledTransaction;
 import com.smartwallet.model.Transaction;
 import com.smartwallet.model.TransactionCategory;
@@ -10,6 +8,7 @@ import com.smartwallet.model.TransactionStatus;
 import com.smartwallet.model.TransactionType;
 import com.smartwallet.model.Wallet;
 import com.smartwallet.model.WalletTransaction;
+
 import com.smartwallet.repository.ScheduledTransactionRepository;
 import com.smartwallet.repository.TransactionRepository;
 import com.smartwallet.repository.WalletRepository;
@@ -41,7 +40,7 @@ public class ScheduledTransactionExecutionService {
     private final WalletTransactionRepository walletTransactionRepository;
     private final WalletCacheService walletCacheService;
     private final NotificationService notificationService;
-    private final TransactionEventProducer transactionEventProducer;
+    private final OutboxEventService outboxEventService;
 
     public ScheduledTransactionExecutionService(
             ScheduledTransactionRepository scheduledRepository,
@@ -50,7 +49,7 @@ public class ScheduledTransactionExecutionService {
             WalletTransactionRepository walletTransactionRepository,
             WalletCacheService walletCacheService,
             NotificationService notificationService,
-            TransactionEventProducer transactionEventProducer) {
+            OutboxEventService outboxEventService) {
 
         this.scheduledRepository = scheduledRepository;
         this.walletRepository = walletRepository;
@@ -58,30 +57,20 @@ public class ScheduledTransactionExecutionService {
         this.walletTransactionRepository = walletTransactionRepository;
         this.walletCacheService = walletCacheService;
         this.notificationService = notificationService;
-        this.transactionEventProducer = transactionEventProducer;
+        this.outboxEventService = outboxEventService;
     }
 
-    /**
-     * Executes one scheduled payment inside an independent
-     * database transaction.
-     *
-     * The scheduled record and both wallets are locked before
-     * the balances are modified.
-     */
     @Transactional
     public boolean executeScheduledTransaction(Long scheduledTransactionId) {
 
         if (scheduledTransactionId == null || scheduledTransactionId <= 0) {
-
             logger.warn("Invalid scheduled transaction ID");
             return false;
         }
 
         LocalDateTime now = LocalDateTime.now();
 
-        // ============================================================
         // STEP 1: LOCK THE SCHEDULED PAYMENT
-        // ============================================================
 
         ScheduledTransaction scheduledTransaction =
                 scheduledRepository.findByIdForUpdate(
@@ -89,43 +78,32 @@ public class ScheduledTransactionExecutionService {
                 ).orElse(null);
 
         if (scheduledTransaction == null) {
-
             logger.warn(
                     "Scheduled transaction not found: {}",
                     scheduledTransactionId
             );
-
             return false;
         }
 
-        // ============================================================
         // STEP 2: VALIDATE PAYMENT STATE
-        // ============================================================
 
-        if (scheduledTransaction.getStatus()
-                != TransactionStatus.PENDING) {
-
+        if (scheduledTransaction.getStatus() != TransactionStatus.PENDING) {
             logger.info(
                     "Scheduled transaction {} is no longer pending",
                     scheduledTransactionId
             );
-
             return false;
         }
 
         if (scheduledTransaction.getScheduledTime() == null
                 || scheduledTransaction.getScheduledTime().isAfter(now)) {
-
             return false;
         }
 
-        // ============================================================
         // STEP 3: VALIDATE AND NORMALIZE EMAILS
-        // ============================================================
 
         String rawSenderEmail = scheduledTransaction.getSenderEmail();
         String rawReceiverEmail = scheduledTransaction.getReceiverEmail();
-
         BigDecimal amount = scheduledTransaction.getAmount();
 
         if (rawSenderEmail == null || rawSenderEmail.isBlank()
@@ -138,7 +116,6 @@ public class ScheduledTransactionExecutionService {
             );
         }
 
-        // Final variables are safe to use inside afterCommit().
         final String senderEmail =
                 rawSenderEmail.trim().toLowerCase(Locale.ROOT);
 
@@ -146,7 +123,6 @@ public class ScheduledTransactionExecutionService {
                 rawReceiverEmail.trim().toLowerCase(Locale.ROOT);
 
         if (senderEmail.equals(receiverEmail)) {
-
             return markFailed(
                     scheduledTransaction,
                     "Sender and receiver cannot be the same",
@@ -165,7 +141,6 @@ public class ScheduledTransactionExecutionService {
         }
 
         if (amount.scale() > 2 || amount.precision() > 19) {
-
             return markFailed(
                     scheduledTransaction,
                     "Invalid scheduled payment amount precision",
@@ -173,9 +148,7 @@ public class ScheduledTransactionExecutionService {
             );
         }
 
-        // ============================================================
         // STEP 4: LOCK BOTH WALLETS IN A CONSISTENT ORDER
-        // ============================================================
 
         Wallet senderWallet;
         Wallet receiverWallet;
@@ -198,7 +171,6 @@ public class ScheduledTransactionExecutionService {
         }
 
         if (senderWallet == null) {
-
             return markFailed(
                     scheduledTransaction,
                     "Sender wallet not found",
@@ -207,7 +179,6 @@ public class ScheduledTransactionExecutionService {
         }
 
         if (receiverWallet == null) {
-
             return markFailed(
                     scheduledTransaction,
                     "Receiver wallet not found",
@@ -215,9 +186,25 @@ public class ScheduledTransactionExecutionService {
             );
         }
 
-        // ============================================================
-        // STEP 5: VALIDATE WALLET BALANCES
-        // ============================================================
+        // STEP 5: VALIDATE WALLET STATUS
+
+        if (!"ACTIVE".equalsIgnoreCase(senderWallet.getStatus())) {
+            return markFailed(
+                    scheduledTransaction,
+                    "Sender wallet is not active",
+                    now
+            );
+        }
+
+        if (!"ACTIVE".equalsIgnoreCase(receiverWallet.getStatus())) {
+            return markFailed(
+                    scheduledTransaction,
+                    "Receiver wallet is not active",
+                    now
+            );
+        }
+
+        // STEP 6: VALIDATE WALLET BALANCES
 
         if (senderWallet.getBalance() == null
                 || receiverWallet.getBalance() == null) {
@@ -239,12 +226,9 @@ public class ScheduledTransactionExecutionService {
             );
         }
 
-        // ============================================================
-        // STEP 6: CHECK AVAILABLE BALANCE
-        // ============================================================
+        // STEP 7: CHECK AVAILABLE BALANCE
 
         if (senderWallet.getBalance().compareTo(amount) < 0) {
-
             return markFailed(
                     scheduledTransaction,
                     "Insufficient wallet balance",
@@ -252,9 +236,7 @@ public class ScheduledTransactionExecutionService {
             );
         }
 
-        // ============================================================
-        // STEP 7: UPDATE BOTH WALLET BALANCES
-        // ============================================================
+        // STEP 8: UPDATE BOTH WALLET BALANCES
 
         senderWallet.setBalance(
                 senderWallet.getBalance().subtract(amount)
@@ -267,9 +249,7 @@ public class ScheduledTransactionExecutionService {
         walletRepository.save(senderWallet);
         walletRepository.save(receiverWallet);
 
-        // ============================================================
-        // STEP 8: CREATE NORMAL TRANSACTION HISTORY
-        // ============================================================
+        // STEP 9: CREATE NORMAL TRANSACTION HISTORY
 
         Transaction transaction = new Transaction(
                 senderEmail,
@@ -281,11 +261,11 @@ public class ScheduledTransactionExecutionService {
                 now
         );
 
+        transaction.setScheduledTransactionId(scheduledTransactionId);
+
         transactionRepository.save(transaction);
 
-        // ============================================================
-        // STEP 9: CREATE SENDER DEBIT LEDGER ENTRY
-        // ============================================================
+        // STEP 10: CREATE SENDER DEBIT LEDGER ENTRY
 
         WalletTransaction senderLedger = new WalletTransaction();
 
@@ -296,9 +276,7 @@ public class ScheduledTransactionExecutionService {
 
         walletTransactionRepository.save(senderLedger);
 
-        // ============================================================
-        // STEP 10: CREATE RECEIVER CREDIT LEDGER ENTRY
-        // ============================================================
+        // STEP 11: CREATE RECEIVER CREDIT LEDGER ENTRY
 
         WalletTransaction receiverLedger = new WalletTransaction();
 
@@ -309,9 +287,7 @@ public class ScheduledTransactionExecutionService {
 
         walletTransactionRepository.save(receiverLedger);
 
-        // ============================================================
-        // STEP 11: UPDATE SCHEDULED PAYMENT STATUS
-        // ============================================================
+        // STEP 12: UPDATE SCHEDULED PAYMENT STATUS
 
         scheduledTransaction.setStatus(TransactionStatus.SUCCESS);
         scheduledTransaction.setExecutedAt(now);
@@ -319,9 +295,7 @@ public class ScheduledTransactionExecutionService {
 
         scheduledRepository.save(scheduledTransaction);
 
-        // ============================================================
-        // STEP 12: CREATE NOTIFICATIONS
-        // ============================================================
+        // STEP 13: CREATE NOTIFICATIONS
 
         notificationService.createNotification(
                 senderEmail,
@@ -333,21 +307,22 @@ public class ScheduledTransactionExecutionService {
                 "₹" + amount + " scheduled payment received from " + senderEmail
         );
 
-        // ============================================================
-        // STEP 13: PREPARE KAFKA EVENT
-        // ============================================================
+        // STEP 14: SAVE KAFKA EVENT IN TRANSACTIONAL OUTBOX
 
-        TransactionEvent event = new TransactionEvent(
+        // This joins the current database transaction because
+        // OutboxEventService uses Propagation.MANDATORY.
+        //
+        // If the outbox insert fails, the wallet transfer also rolls back.
+
+        outboxEventService.createScheduledTransactionEvent(
+                scheduledTransactionId,
                 senderEmail,
                 receiverEmail,
                 amount,
-                "SUCCESS",
                 now
         );
 
-        // ============================================================
-        // STEP 14: EXECUTE EXTERNAL SIDE EFFECTS AFTER COMMIT
-        // ============================================================
+        // STEP 15: INVALIDATE CACHE AFTER DATABASE COMMIT
 
         TransactionSynchronizationManager.registerSynchronization(
                 new TransactionSynchronization() {
@@ -355,7 +330,6 @@ public class ScheduledTransactionExecutionService {
                     @Override
                     public void afterCommit() {
 
-                        // Cache invalidation
                         try {
 
                             walletCacheService.clearWalletCache(senderEmail);
@@ -369,54 +343,12 @@ public class ScheduledTransactionExecutionService {
                                     exception
                             );
                         }
-
-                        // Kafka publication
-                        try {
-
-                            transactionEventProducer
-                                    .publishTransactionEvent(event)
-                                    .thenAccept(published -> {
-
-                                        if (Boolean.TRUE.equals(published)) {
-
-                                            logger.info(
-                                                    "Kafka event published for scheduled transaction {}",
-                                                    scheduledTransactionId
-                                            );
-
-                                        } else {
-
-                                            logger.warn(
-                                                    "Kafka event publication returned false for scheduled transaction {}",
-                                                    scheduledTransactionId
-                                            );
-                                        }
-                                    })
-                                    .exceptionally(exception -> {
-
-                                        logger.error(
-                                                "Kafka event publication failed for scheduled transaction {}",
-                                                scheduledTransactionId,
-                                                exception
-                                        );
-
-                                        return null;
-                                    });
-
-                        } catch (Exception exception) {
-
-                            logger.error(
-                                    "Kafka event could not be initiated for scheduled transaction {}",
-                                    scheduledTransactionId,
-                                    exception
-                            );
-                        }
                     }
                 }
         );
 
         logger.info(
-                "Scheduled transaction {} executed successfully",
+                "Scheduled transaction {} executed successfully. Outbox event created.",
                 scheduledTransactionId
         );
 

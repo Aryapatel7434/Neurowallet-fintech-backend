@@ -1,4 +1,3 @@
-
 package com.smartwallet.service;
 
 import com.smartwallet.dto.ScheduleTransactionRequest;
@@ -196,6 +195,72 @@ public class ScheduledTransactionService {
         repository.save(transaction);
 
         return "Scheduled transaction cancelled successfully";
+    }
+
+    // ============================================================
+    // GET SCHEDULED TRANSACTION ANALYTICS
+    // ============================================================
+
+    @Transactional(readOnly = true)
+    public ScheduledTransactionAnalytics getScheduledTransactionAnalytics() {
+
+        String senderEmail = getAuthenticatedUserEmail();
+
+        long total = repository.countBySenderEmail(senderEmail);
+
+        long pending = repository.countBySenderEmailAndStatus(
+                senderEmail,
+                TransactionStatus.PENDING
+        );
+
+        long successful = repository.countBySenderEmailAndStatus(
+                senderEmail,
+                TransactionStatus.SUCCESS
+        );
+
+        long failed = repository.countBySenderEmailAndStatus(
+                senderEmail,
+                TransactionStatus.FAILED
+        );
+
+        long cancelled = repository.countBySenderEmailAndStatus(
+                senderEmail,
+                TransactionStatus.CANCELLED
+        );
+
+        BigDecimal totalScheduledAmount =
+                repository.getTotalScheduledAmount(senderEmail);
+
+        BigDecimal totalSuccessfulAmount =
+                repository.getTotalAmountBySenderAndStatus(
+                        senderEmail,
+                        TransactionStatus.SUCCESS
+                );
+
+        return new ScheduledTransactionAnalytics(
+                total,
+                pending,
+                successful,
+                failed,
+                cancelled,
+                totalScheduledAmount,
+                totalSuccessfulAmount
+        );
+    }
+
+    // ============================================================
+    // ANALYTICS RESPONSE
+    // ============================================================
+
+    public record ScheduledTransactionAnalytics(
+            long totalScheduledPayments,
+            long pendingPayments,
+            long successfulPayments,
+            long failedPayments,
+            long cancelledPayments,
+            BigDecimal totalScheduledAmount,
+            BigDecimal totalSuccessfulAmount
+    ) {
     }
 
     // ============================================================

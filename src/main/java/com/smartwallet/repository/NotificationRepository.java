@@ -1,3 +1,4 @@
+
 package com.smartwallet.repository;
 
 import com.smartwallet.model.Notification;
@@ -9,20 +10,21 @@ import java.util.Optional;
 public interface NotificationRepository
         extends JpaRepository<Notification, Long> {
 
-    List<Notification>
-    findByEmailOrderByCreatedAtDesc(
+    List<Notification> findByEmailOrderByCreatedAtDesc(
             String email
     );
-    List<Notification>
-        findByEmailAndIsReadFalseOrderByCreatedAtDesc(
-        String email
-);
-        Optional<Notification>
-        findById(Long id);
-        
-        
-        List<Notification>
-           findByEmailAndIsReadFalse(
-        String email
-);
+
+    List<Notification> findByEmailAndIsReadFalseOrderByCreatedAtDesc(
+            String email
+    );
+
+    // Owner-scoped notification lookup
+    Optional<Notification> findByIdAndEmail(
+            Long id,
+            String email
+    );
+
+    List<Notification> findByEmailAndIsReadFalse(
+            String email
+    );
 }

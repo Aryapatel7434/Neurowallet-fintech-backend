@@ -1,9 +1,9 @@
-
 package com.smartwallet.controller;
 
 import com.smartwallet.dto.ScheduleTransactionRequest;
 import com.smartwallet.dto.ScheduledTransactionResponse;
 import com.smartwallet.service.ScheduledTransactionService;
+import com.smartwallet.service.ScheduledTransactionService.ScheduledTransactionAnalytics;
 
 import jakarta.validation.Valid;
 
@@ -25,7 +25,10 @@ public class ScheduledTransactionController {
         this.service = service;
     }
 
-    // Create scheduled payment
+    // ============================================================
+    // CREATE SCHEDULED PAYMENT
+    // ============================================================
+
     @PostMapping("/schedule")
     public ResponseEntity<String> scheduleTransaction(
             @Valid @RequestBody ScheduleTransactionRequest request) {
@@ -37,7 +40,10 @@ public class ScheduledTransactionController {
                 .body(response);
     }
 
-    // List authenticated user's scheduled payments
+    // ============================================================
+    // LIST AUTHENTICATED USER'S SCHEDULED PAYMENTS
+    // ============================================================
+
     @GetMapping
     public ResponseEntity<Page<ScheduledTransactionResponse>>
             getMyScheduledTransactions(
@@ -49,7 +55,10 @@ public class ScheduledTransactionController {
         );
     }
 
-    // Get one scheduled payment owned by authenticated user
+    // ============================================================
+    // GET ONE SCHEDULED PAYMENT
+    // ============================================================
+
     @GetMapping("/{id}")
     public ResponseEntity<ScheduledTransactionResponse>
             getScheduledTransactionById(@PathVariable Long id) {
@@ -59,13 +68,29 @@ public class ScheduledTransactionController {
         );
     }
 
-    // Cancel one pending scheduled payment
+    // ============================================================
+    // CANCEL SCHEDULED PAYMENT
+    // ============================================================
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> cancelScheduledTransaction(
             @PathVariable Long id) {
 
         return ResponseEntity.ok(
                 service.cancelScheduledTransaction(id)
+        );
+    }
+
+    // ============================================================
+    // GET SCHEDULED PAYMENT ANALYTICS
+    // ============================================================
+
+    @GetMapping("/analytics")
+    public ResponseEntity<ScheduledTransactionAnalytics>
+            getScheduledTransactionAnalytics() {
+
+        return ResponseEntity.ok(
+                service.getScheduledTransactionAnalytics()
         );
     }
 }

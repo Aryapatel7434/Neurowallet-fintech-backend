@@ -1,9 +1,9 @@
-
 package com.smartwallet.repository;
 
 import com.smartwallet.model.ScheduledTransaction;
 import com.smartwallet.model.TransactionStatus;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -80,5 +80,40 @@ public interface ScheduledTransactionRepository
     boolean existsByScheduledTransactionIdAndSenderEmail(
             Long scheduledTransactionId,
             String senderEmail
+    );
+
+    // ============================================================
+    // SCHEDULED TRANSACTION ANALYTICS
+    // ============================================================
+
+    // Count all scheduled transactions created by a user
+    long countBySenderEmail(String senderEmail);
+
+    // Count transactions by user and status
+    long countBySenderEmailAndStatus(
+            String senderEmail,
+            TransactionStatus status
+    );
+
+    // Calculate total amount of all scheduled payments for a user
+    @Query("""
+           SELECT COALESCE(SUM(st.amount), 0)
+           FROM ScheduledTransaction st
+           WHERE st.senderEmail = :senderEmail
+           """)
+    BigDecimal getTotalScheduledAmount(
+            @Param("senderEmail") String senderEmail
+    );
+
+    // Calculate total amount of successful payments for a user
+    @Query("""
+           SELECT COALESCE(SUM(st.amount), 0)
+           FROM ScheduledTransaction st
+           WHERE st.senderEmail = :senderEmail
+             AND st.status = :status
+           """)
+    BigDecimal getTotalAmountBySenderAndStatus(
+            @Param("senderEmail") String senderEmail,
+            @Param("status") TransactionStatus status
     );
 }
