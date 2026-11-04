@@ -11000,3 +11000,418 @@ org.apache.kafka.common.errors.TimeoutException: Expiring 1 record(s) for transa
 2026-11-04 13:49:06 - INFO - [] - o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-11-04 13:49:06 - INFO - [] - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 2026-11-04 13:49:06 - INFO - [] - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-11-04 13:52:19 - INFO - [] - c.s.SmartwalletRestApiApplication - Starting SmartwalletRestApiApplication using Java 17.0.20.1 with PID 26752 (C:\Projects\Neurowallet-fintech-backend\target\classes started by DELL in C:\Projects\Neurowallet-fintech-backend)
+2026-11-04 13:52:19 - DEBUG - [] - c.s.SmartwalletRestApiApplication - Running with Spring Boot v3.4.12, Spring v6.2.14
+2026-11-04 13:52:19 - INFO - [] - c.s.SmartwalletRestApiApplication - No active profile set, falling back to 1 default profile: "default"
+2026-11-04 13:52:26 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-11-04 13:52:26 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 857 ms. Found 18 JPA repository interfaces.
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.AIConversationMessageRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.AIConversationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.AuditLogRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.BudgetRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.GoalContributionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.GoalRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.NotificationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.OtpRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.OutboxEventRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.PasswordResetTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.RefreshTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.ScheduledTransactionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.TransactionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.UserNotificationPreferencesRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.UserPreferencesRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.WalletRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.smartwallet.repository.WalletTransactionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-04 13:52:27 - INFO - [] - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 92 ms. Found 0 Redis repository interfaces.
+2026-11-04 13:52:31 - INFO - [] - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-11-04 13:52:31 - INFO - [] - o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-11-04 13:52:31 - INFO - [] - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.49]
+2026-11-04 13:52:31 - INFO - [] - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-11-04 13:52:31 - INFO - [] - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 11827 ms
+2026-11-04 13:52:35 - INFO - [] - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-11-04 13:52:35 - INFO - [] - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.36.Final
+2026-11-04 13:52:35 - INFO - [] - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-11-04 13:52:37 - INFO - [] - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-04 13:52:37 - INFO - [] - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-11-04 13:52:39 - INFO - [] - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6c26e588
+2026-11-04 13:52:39 - INFO - [] - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-11-04 13:52:40 - INFO - [] - o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.4.11
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-04 13:52:47 - INFO - [] - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-04 13:52:48 - INFO - [] - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-04 13:52:50 - DEBUG - [] - com.smartwallet.security.JwtFilter - Filter 'jwtFilter' configured for use
+2026-11-04 13:52:50 - DEBUG - [] - c.s.f.RequestResponseLoggingFilter - Filter 'requestResponseLoggingFilter' configured for use
+2026-11-04 13:52:51 - INFO - [] - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-04 13:53:03 - INFO - [] - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-11-04 13:53:04 - INFO - [] - o.s.b.a.e.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+2026-11-04 13:53:08 - INFO - [] - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-11-04 13:53:09 - INFO - [] - c.s.SmartwalletRestApiApplication - Started SmartwalletRestApiApplication in 51.563 seconds (process running for 53.287)
+2026-11-04 13:53:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T13:53:09.658560600
+2026-11-04 13:53:10 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 13:53:10 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 13:53:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T13:53:39.588867900
+2026-11-04 13:53:39 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 13:53:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 13:54:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T13:54:09.591445300
+2026-11-04 13:54:09 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 13:54:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 13:54:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T13:54:39.583564900
+2026-11-04 13:54:39 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 13:54:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 13:55:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T13:55:09.592179200
+2026-11-04 13:55:09 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 13:55:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 13:55:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T13:55:39.594873200
+2026-11-04 13:55:39 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 13:55:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 13:56:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T13:56:09.584313100
+2026-11-04 13:56:09 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 13:56:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 13:56:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T13:56:39.594108900
+2026-11-04 13:56:39 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 13:56:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 13:57:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T13:57:09.584577200
+2026-11-04 13:57:09 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 13:57:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 13:57:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T13:57:39.586701
+2026-11-04 13:57:39 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 13:57:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 13:58:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T13:58:09.590017500
+2026-11-04 13:58:09 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 13:58:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 13:58:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T13:58:39.584887600
+2026-11-04 13:58:39 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 13:58:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 13:59:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T13:59:09.583549
+2026-11-04 13:59:09 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 13:59:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 13:59:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T13:59:39.593615300
+2026-11-04 13:59:39 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 13:59:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 14:00:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T14:00:09.591259500
+2026-11-04 14:00:09 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 14:00:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 14:00:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T14:00:39.645853800
+2026-11-04 14:00:39 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 14:00:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 14:00:57 - INFO - [] - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-11-04 14:00:57 - INFO - [] - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-11-04 14:00:57 - INFO - [] - o.s.web.servlet.DispatcherServlet - Completed initialization in 470 ms
+2026-11-04 14:01:00 - INFO - [1e9c7f96-eea2-41f5-b7f9-36c3859a125a] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-04 14:01:01 - INFO - [1e9c7f96-eea2-41f5-b7f9-36c3859a125a] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 365 ms
+2026-11-04 14:01:04 - INFO - [3c136d84-46e5-49e2-aac9-98112877c7de] - c.s.f.RequestResponseLoggingFilter - Request started: POST /api/auth/refresh
+2026-11-04 14:01:04 - INFO - [693661be-5f2a-44b7-804d-1bc52737d338] - c.s.f.RequestResponseLoggingFilter - Request started: POST /api/auth/refresh
+2026-11-04 14:01:04 - INFO - [b839d98b-b2bc-4a61-b133-2587abf8d8bd] - c.s.f.RequestResponseLoggingFilter - Request started: POST /api/auth/refresh
+2026-11-04 14:01:04 - INFO - [560229b1-35e7-484d-9840-30c556256a60] - c.s.f.RequestResponseLoggingFilter - Request started: POST /api/auth/refresh
+2026-11-04 14:01:05 - INFO - [560229b1-35e7-484d-9840-30c556256a60] - c.s.f.RequestResponseLoggingFilter - Request completed: POST /api/auth/refresh - Status: 200 - Duration: 821 ms
+2026-11-04 14:01:05 - INFO - [b839d98b-b2bc-4a61-b133-2587abf8d8bd] - c.s.f.RequestResponseLoggingFilter - Request completed: POST /api/auth/refresh - Status: 200 - Duration: 976 ms
+2026-11-04 14:01:05 - INFO - [693661be-5f2a-44b7-804d-1bc52737d338] - c.s.f.RequestResponseLoggingFilter - Request completed: POST /api/auth/refresh - Status: 200 - Duration: 1196 ms
+2026-11-04 14:01:05 - INFO - [3c136d84-46e5-49e2-aac9-98112877c7de] - c.s.f.RequestResponseLoggingFilter - Request completed: POST /api/auth/refresh - Status: 200 - Duration: 1225 ms
+2026-11-04 14:01:05 - INFO - [d6a72a74-8c01-42e7-976a-62ec1205615c] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-04 14:01:05 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/wallet/summary
+2026-11-04 14:01:05 - INFO - [fa1c9f89-0d9a-4b7e-9fdf-48e8dbcd68d8] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/wallet/me
+2026-11-04 14:01:05 - INFO - [659864ba-f296-4be1-a547-61d921028bad] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/users/me/preferences
+2026-11-04 14:01:05 - INFO - [d6a72a74-8c01-42e7-976a-62ec1205615c] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 24 ms
+2026-11-04 14:01:06 - INFO - [659864ba-f296-4be1-a547-61d921028bad] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/users/me/preferences - Status: 200 - Duration: 118 ms
+2026-11-04 14:01:06 - INFO - [258dda48-709a-47e5-8a28-d418f0f79215] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/transactions/history
+2026-11-04 14:01:06 - INFO - [7d75ae78-e216-4b90-828c-4f14710cbad7] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-04 14:01:06 - INFO - [7d75ae78-e216-4b90-828c-4f14710cbad7] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 14 ms
+2026-11-04 14:01:06 - INFO - [3597ef08-0bcb-417b-ba1c-26f9dd6941c4] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/users/me/preferences
+2026-11-04 14:01:06 - INFO - [66aa32b1-ee92-4ac0-a629-6d17ce32f86e] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-04 14:01:06 - INFO - [66aa32b1-ee92-4ac0-a629-6d17ce32f86e] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 12 ms
+2026-11-04 14:01:06 - INFO - [3597ef08-0bcb-417b-ba1c-26f9dd6941c4] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/users/me/preferences - Status: 200 - Duration: 19 ms
+2026-11-04 14:01:06 - INFO - [8edf4306-a475-410f-96dc-bc788c25c0f3] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-04 14:01:06 - INFO - [8edf4306-a475-410f-96dc-bc788c25c0f3] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 13 ms
+2026-11-04 14:01:06 - INFO - [46075eeb-b9a8-4583-9d04-c858bc6cd0f5] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-04 14:01:06 - INFO - [46075eeb-b9a8-4583-9d04-c858bc6cd0f5] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 11 ms
+2026-11-04 14:01:06 - INFO - [258dda48-709a-47e5-8a28-d418f0f79215] - c.s.service.TransactionService - Fetching transaction history. Page: 0, Size: 100
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Generating wallet summary
+2026-11-04 14:01:06 - INFO - [b623bf68-0046-42f2-a088-88387bb1f185] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-04 14:01:06 - INFO - [b623bf68-0046-42f2-a088-88387bb1f185] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 10 ms
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Wallet summary transaction data loaded
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Transfer rows found = 40
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=vansh1512@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=yash@gmail.com Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=rahul2@gmail.com Status=FAILED
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arypatel913@gamail.com Status=FAILED
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=rahul2@gmail.com Status=FAILED
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=SYSTEM Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=SYSTEM Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=dhruv@gmail.com Status=FAILED
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=SYSTEM Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=SYSTEM Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=SYSTEM Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=SYSTEM Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.smartwallet.service.WalletService - Wallet summary generated successfully
+2026-11-04 14:01:06 - INFO - [6e8686cc-8745-455a-9e06-98f8ffbf864d] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-04 14:01:06 - INFO - [6e8686cc-8745-455a-9e06-98f8ffbf864d] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 13 ms
+2026-11-04 14:01:06 - WARN - [258dda48-709a-47e5-8a28-d418f0f79215] - o.s.d.w.c.SpringDataJacksonConfiguration$PageModule$WarningLoggingModifier - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-11-04 14:01:06 - INFO - [e4560f7f-0556-4eb8-8ba2-e9e5162f8556] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/wallet/summary - Status: 200 - Duration: 763 ms
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/wallet/summary
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Generating wallet summary
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Wallet summary transaction data loaded
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Transfer rows found = 40
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=vansh1512@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=yash@gmail.com Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=rahul2@gmail.com Status=FAILED
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arypatel913@gamail.com Status=FAILED
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=rahul2@gmail.com Status=FAILED
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=SYSTEM Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=SYSTEM Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=dhruv@gmail.com Status=FAILED
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=arya@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=SYSTEM Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=SYSTEM Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [258dda48-709a-47e5-8a28-d418f0f79215] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/transactions/history - Status: 200 - Duration: 753 ms
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=SYSTEM Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=SYSTEM Receiver=arypatel913@gmail.com Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Sender=arypatel913@gmail.com Receiver=SYSTEM Status=SUCCESS
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.smartwallet.service.WalletService - Wallet summary generated successfully
+2026-11-04 14:01:06 - INFO - [854339fa-0401-43ff-bc43-3749ccbb60fd] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/wallet/summary - Status: 200 - Duration: 114 ms
+2026-11-04 14:01:06 - INFO - [dd85ee62-339f-45ac-b667-eae92d24fb9b] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/transactions/history
+2026-11-04 14:01:06 - INFO - [dd85ee62-339f-45ac-b667-eae92d24fb9b] - c.s.service.TransactionService - Fetching transaction history. Page: 0, Size: 100
+2026-11-04 14:01:07 - INFO - [dd85ee62-339f-45ac-b667-eae92d24fb9b] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/transactions/history - Status: 200 - Duration: 23 ms
+2026-11-04 14:01:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T14:01:09.589442400
+2026-11-04 14:01:09 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 14:01:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 14:01:10 - INFO - [fa1c9f89-0d9a-4b7e-9fdf-48e8dbcd68d8] - c.smartwallet.service.WalletService - Fetching wallet from MySQL
+2026-11-04 14:01:10 - INFO - [fa1c9f89-0d9a-4b7e-9fdf-48e8dbcd68d8] - c.smartwallet.service.WalletService - Wallet fetched successfully
+2026-11-04 14:01:11 - INFO - [fa1c9f89-0d9a-4b7e-9fdf-48e8dbcd68d8] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/wallet/me - Status: 200 - Duration: 5042 ms
+2026-11-04 14:01:11 - INFO - [21855382-eab4-442f-b147-2aeca879b01c] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/wallet/me
+2026-11-04 14:01:11 - INFO - [21855382-eab4-442f-b147-2aeca879b01c] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/wallet/me - Status: 200 - Duration: 57 ms
+2026-11-04 14:01:14 - INFO - [0ed01d9f-7db2-40ea-ac1d-bb76024c3a68] - c.s.f.RequestResponseLoggingFilter - Request started: POST /api/auth/logout
+2026-11-04 14:01:14 - INFO - [0ed01d9f-7db2-40ea-ac1d-bb76024c3a68] - c.s.f.RequestResponseLoggingFilter - Request completed: POST /api/auth/logout - Status: 200 - Duration: 362 ms
+2026-11-04 14:01:17 - INFO - [3add3923-2b02-406d-b620-4e3ac649c0e2] - c.s.f.RequestResponseLoggingFilter - Request started: POST /api/auth/login
+2026-11-04 14:01:17 - INFO - [3add3923-2b02-406d-b620-4e3ac649c0e2] - com.smartwallet.service.AuthService - Login request received
+2026-11-04 14:01:17 - INFO - [3add3923-2b02-406d-b620-4e3ac649c0e2] - com.smartwallet.service.AuthService - Login successful
+2026-11-04 14:01:17 - INFO - [3add3923-2b02-406d-b620-4e3ac649c0e2] - c.s.f.RequestResponseLoggingFilter - Request completed: POST /api/auth/login - Status: 200 - Duration: 878 ms
+2026-11-04 14:01:18 - INFO - [f04e575d-a80c-4940-ae35-8dc41e1fa9db] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/insights
+2026-11-04 14:01:18 - INFO - [f04e575d-a80c-4940-ae35-8dc41e1fa9db] - com.smartwallet.service.AIService - Generating AI insights for user: arypatel913@gmail.com
+2026-11-04 14:01:18 - INFO - [2e5d27d1-d51a-4db1-9db1-b0b9d893e168] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/budget-health
+2026-11-04 14:01:18 - INFO - [2e5d27d1-d51a-4db1-9db1-b0b9d893e168] - com.smartwallet.service.AIService - Calculating budget health for user: arypatel913@gmail.com
+2026-11-04 14:01:18 - INFO - [2e5d27d1-d51a-4db1-9db1-b0b9d893e168] - com.smartwallet.service.AIService - Budget health calculated successfully for user: arypatel913@gmail.com
+2026-11-04 14:01:18 - INFO - [03bd6ff9-9a84-41a1-909f-7e46770b1e3a] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-04 14:01:18 - INFO - [a36ad009-18a3-409a-9cf4-b6ed2062a353] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/financial-score
+2026-11-04 14:01:18 - INFO - [de29409c-d56b-4a17-b507-cc29f5872fa6] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/dashboard/insights
+2026-11-04 14:01:18 - INFO - [a36ad009-18a3-409a-9cf4-b6ed2062a353] - com.smartwallet.service.AIService - Calculating financial score for user: arypatel913@gmail.com
+2026-11-04 14:01:18 - INFO - [2e5d27d1-d51a-4db1-9db1-b0b9d893e168] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/budget-health - Status: 200 - Duration: 142 ms
+2026-11-04 14:01:18 - INFO - [de29409c-d56b-4a17-b507-cc29f5872fa6] - c.s.service.TransactionService - Generating dashboard insights. From: 2026-11-04T00:00, To: 2026-11-05T00:00
+2026-11-04 14:01:18 - INFO - [03bd6ff9-9a84-41a1-909f-7e46770b1e3a] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 54 ms
+2026-11-04 14:01:18 - INFO - [a36ad009-18a3-409a-9cf4-b6ed2062a353] - com.smartwallet.service.AIService - Financial score calculated successfully for user: arypatel913@gmail.com
+2026-11-04 14:01:18 - INFO - [a36ad009-18a3-409a-9cf4-b6ed2062a353] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/financial-score - Status: 200 - Duration: 70 ms
+2026-11-04 14:01:18 - INFO - [de29409c-d56b-4a17-b507-cc29f5872fa6] - c.s.service.TransactionService - Dashboard insights generated successfully
+2026-11-04 14:01:18 - INFO - [de29409c-d56b-4a17-b507-cc29f5872fa6] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/dashboard/insights - Status: 200 - Duration: 133 ms
+2026-11-04 14:01:18 - INFO - [90b02b66-3f55-4433-8c78-4d0bda8e66dd] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/goals
+2026-11-04 14:01:18 - INFO - [90b02b66-3f55-4433-8c78-4d0bda8e66dd] - com.smartwallet.service.AIService - Generating goal recommendation for user: arypatel913@gmail.com
+2026-11-04 14:01:18 - INFO - [90b02b66-3f55-4433-8c78-4d0bda8e66dd] - com.smartwallet.service.AIService - Goal recommendation generated successfully for user: arypatel913@gmail.com
+2026-11-04 14:01:18 - INFO - [90b02b66-3f55-4433-8c78-4d0bda8e66dd] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/goals - Status: 200 - Duration: 135 ms
+2026-11-04 14:01:18 - INFO - [a0652a66-5765-4f83-ab97-dd6c11b7cb15] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/wallet/me
+2026-11-04 14:01:18 - INFO - [cde3e55e-f567-4f60-b84a-afedb174b65b] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/users/me/preferences
+2026-11-04 14:01:19 - INFO - [cde3e55e-f567-4f60-b84a-afedb174b65b] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/users/me/preferences - Status: 200 - Duration: 27 ms
+2026-11-04 14:01:19 - INFO - [1ddfb3ba-2ef6-4086-bb00-0365fc0617d0] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/budget-health
+2026-11-04 14:01:19 - INFO - [1ddfb3ba-2ef6-4086-bb00-0365fc0617d0] - com.smartwallet.service.AIService - Calculating budget health for user: arypatel913@gmail.com
+2026-11-04 14:01:19 - INFO - [1ddfb3ba-2ef6-4086-bb00-0365fc0617d0] - com.smartwallet.service.AIService - Budget health calculated successfully for user: arypatel913@gmail.com
+2026-11-04 14:01:19 - INFO - [ae04f9cc-cb28-4303-8b46-7e6018f98e62] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-04 14:01:19 - INFO - [1ddfb3ba-2ef6-4086-bb00-0365fc0617d0] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/budget-health - Status: 200 - Duration: 58 ms
+2026-11-04 14:01:19 - INFO - [ae04f9cc-cb28-4303-8b46-7e6018f98e62] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 28 ms
+2026-11-04 14:01:19 - INFO - [8b67a1fe-e267-42bf-ad5b-2cea4dd06c95] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/financial-score
+2026-11-04 14:01:19 - INFO - [8b67a1fe-e267-42bf-ad5b-2cea4dd06c95] - com.smartwallet.service.AIService - Calculating financial score for user: arypatel913@gmail.com
+2026-11-04 14:01:19 - INFO - [8b67a1fe-e267-42bf-ad5b-2cea4dd06c95] - com.smartwallet.service.AIService - Financial score calculated successfully for user: arypatel913@gmail.com
+2026-11-04 14:01:19 - INFO - [8b67a1fe-e267-42bf-ad5b-2cea4dd06c95] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/financial-score - Status: 200 - Duration: 60 ms
+2026-11-04 14:01:19 - INFO - [6a0f3d89-4007-4995-8ca0-fab8ab68d17f] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/transactions/history/filter
+2026-11-04 14:01:19 - INFO - [c53bf525-9a74-4588-9487-e5c24509115e] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/goals
+2026-11-04 14:01:19 - INFO - [c53bf525-9a74-4588-9487-e5c24509115e] - com.smartwallet.service.AIService - Generating goal recommendation for user: arypatel913@gmail.com
+2026-11-04 14:01:19 - INFO - [6a0f3d89-4007-4995-8ca0-fab8ab68d17f] - c.s.service.TransactionService - Transaction search | email=arypatel913@gmail.com, keyword=null, transactionId=null, keywordAmount=null, category=null, type=null, status=null
+2026-11-04 14:01:19 - INFO - [c53bf525-9a74-4588-9487-e5c24509115e] - com.smartwallet.service.AIService - Goal recommendation generated successfully for user: arypatel913@gmail.com
+2026-11-04 14:01:19 - INFO - [c53bf525-9a74-4588-9487-e5c24509115e] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/goals - Status: 200 - Duration: 78 ms
+2026-11-04 14:01:19 - INFO - [5615a6e8-c317-4eae-b50f-d3415bfbbfce] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/users/me/preferences
+2026-11-04 14:01:19 - INFO - [5dd119c3-22c7-4d08-9f8e-fc09e1389594] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-04 14:01:19 - INFO - [5615a6e8-c317-4eae-b50f-d3415bfbbfce] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/users/me/preferences - Status: 200 - Duration: 16 ms
+2026-11-04 14:01:19 - INFO - [5dd119c3-22c7-4d08-9f8e-fc09e1389594] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 12 ms
+2026-11-04 14:01:19 - INFO - [637a1139-c729-46f2-a087-3021203a0d8c] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/dashboard/insights
+2026-11-04 14:01:19 - INFO - [637a1139-c729-46f2-a087-3021203a0d8c] - c.s.service.TransactionService - Generating dashboard insights. From: 2026-11-04T00:00, To: 2026-11-05T00:00
+2026-11-04 14:01:19 - INFO - [637a1139-c729-46f2-a087-3021203a0d8c] - c.s.service.TransactionService - Dashboard insights generated successfully
+2026-11-04 14:01:19 - INFO - [637a1139-c729-46f2-a087-3021203a0d8c] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/dashboard/insights - Status: 200 - Duration: 15 ms
+2026-11-04 14:01:19 - INFO - [2b217fe6-37c0-44b0-9c21-ccd0b250d4af] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-04 14:01:19 - INFO - [2b217fe6-37c0-44b0-9c21-ccd0b250d4af] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 13 ms
+2026-11-04 14:01:19 - INFO - [6a0f3d89-4007-4995-8ca0-fab8ab68d17f] - c.s.service.TransactionService - Transaction search result | email=arypatel913@gmail.com, keyword=null, page=0, size=100, totalElements=12, returnedElements=12
+2026-11-04 14:01:19 - INFO - [6a0f3d89-4007-4995-8ca0-fab8ab68d17f] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/transactions/history/filter - Status: 200 - Duration: 454 ms
+2026-11-04 14:01:19 - INFO - [a0652a66-5765-4f83-ab97-dd6c11b7cb15] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/wallet/me - Status: 200 - Duration: 793 ms
+2026-11-04 14:01:19 - INFO - [c8041f4d-da83-46d2-b342-e3eeb49f5d85] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/transactions/history/filter
+2026-11-04 14:01:19 - INFO - [c8041f4d-da83-46d2-b342-e3eeb49f5d85] - c.s.service.TransactionService - Transaction search | email=arypatel913@gmail.com, keyword=null, transactionId=null, keywordAmount=null, category=null, type=null, status=null
+2026-11-04 14:01:19 - INFO - [c8041f4d-da83-46d2-b342-e3eeb49f5d85] - c.s.service.TransactionService - Transaction search result | email=arypatel913@gmail.com, keyword=null, page=0, size=100, totalElements=12, returnedElements=12
+2026-11-04 14:01:19 - INFO - [c8041f4d-da83-46d2-b342-e3eeb49f5d85] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/transactions/history/filter - Status: 200 - Duration: 36 ms
+2026-11-04 14:01:19 - INFO - [0004e056-5323-4f55-be13-bd1a90cd03a5] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/wallet/me
+2026-11-04 14:01:19 - INFO - [0004e056-5323-4f55-be13-bd1a90cd03a5] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/wallet/me - Status: 200 - Duration: 18 ms
+2026-11-04 14:01:24 - INFO - [17d53912-f061-42e6-9799-fff4a72420a8] - c.s.f.RequestResponseLoggingFilter - Request started: POST /api/auth/logout
+2026-11-04 14:01:24 - INFO - [17d53912-f061-42e6-9799-fff4a72420a8] - c.s.f.RequestResponseLoggingFilter - Request completed: POST /api/auth/logout - Status: 200 - Duration: 32 ms
+2026-11-04 14:01:27 - INFO - [fb77fce9-c090-4d64-ad38-fad2c55c8a5d] - c.s.f.RequestResponseLoggingFilter - Request started: POST /api/auth/login
+2026-11-04 14:01:27 - INFO - [fb77fce9-c090-4d64-ad38-fad2c55c8a5d] - com.smartwallet.service.AuthService - Login request received
+2026-11-04 14:01:27 - INFO - [fb77fce9-c090-4d64-ad38-fad2c55c8a5d] - com.smartwallet.service.AuthService - Login successful
+2026-11-04 14:01:27 - INFO - [fb77fce9-c090-4d64-ad38-fad2c55c8a5d] - c.s.f.RequestResponseLoggingFilter - Request completed: POST /api/auth/login - Status: 200 - Duration: 256 ms
+2026-11-04 14:01:27 - INFO - [c61a9ba5-661c-4cef-a1ad-50fbf7feff33] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-04 14:01:27 - INFO - [c61a9ba5-661c-4cef-a1ad-50fbf7feff33] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 21 ms
+2026-11-04 14:01:27 - INFO - [cb72b2f9-6f5a-4ac7-a906-00130bfdeca4] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/goals
+2026-11-04 14:01:27 - INFO - [ca27b976-a277-46a5-8433-bf9d6b2b79eb] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/budget-health
+2026-11-04 14:01:27 - INFO - [cb72b2f9-6f5a-4ac7-a906-00130bfdeca4] - com.smartwallet.service.AIService - Generating goal recommendation for user: arypatel913@gmail.com
+2026-11-04 14:01:27 - INFO - [ca27b976-a277-46a5-8433-bf9d6b2b79eb] - com.smartwallet.service.AIService - Calculating budget health for user: arypatel913@gmail.com
+2026-11-04 14:01:27 - INFO - [cb72b2f9-6f5a-4ac7-a906-00130bfdeca4] - com.smartwallet.service.AIService - Goal recommendation generated successfully for user: arypatel913@gmail.com
+2026-11-04 14:01:27 - INFO - [cb72b2f9-6f5a-4ac7-a906-00130bfdeca4] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/goals - Status: 200 - Duration: 55 ms
+2026-11-04 14:01:27 - INFO - [ca27b976-a277-46a5-8433-bf9d6b2b79eb] - com.smartwallet.service.AIService - Budget health calculated successfully for user: arypatel913@gmail.com
+2026-11-04 14:01:27 - INFO - [ca27b976-a277-46a5-8433-bf9d6b2b79eb] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/budget-health - Status: 200 - Duration: 48 ms
+2026-11-04 14:01:27 - INFO - [bf681cd1-a88e-4c56-9ab8-6417fca371ad] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/wallet/me
+2026-11-04 14:01:27 - INFO - [9c43140a-88f0-496a-b004-e80a1719a65e] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/users/me/preferences
+2026-11-04 14:01:27 - INFO - [345060a1-4585-4e6e-b35a-3fbe7c659965] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/transactions/history/filter
+2026-11-04 14:01:27 - INFO - [1c7725cb-4faa-4d97-b369-62668f1d96f5] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/financial-score
+2026-11-04 14:01:27 - INFO - [1c7725cb-4faa-4d97-b369-62668f1d96f5] - com.smartwallet.service.AIService - Calculating financial score for user: arypatel913@gmail.com
+2026-11-04 14:01:27 - INFO - [9c43140a-88f0-496a-b004-e80a1719a65e] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/users/me/preferences - Status: 200 - Duration: 29 ms
+2026-11-04 14:01:27 - INFO - [345060a1-4585-4e6e-b35a-3fbe7c659965] - c.s.service.TransactionService - Transaction search | email=arypatel913@gmail.com, keyword=null, transactionId=null, keywordAmount=null, category=null, type=null, status=null
+2026-11-04 14:01:27 - INFO - [345060a1-4585-4e6e-b35a-3fbe7c659965] - c.s.service.TransactionService - Transaction search result | email=arypatel913@gmail.com, keyword=null, page=0, size=100, totalElements=12, returnedElements=12
+2026-11-04 14:01:27 - INFO - [1c7725cb-4faa-4d97-b369-62668f1d96f5] - com.smartwallet.service.AIService - Financial score calculated successfully for user: arypatel913@gmail.com
+2026-11-04 14:01:27 - INFO - [1c7725cb-4faa-4d97-b369-62668f1d96f5] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/financial-score - Status: 200 - Duration: 50 ms
+2026-11-04 14:01:27 - INFO - [345060a1-4585-4e6e-b35a-3fbe7c659965] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/transactions/history/filter - Status: 200 - Duration: 61 ms
+2026-11-04 14:01:27 - INFO - [d12e062d-95fc-4825-9525-1c147e3841f0] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-04 14:01:27 - INFO - [d12e062d-95fc-4825-9525-1c147e3841f0] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 22 ms
+2026-11-04 14:01:27 - INFO - [723fff53-6993-4d60-bb43-b6fc0625f6a7] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/users/me/preferences
+2026-11-04 14:01:27 - INFO - [723fff53-6993-4d60-bb43-b6fc0625f6a7] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/users/me/preferences - Status: 200 - Duration: 31 ms
+2026-11-04 14:01:27 - INFO - [be99cf98-0de9-4e33-8dcd-14f7f4d34329] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/goals
+2026-11-04 14:01:27 - INFO - [be99cf98-0de9-4e33-8dcd-14f7f4d34329] - com.smartwallet.service.AIService - Generating goal recommendation for user: arypatel913@gmail.com
+2026-11-04 14:01:27 - INFO - [a9bfe9d7-f5f2-46e9-bc50-feeef037140d] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/financial-score
+2026-11-04 14:01:27 - INFO - [be99cf98-0de9-4e33-8dcd-14f7f4d34329] - com.smartwallet.service.AIService - Goal recommendation generated successfully for user: arypatel913@gmail.com
+2026-11-04 14:01:27 - INFO - [be99cf98-0de9-4e33-8dcd-14f7f4d34329] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/goals - Status: 200 - Duration: 48 ms
+2026-11-04 14:01:27 - INFO - [a9bfe9d7-f5f2-46e9-bc50-feeef037140d] - com.smartwallet.service.AIService - Calculating financial score for user: arypatel913@gmail.com
+2026-11-04 14:01:28 - INFO - [ee3e41c6-a542-4dbd-af18-666855512887] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/dashboard/insights
+2026-11-04 14:01:28 - INFO - [a9bfe9d7-f5f2-46e9-bc50-feeef037140d] - com.smartwallet.service.AIService - Financial score calculated successfully for user: arypatel913@gmail.com
+2026-11-04 14:01:28 - INFO - [ee3e41c6-a542-4dbd-af18-666855512887] - c.s.service.TransactionService - Generating dashboard insights. From: 2026-11-04T00:00, To: 2026-11-05T00:00
+2026-11-04 14:01:28 - INFO - [a9bfe9d7-f5f2-46e9-bc50-feeef037140d] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/financial-score - Status: 200 - Duration: 68 ms
+2026-11-04 14:01:28 - INFO - [9351f68d-a45e-48c7-be06-4ee16c92891f] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/transactions/history/filter
+2026-11-04 14:01:28 - INFO - [1ea923f7-291c-416f-ac9b-ed22a3922a5b] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-04 14:01:28 - INFO - [9351f68d-a45e-48c7-be06-4ee16c92891f] - c.s.service.TransactionService - Transaction search | email=arypatel913@gmail.com, keyword=null, transactionId=null, keywordAmount=null, category=null, type=null, status=null
+2026-11-04 14:01:28 - INFO - [fcefe1cd-1247-4685-a975-81b1ccece026] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/budget-health
+2026-11-04 14:01:28 - INFO - [9351f68d-a45e-48c7-be06-4ee16c92891f] - c.s.service.TransactionService - Transaction search result | email=arypatel913@gmail.com, keyword=null, page=0, size=100, totalElements=12, returnedElements=12
+2026-11-04 14:01:28 - INFO - [9351f68d-a45e-48c7-be06-4ee16c92891f] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/transactions/history/filter - Status: 200 - Duration: 143 ms
+2026-11-04 14:01:28 - INFO - [fcefe1cd-1247-4685-a975-81b1ccece026] - com.smartwallet.service.AIService - Calculating budget health for user: arypatel913@gmail.com
+2026-11-04 14:01:28 - INFO - [ee3e41c6-a542-4dbd-af18-666855512887] - c.s.service.TransactionService - Dashboard insights generated successfully
+2026-11-04 14:01:28 - INFO - [1ea923f7-291c-416f-ac9b-ed22a3922a5b] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 144 ms
+2026-11-04 14:01:28 - INFO - [fcefe1cd-1247-4685-a975-81b1ccece026] - com.smartwallet.service.AIService - Budget health calculated successfully for user: arypatel913@gmail.com
+2026-11-04 14:01:28 - INFO - [fcefe1cd-1247-4685-a975-81b1ccece026] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/budget-health - Status: 200 - Duration: 113 ms
+2026-11-04 14:01:28 - INFO - [ee3e41c6-a542-4dbd-af18-666855512887] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/dashboard/insights - Status: 200 - Duration: 217 ms
+2026-11-04 14:01:28 - INFO - [5044fbf8-ff48-4d42-88d3-470b3c0df9b6] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/dashboard/insights
+2026-11-04 14:01:28 - INFO - [5044fbf8-ff48-4d42-88d3-470b3c0df9b6] - c.s.service.TransactionService - Generating dashboard insights. From: 2026-11-04T00:00, To: 2026-11-05T00:00
+2026-11-04 14:01:28 - INFO - [5044fbf8-ff48-4d42-88d3-470b3c0df9b6] - c.s.service.TransactionService - Dashboard insights generated successfully
+2026-11-04 14:01:28 - INFO - [5044fbf8-ff48-4d42-88d3-470b3c0df9b6] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/dashboard/insights - Status: 200 - Duration: 12 ms
+2026-11-04 14:01:28 - INFO - [56bbc6fd-a8e1-4629-9bc8-ba0d1c3c93ae] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/notifications/unread
+2026-11-04 14:01:28 - INFO - [56bbc6fd-a8e1-4629-9bc8-ba0d1c3c93ae] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/notifications/unread - Status: 200 - Duration: 15 ms
+2026-11-04 14:01:28 - INFO - [bf681cd1-a88e-4c56-9ab8-6417fca371ad] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/wallet/me - Status: 200 - Duration: 603 ms
+2026-11-04 14:01:28 - INFO - [e6664f9b-848c-4548-8c8e-4c8ffddda824] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/wallet/me
+2026-11-04 14:01:28 - INFO - [e6664f9b-848c-4548-8c8e-4c8ffddda824] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/wallet/me - Status: 200 - Duration: 22 ms
+2026-11-04 14:01:32 - INFO - [16a69f95-708f-42e5-bc2e-2cd3f6fca4dd] - c.s.f.RequestResponseLoggingFilter - Request started: POST /api/auth/logout
+2026-11-04 14:01:32 - INFO - [16a69f95-708f-42e5-bc2e-2cd3f6fca4dd] - c.s.f.RequestResponseLoggingFilter - Request completed: POST /api/auth/logout - Status: 200 - Duration: 46 ms
+2026-11-04 14:01:38 - INFO - [f7b44dcd-6fee-425b-bcdc-f6fae8af5ffb] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/insights
+2026-11-04 14:01:38 - INFO - [f7b44dcd-6fee-425b-bcdc-f6fae8af5ffb] - com.smartwallet.service.AIService - Generating AI insights for user: arypatel913@gmail.com
+2026-11-04 14:01:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T14:01:39.582853300
+2026-11-04 14:01:39 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 14:01:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 14:01:44 - INFO - [f04e575d-a80c-4940-ae35-8dc41e1fa9db] - com.smartwallet.service.AIService - AI insights generated successfully for user: arypatel913@gmail.com
+2026-11-04 14:01:44 - INFO - [f04e575d-a80c-4940-ae35-8dc41e1fa9db] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/insights - Status: 200 - Duration: 25562 ms
+2026-11-04 14:01:44 - INFO - [9ee34795-49e5-4ebb-ada2-4a31ae20928b] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/insights
+2026-11-04 14:01:44 - INFO - [9ee34795-49e5-4ebb-ada2-4a31ae20928b] - com.smartwallet.service.AIService - Generating AI insights for user: arypatel913@gmail.com
+2026-11-04 14:02:03 - INFO - [f7b44dcd-6fee-425b-bcdc-f6fae8af5ffb] - com.smartwallet.service.AIService - AI insights generated successfully for user: arypatel913@gmail.com
+2026-11-04 14:02:03 - INFO - [f7b44dcd-6fee-425b-bcdc-f6fae8af5ffb] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/insights - Status: 200 - Duration: 24953 ms
+2026-11-04 14:02:04 - INFO - [688792ad-8105-40b5-9c20-daeeaa468e04] - c.s.f.RequestResponseLoggingFilter - Request started: GET /api/ai/insights
+2026-11-04 14:02:04 - INFO - [688792ad-8105-40b5-9c20-daeeaa468e04] - com.smartwallet.service.AIService - Generating AI insights for user: arypatel913@gmail.com
+2026-11-04 14:02:08 - INFO - [9ee34795-49e5-4ebb-ada2-4a31ae20928b] - com.smartwallet.service.AIService - AI insights generated successfully for user: arypatel913@gmail.com
+2026-11-04 14:02:08 - INFO - [9ee34795-49e5-4ebb-ada2-4a31ae20928b] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/insights - Status: 200 - Duration: 24579 ms
+2026-11-04 14:02:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T14:02:09.584451600
+2026-11-04 14:02:09 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 14:02:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 14:02:29 - INFO - [688792ad-8105-40b5-9c20-daeeaa468e04] - com.smartwallet.service.AIService - AI insights generated successfully for user: arypatel913@gmail.com
+2026-11-04 14:02:29 - INFO - [688792ad-8105-40b5-9c20-daeeaa468e04] - c.s.f.RequestResponseLoggingFilter - Request completed: GET /api/ai/insights - Status: 200 - Duration: 25525 ms
+2026-11-04 14:02:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T14:02:39.586560300
+2026-11-04 14:02:39 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 14:02:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 14:03:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T14:03:09.594276500
+2026-11-04 14:03:09 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 14:03:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 14:03:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T14:03:39.593342200
+2026-11-04 14:03:39 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 14:03:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 14:04:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T14:04:09.599326900
+2026-11-04 14:04:09 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 14:04:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 14:04:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T14:04:39.591037300
+2026-11-04 14:04:39 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 14:04:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 14:05:09 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T14:05:09.586424500
+2026-11-04 14:05:10 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 14:05:10 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
+2026-11-04 14:05:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor started at 2026-11-04T14:05:39.598059600
+2026-11-04 14:05:39 - DEBUG - [] - c.s.s.ScheduledTransactionProcessor - No scheduled transactions are due
+2026-11-04 14:05:39 - INFO - [] - c.s.s.ScheduledTransactionProcessor - Scheduled transaction processor completed. Candidates=0, Successful=0, Skipped=0, Errors=0
