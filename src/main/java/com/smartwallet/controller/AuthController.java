@@ -1,3 +1,4 @@
+
 package com.smartwallet.controller;
 
 import com.smartwallet.dto.AuthResponse;
@@ -7,8 +8,11 @@ import com.smartwallet.dto.ForgotPasswordRequest;
 import com.smartwallet.dto.ResetPasswordRequest;
 import com.smartwallet.service.AuthService;
 import com.smartwallet.service.PasswordResetService;
+import com.smartwallet.service.RefreshTokenService;
+
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,13 +21,16 @@ public class AuthController {
 
     private final AuthService authService;
     private final PasswordResetService passwordResetService;
+    private final RefreshTokenService refreshTokenService;
 
     public AuthController(
             AuthService authService,
-            PasswordResetService passwordResetService) {
+            PasswordResetService passwordResetService,
+            RefreshTokenService refreshTokenService) {
 
         this.authService = authService;
         this.passwordResetService = passwordResetService;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @PostMapping("/login")
@@ -42,15 +49,27 @@ public class AuthController {
         );
     }
 
+    @PostMapping("/logout")
+    public String logout(
+            @RequestBody RefreshTokenRequest request) {
+
+        refreshTokenService.revokeRefreshToken(
+                request.getRefreshToken()
+        );
+
+        return "Logged out successfully.";
+    }
+
     @PostMapping("/forgot-password")
     public String forgotPassword(
-            @RequestBody ForgotPasswordRequest request) throws MessagingException {
+            @RequestBody ForgotPasswordRequest request)
+            throws MessagingException {
 
-       passwordResetService.generateResetToken(
-        request.getEmail()
-);
+        passwordResetService.generateResetToken(
+                request.getEmail()
+        );
 
-return "Password reset email sent successfully.";
+        return "Password reset email sent successfully.";
     }
 
     @PostMapping("/reset-password")

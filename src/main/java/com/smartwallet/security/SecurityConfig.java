@@ -30,14 +30,11 @@ public class SecurityConfig {
             HttpSecurity http) throws Exception {
 
         http
-            // CORS
             .cors(cors -> {
             })
 
-            // JWT-based API: disable CSRF
             .csrf(csrf -> csrf.disable())
 
-            // Authentication and authorization error handling
             .exceptionHandling(exception -> exception
                 .authenticationEntryPoint((request, response, authException) -> {
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -57,13 +54,13 @@ public class SecurityConfig {
                 })
             )
 
-            // Authorization rules
             .authorizeHttpRequests(auth -> auth
 
                 // Authentication APIs
                 .requestMatchers(
                     "/api/auth/login",
                     "/api/auth/refresh",
+                    "/api/auth/logout",
                     "/api/auth/forgot-password",
                     "/api/auth/reset-password"
                 ).permitAll()
@@ -129,7 +126,6 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
 
-            // JWT filter
             .addFilterBefore(
                 jwtFilter,
                 UsernamePasswordAuthenticationFilter.class
@@ -143,13 +139,12 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Trusted frontend
         configuration.setAllowCredentials(true);
+
         configuration.setAllowedOrigins(
             List.of("http://localhost:3000")
         );
 
-        // Allowed HTTP methods
         configuration.setAllowedMethods(
             List.of(
                 "GET",
@@ -161,7 +156,6 @@ public class SecurityConfig {
             )
         );
 
-        // Allowed request headers
         configuration.setAllowedHeaders(
             List.of(
                 "Authorization",
@@ -171,12 +165,10 @@ public class SecurityConfig {
             )
         );
 
-        // Exposed response headers
         configuration.setExposedHeaders(
             List.of("X-Request-ID")
         );
 
-        // Register CORS configuration
         UrlBasedCorsConfigurationSource source =
             new UrlBasedCorsConfigurationSource();
 

@@ -1,8 +1,10 @@
+
 package com.smartwallet.service;
 
 import com.smartwallet.model.RefreshToken;
 import com.smartwallet.repository.RefreshTokenRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -15,15 +17,12 @@ public class RefreshTokenService {
     public RefreshTokenService(
             RefreshTokenRepository refreshTokenRepository) {
 
-        this.refreshTokenRepository =
-                refreshTokenRepository;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    public RefreshToken createRefreshToken(
-            String email) {
+    public RefreshToken createRefreshToken(String email) {
 
-        RefreshToken refreshToken =
-                new RefreshToken();
+        RefreshToken refreshToken = new RefreshToken();
 
         refreshToken.setEmail(email);
 
@@ -35,35 +34,46 @@ public class RefreshTokenService {
                 LocalDateTime.now().plusDays(7)
         );
 
-        return refreshTokenRepository.save(
-                refreshToken
-        );
+        return refreshTokenRepository.save(refreshToken);
     }
 
-    public RefreshToken findByToken(
-            String token) {
+    public RefreshToken findByToken(String token) {
 
-        return refreshTokenRepository
-                .findByToken(token);
+        return refreshTokenRepository.findByToken(token);
     }
 
-    public RefreshToken validateRefreshToken(
-            String token) {
+    @Transactional
+    public RefreshToken validateRefreshToken(String token) {
+
+        if (token == null || token.isBlank()) {
+            return null;
+        }
 
         RefreshToken refreshToken =
-                refreshTokenRepository
-                        .findByToken(token);
+                refreshTokenRepository.findByToken(token);
 
         if (refreshToken == null) {
             return null;
         }
 
-        if (refreshToken.getExpiryDate()
-                .isBefore(LocalDateTime.now())) {
+        if (refreshToken.getExpiryDate() == null
+                || !refreshToken.getExpiryDate()
+                        .isAfter(LocalDateTime.now())) {
 
+            refreshTokenRepository.deleteByToken(token);
             return null;
         }
 
         return refreshToken;
+    }
+
+    @Transactional
+    public void revokeRefreshToken(String token) {
+
+        if (token == null || token.isBlank()) {
+            return;
+        }
+
+        refreshTokenRepository.deleteByToken(token);
     }
 }

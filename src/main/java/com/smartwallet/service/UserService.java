@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.smartwallet.dto.RegisterRequest;
 import com.smartwallet.dto.UserProfileResponse;
+import com.smartwallet.dto.ChangePasswordRequest;
 import com.smartwallet.exception.ResourceNotFoundException;
 import com.smartwallet.model.User;
 import com.smartwallet.model.Wallet;
@@ -74,9 +75,7 @@ public class UserService {
         User user = userRepository.findByEmail(email);
 
         if (user == null) {
-            throw new ResourceNotFoundException(
-                    "User not found"
-            );
+            throw new ResourceNotFoundException("User not found");
         }
 
         return walletRepository.findByUserUserId(
@@ -96,9 +95,7 @@ public class UserService {
         User user = userRepository.findByEmail(email);
 
         if (user == null) {
-            throw new ResourceNotFoundException(
-                    "User not found"
-            );
+            throw new ResourceNotFoundException("User not found");
         }
 
         return toProfileResponse(user);
@@ -110,9 +107,7 @@ public class UserService {
             String newName) {
 
         if (newName == null) {
-            throw new IllegalArgumentException(
-                    "Name is required"
-            );
+            throw new IllegalArgumentException("Name is required");
         }
 
         String normalizedName = newName.trim();
@@ -127,16 +122,55 @@ public class UserService {
         User user = userRepository.findByEmail(email);
 
         if (user == null) {
-            throw new ResourceNotFoundException(
-                    "User not found"
-            );
+            throw new ResourceNotFoundException("User not found");
         }
 
         user.setName(normalizedName);
 
-        // The entity is managed in this transaction.
-        // JPA dirty checking persists the name change.
         return toProfileResponse(user);
+    }
+
+    // ============================================================
+    // CHANGE PASSWORD
+    // ============================================================
+
+    @Transactional
+    public void changePassword(
+            String email,
+            ChangePasswordRequest request) {
+
+        User user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            throw new ResourceNotFoundException("User not found");
+        }
+
+        // Verify the current password
+        if (!passwordEncoder.matches(
+                request.getCurrentPassword(),
+                user.getPassword())) {
+
+            throw new IllegalArgumentException(
+                    "Current password is incorrect"
+            );
+        }
+
+        String newPassword = request.getNewPassword();
+
+        // Prevent reusing the current password
+        if (passwordEncoder.matches(
+                newPassword,
+                user.getPassword())) {
+
+            throw new IllegalArgumentException(
+                    "New password must be different from current password"
+            );
+        }
+
+        // Store only the BCrypt-encoded password
+        user.setPassword(passwordEncoder.encode(newPassword));
+
+        // JPA dirty checking persists the updated password.
     }
 
     private UserProfileResponse toProfileResponse(User user) {
