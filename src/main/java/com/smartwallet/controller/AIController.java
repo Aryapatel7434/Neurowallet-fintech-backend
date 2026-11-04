@@ -1,3 +1,4 @@
+
 package com.smartwallet.controller;
 
 import com.smartwallet.dto.AIInsightResponse;
@@ -28,19 +29,23 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.validation.Valid;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.server.ResponseStatusException;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.smartwallet.dto.GoalAdvisorResponse;
-import com.smartwallet.service.GoalAdvisorService;
+
 @Tag(
         name = "AI APIs",
         description = "AI-powered financial analysis and recommendation endpoints"
@@ -56,7 +61,7 @@ public class AIController {
     private final AIAssistantService aiAssistantService;
     private final FraudDetectionService fraudDetectionService;
     private final FinancialIntelligenceService financialIntelligenceService;
-private final GoalAdvisorService goalAdvisorService;
+
     public AIController(
             AIService aiService,
             TransactionAnalyticsService transactionAnalyticsService,
@@ -64,29 +69,15 @@ private final GoalAdvisorService goalAdvisorService;
             SpendingPatternService spendingPatternService,
             AIAssistantService aiAssistantService,
             FraudDetectionService fraudDetectionService,
-            FinancialIntelligenceService financialIntelligenceService,GoalAdvisorService goalAdvisorService) {
+            FinancialIntelligenceService financialIntelligenceService) {
 
         this.aiService = aiService;
-
-        this.transactionAnalyticsService =
-                transactionAnalyticsService;
-
-        this.categoryAnalysisService =
-                categoryAnalysisService;
-
-        this.spendingPatternService =
-                spendingPatternService;
-
-        this.aiAssistantService =
-                aiAssistantService;
-
-        this.fraudDetectionService =
-                fraudDetectionService;
-
-        this.financialIntelligenceService =
-                financialIntelligenceService;
-        
-        this.goalAdvisorService = goalAdvisorService;
+        this.transactionAnalyticsService = transactionAnalyticsService;
+        this.categoryAnalysisService = categoryAnalysisService;
+        this.spendingPatternService = spendingPatternService;
+        this.aiAssistantService = aiAssistantService;
+        this.fraudDetectionService = fraudDetectionService;
+        this.financialIntelligenceService = financialIntelligenceService;
     }
 
     // ============================================================
@@ -102,9 +93,7 @@ private final GoalAdvisorService goalAdvisorService;
     public AIInsightResponse getAIInsights(
             Authentication authentication) {
 
-        return aiService.getAIInsights(
-                authentication.getName()
-        );
+        return aiService.getAIInsights(authentication.getName());
     }
 
     // ============================================================
@@ -120,9 +109,7 @@ private final GoalAdvisorService goalAdvisorService;
     public FinancialScoreResponse getFinancialScore(
             Authentication authentication) {
 
-        return aiService.getFinancialScore(
-                authentication.getName()
-        );
+        return aiService.getFinancialScore(authentication.getName());
     }
 
     // ============================================================
@@ -138,9 +125,7 @@ private final GoalAdvisorService goalAdvisorService;
     public BudgetHealthResponse getBudgetHealth(
             Authentication authentication) {
 
-        return aiService.getBudgetHealth(
-                authentication.getName()
-        );
+        return aiService.getBudgetHealth(authentication.getName());
     }
 
     // ============================================================
@@ -156,9 +141,7 @@ private final GoalAdvisorService goalAdvisorService;
     public GoalRecommendationResponse getGoalRecommendation(
             Authentication authentication) {
 
-        return aiService.getGoalRecommendation(
-                authentication.getName()
-        );
+        return aiService.getGoalRecommendation(authentication.getName());
     }
 
     // ============================================================
@@ -167,17 +150,28 @@ private final GoalAdvisorService goalAdvisorService;
 
     @Operation(
             summary = "Transaction Analytics",
-            description = "Returns deterministic financial analytics calculated from the authenticated user's transactions."
+            description = "Returns transaction analytics for the authenticated user. Optional ISO dates filter the result."
     )
     @GetMapping("/transaction-analytics")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public TransactionAnalyticsResponse getTransactionAnalytics(
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fromDate,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate toDate,
+
             Authentication authentication) {
 
-        return transactionAnalyticsService
-                .getTransactionAnalytics(
-                        authentication.getName()
-                );
+        validateDateRange(fromDate, toDate);
+
+        return transactionAnalyticsService.getTransactionAnalytics(
+                authentication.getName(),
+                fromDate,
+                toDate
+        );
     }
 
     // ============================================================
@@ -186,17 +180,28 @@ private final GoalAdvisorService goalAdvisorService;
 
     @Operation(
             summary = "Category Spending Analysis",
-            description = "Returns spending distribution across transaction categories."
+            description = "Returns category-wise spending analytics with optional date filtering."
     )
     @GetMapping("/category-spending")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public List<CategorySpendingResponse> getCategorySpending(
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fromDate,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate toDate,
+
             Authentication authentication) {
 
-        return categoryAnalysisService
-                .getCategorySpending(
-                        authentication.getName()
-                );
+        validateDateRange(fromDate, toDate);
+
+        return categoryAnalysisService.getCategorySpending(
+                authentication.getName(),
+                fromDate,
+                toDate
+        );
     }
 
     // ============================================================
@@ -205,17 +210,28 @@ private final GoalAdvisorService goalAdvisorService;
 
     @Operation(
             summary = "Spending Pattern Analysis",
-            description = "Analyzes the authenticated user's spending behavior and concentration."
+            description = "Analyzes the authenticated user's spending behavior with optional date filtering."
     )
     @GetMapping("/spending-pattern")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public SpendingPatternResponse getSpendingPattern(
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fromDate,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate toDate,
+
             Authentication authentication) {
 
-        return spendingPatternService
-                .getSpendingPattern(
-                        authentication.getName()
-                );
+        validateDateRange(fromDate, toDate);
+
+        return spendingPatternService.getSpendingPattern(
+                authentication.getName(),
+                fromDate,
+                toDate
+        );
     }
 
     // ============================================================
@@ -231,9 +247,7 @@ private final GoalAdvisorService goalAdvisorService;
     public FinancialAnalysisResponse getFinancialAnalysis(
             Authentication authentication) {
 
-        return aiService.getFinancialAnalysis(
-                authentication.getName()
-        );
+        return aiService.getFinancialAnalysis(authentication.getName());
     }
 
     // ============================================================
@@ -249,9 +263,7 @@ private final GoalAdvisorService goalAdvisorService;
     public BudgetAdvisorResponse getBudgetAdvisor(
             Authentication authentication) {
 
-        return aiService.getBudgetAdvisor(
-                authentication.getName()
-        );
+        return aiService.getBudgetAdvisor(authentication.getName());
     }
 
     // ============================================================
@@ -311,29 +323,28 @@ private final GoalAdvisorService goalAdvisorService;
         return new ApiResponse<>(
                 true,
                 "Financial intelligence retrieved successfully.",
-                financialIntelligenceService
-                        .getFinancialIntelligence(
-                                authentication.getName()
-                        )
+                financialIntelligenceService.getFinancialIntelligence(
+                        authentication.getName()
+                )
         );
     }
-            // ============================================================
-// AI GOAL ADVISOR
-// ============================================================
 
-@Operation(
-        summary = "AI Goal Advisor",
-        description = "Analyzes the authenticated user's financial goals, "
-                + "transaction history and savings feasibility using "
-                + "deterministic financial calculations and Google Gemini."
-)
-@GetMapping("/goal-advisor")
-@PreAuthorize("hasAnyRole('USER','ADMIN')")
-public GoalAdvisorResponse getGoalAdvisor(
-        Authentication authentication) {
+    // ============================================================
+    // DATE RANGE VALIDATION
+    // ============================================================
 
-    return goalAdvisorService.getGoalAdvisor(
-            authentication.getName()
-    );
-}
+    private void validateDateRange(
+            LocalDate fromDate,
+            LocalDate toDate) {
+
+        if (fromDate != null
+                && toDate != null
+                && fromDate.isAfter(toDate)) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "From date cannot be after to date."
+            );
+        }
+    }
 }

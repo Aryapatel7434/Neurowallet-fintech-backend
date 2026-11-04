@@ -1218,8 +1218,8 @@ private AIInsightResponse buildDeterministicAIInsightResponse(
                     backendBudget.getMonthlyIncome(),
                     backendBudget.getMonthlyExpense(),
                     backendBudget.getCurrentSavings(),
-                    backendBudget.getEssentialBudget(),
-                    backendBudget.getDiscretionaryBudget(),
+                    backendBudget.getEssentialExpense(),
+                    backendBudget.getDiscretionaryExpense(),
                     backendBudget.getRecommendedSavings(),
                     backendBudget.getEssentialBudget(),
                     backendBudget.getDiscretionaryBudget()
@@ -1285,6 +1285,16 @@ private AIInsightResponse buildDeterministicAIInsightResponse(
 
         finalResponse.setCurrentSavings(
                 backendBudget.getCurrentSavings()
+        );
+
+        // Actual category expenses are trusted backend facts.
+        // Do not ask the AI model to calculate or overwrite transaction totals.
+        finalResponse.setEssentialExpense(
+                backendBudget.getEssentialExpense()
+        );
+
+        finalResponse.setDiscretionaryExpense(
+                backendBudget.getDiscretionaryExpense()
         );
 
         // AI-generated values
@@ -1380,6 +1390,18 @@ private AIInsightResponse buildDeterministicAIInsightResponse(
     }
 
     // ------------------------------------------------------------
+    // Trusted category-expense facts
+    // ------------------------------------------------------------
+
+    if (response.getEssentialExpense() == null
+            || response.getDiscretionaryExpense() == null) {
+
+        throw new AIServiceException(
+                "Backend budget response is missing category expense data"
+        );
+    }
+
+    // ------------------------------------------------------------
     // AI-generated budget decisions
     // ------------------------------------------------------------
 
@@ -1404,6 +1426,16 @@ private AIInsightResponse buildDeterministicAIInsightResponse(
         );
     }
 
+    // Reject impossible negative monetary recommendations.
+    if (response.getRecommendedSavings().signum() < 0
+            || response.getEssentialBudget().signum() < 0
+            || response.getDiscretionaryBudget().signum() < 0) {
+
+        throw new AIServiceException(
+                "AI budget advisor returned negative monetary values"
+        );
+    }
+
     if (isBlank(response.getPriority())) {
 
         throw new AIServiceException(
@@ -1424,6 +1456,23 @@ private AIInsightResponse buildDeterministicAIInsightResponse(
         throw new AIServiceException(
                 "AI budget advisor response is missing recommendations"
         );
+    }
+
+    if (response.getRecommendations().size() > 5) {
+
+        throw new AIServiceException(
+                "AI budget advisor returned too many recommendations"
+        );
+    }
+
+    for (String recommendation : response.getRecommendations()) {
+
+        if (isBlank(recommendation) || recommendation.length() > 500) {
+
+            throw new AIServiceException(
+                    "AI budget advisor returned an invalid recommendation"
+            );
+        }
     }
 }
  public UnifiedAIInsightResponse getUnifiedAIInsight(

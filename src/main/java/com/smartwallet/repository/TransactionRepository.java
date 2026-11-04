@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -93,9 +92,6 @@ public interface TransactionRepository
             @Param("email") String email,
             @Param("status") TransactionStatus status
     );
-
-    // Only FAILED transactions are queried.
-    // Legacy FAILD enum dependency has been removed.
 
     @Query("""
             SELECT t
@@ -288,6 +284,172 @@ public interface TransactionRepository
     List<Object[]> getBudgetCategorySpending(
             @Param("email") String email,
             @Param("status") TransactionStatus status,
+            @Param("types") List<TransactionType> types,
+            @Param("fromDate") LocalDateTime fromDate,
+            @Param("toDateExclusive") LocalDateTime toDateExclusive
+    );
+
+    // ============================================================
+    // ANALYTICS — TRANSACTION AGGREGATION
+    // ============================================================
+
+    /**
+     * Object[] positions:
+     * 0 - Total transactions
+     * 1 - Successful transactions
+     * 2 - Failed transactions
+     * 3 - Total income
+     * 4 - Total expense
+     * 5 - Total transfer
+     * 6 - Average successful transaction
+     * 7 - Largest successful transaction
+     */
+    @Query("""
+            SELECT
+                COUNT(t),
+
+                COUNT(
+                    CASE WHEN t.status = :successStatus
+                    THEN t.transactionId END
+                ),
+
+                COUNT(
+                    CASE WHEN t.status = :failedStatus
+                    THEN t.transactionId END
+                ),
+
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN t.status = :successStatus
+                             AND (
+                                 (t.type = :creditType
+                                  AND t.receiverEmail = :email)
+                                 OR
+                                 (t.type = :transferType
+                                  AND t.receiverEmail = :email)
+                             )
+                            THEN ABS(t.amount)
+                            ELSE 0
+                        END
+                    ),
+                    0
+                ),
+
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN t.status = :successStatus
+                             AND (
+                                 (t.type = :debitType
+                                  AND t.senderEmail = :email)
+                                 OR
+                                 (t.type = :transferType
+                                  AND t.senderEmail = :email)
+                             )
+                            THEN ABS(t.amount)
+                            ELSE 0
+                        END
+                    ),
+                    0
+                ),
+
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN t.status = :successStatus
+                             AND t.type = :transferType
+                            THEN ABS(t.amount)
+                            ELSE 0
+                        END
+                    ),
+                    0
+                ),
+
+                COALESCE(
+                    AVG(
+                        CASE
+                            WHEN t.status = :successStatus
+                            THEN ABS(t.amount)
+                            ELSE NULL
+                        END
+                    ),
+                    0
+                ),
+
+                COALESCE(
+                    MAX(
+                        CASE
+                            WHEN t.status = :successStatus
+                            THEN ABS(t.amount)
+                            ELSE NULL
+                        END
+                    ),
+                    0
+                )
+
+            FROM Transaction t
+
+            WHERE
+                (t.senderEmail = :email
+                 OR t.receiverEmail = :email)
+
+                AND (:fromDate IS NULL
+                     OR t.timestamp >= :fromDate)
+
+                AND (:toDateExclusive IS NULL
+                     OR t.timestamp < :toDateExclusive)
+            """)
+    Object[] getTransactionAnalyticsAggregation(
+            @Param("email") String email,
+            @Param("successStatus") TransactionStatus successStatus,
+            @Param("failedStatus") TransactionStatus failedStatus,
+            @Param("creditType") TransactionType creditType,
+            @Param("debitType") TransactionType debitType,
+            @Param("transferType") TransactionType transferType,
+            @Param("fromDate") LocalDateTime fromDate,
+            @Param("toDateExclusive") LocalDateTime toDateExclusive
+    );
+
+    // ============================================================
+    // ANALYTICS — CATEGORY AND SPENDING AGGREGATION
+    // ============================================================
+
+    /**
+     * Object[] positions:
+     * 0 - TransactionCategory
+     * 1 - Total spending
+     * 2 - Spending transaction count
+     * 3 - Largest transaction
+     * 4 - High-value transaction count (>= 10000)
+     */
+    @Query("""
+            SELECT
+                t.category,
+                SUM(ABS(t.amount)),
+                COUNT(t),
+                MAX(ABS(t.amount)),
+                COUNT(
+                    CASE
+                        WHEN ABS(t.amount) >= 10000
+                        THEN t.transactionId
+                    END
+                )
+            FROM Transaction t
+            WHERE t.senderEmail = :email
+              AND t.status = :successStatus
+              AND t.type IN :types
+              AND t.category IS NOT NULL
+              AND (:fromDate IS NULL
+                   OR t.timestamp >= :fromDate)
+              AND (:toDateExclusive IS NULL
+                   OR t.timestamp < :toDateExclusive)
+            GROUP BY t.category
+            ORDER BY SUM(ABS(t.amount)) DESC
+            """)
+    List<Object[]> getAnalyticsCategorySpending(
+            @Param("email") String email,
+            @Param("successStatus") TransactionStatus successStatus,
             @Param("types") List<TransactionType> types,
             @Param("fromDate") LocalDateTime fromDate,
             @Param("toDateExclusive") LocalDateTime toDateExclusive

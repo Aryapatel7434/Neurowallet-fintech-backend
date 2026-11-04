@@ -1,204 +1,144 @@
+
 package com.smartwallet.service;
 
 import com.smartwallet.dto.TransactionAnalyticsResponse;
-import com.smartwallet.model.Transaction;
 import com.smartwallet.model.TransactionStatus;
 import com.smartwallet.model.TransactionType;
 import com.smartwallet.repository.TransactionRepository;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class TransactionAnalyticsService {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(TransactionAnalyticsService.class);
 
     private final TransactionRepository transactionRepository;
 
     public TransactionAnalyticsService(
             TransactionRepository transactionRepository) {
 
-        this.transactionRepository =
-                transactionRepository;
+        this.transactionRepository = transactionRepository;
     }
 
-    public TransactionAnalyticsResponse
-            getTransactionAnalytics(String email) {
+    /**
+     * Returns all-time transaction analytics.
+     */
+    public TransactionAnalyticsResponse getTransactionAnalytics(
+            String email) {
 
-        List<Transaction> transactions =
-                transactionRepository
-                        .findBySenderEmailOrReceiverEmail(
-                                email,
-                                email
-                        );
-
-        long totalTransactions = 0;
-        long successfulTransactions = 0;
-        long failedTransactions = 0;
-
-        BigDecimal totalIncome =
-                BigDecimal.ZERO;
-
-        BigDecimal totalExpense =
-                BigDecimal.ZERO;
-
-        BigDecimal totalTransfer =
-                BigDecimal.ZERO;
-
-        BigDecimal totalTransactionAmount =
-                BigDecimal.ZERO;
-
-        BigDecimal largestTransaction =
-                BigDecimal.ZERO;
-
-        for (Transaction transaction : transactions) {
-
-            if (transaction == null
-                    || transaction.getAmount() == null
-                    || transaction.getStatus() == null
-                    || transaction.getType() == null) {
-
-                continue;
-            }
-
-            totalTransactions++;
-
-            TransactionStatus status =
-                    transaction.getStatus();
-
-            if (status == TransactionStatus.SUCCESS) {
-
-                successfulTransactions++;
-
-            }else if (status == TransactionStatus.FAILED) {
-
-    failedTransactions++;
-}
-
-            // Only successful transactions contribute
-            // to financial calculations.
-            if (status != TransactionStatus.SUCCESS) {
-                continue;
-            }
-
-            BigDecimal amount =
-                    transaction.getAmount().abs();
-
-            totalTransactionAmount =
-                    totalTransactionAmount.add(amount);
-
-            if (amount.compareTo(largestTransaction) > 0) {
-
-                largestTransaction = amount;
-            }
-
-            TransactionType type =
-                    transaction.getType();
-
-            // ====================================================
-            // INCOME
-            // ====================================================
-
-            if (type == TransactionType.CREDIT
-                    && email.equals(
-                            transaction.getReceiverEmail())) {
-
-                totalIncome =
-                        totalIncome.add(amount);
-            }
-
-            // ====================================================
-            // EXPENSE
-            // ====================================================
-
-            else if (type == TransactionType.DEBIT
-                    && email.equals(
-                            transaction.getSenderEmail())) {
-
-                totalExpense =
-                        totalExpense.add(amount);
-            }
-
-            // ====================================================
-            // TRANSFER
-            // ====================================================
-
-        else if (type == TransactionType.TRANSFER) {
-
-    // Track total transfer volume
-    totalTransfer =
-            totalTransfer.add(amount);
-
-    // Money received = income
-    if (email.equals(transaction.getReceiverEmail())) {
-
-        totalIncome =
-                totalIncome.add(amount);
+        return getTransactionAnalytics(email, null, null);
     }
 
-    // Money sent = expense
-    if (email.equals(transaction.getSenderEmail())) {
+    /**
+     * Returns transaction analytics for an optional date range.
+     */
+    public TransactionAnalyticsResponse getTransactionAnalytics(
+            String email,
+            LocalDate fromDate,
+            LocalDate toDate) {
 
-        totalExpense =
-                totalExpense.add(amount);
-    }
-}
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException(
+                    "User email must not be empty."
+            );
         }
 
-        // ========================================================
-        // SAVINGS
-        // ========================================================
+        if (fromDate != null
+                && toDate != null
+                && fromDate.isAfter(toDate)) {
+
+            throw new IllegalArgumentException(
+                    "From date must not be after to date."
+            );
+        }
+
+        LocalDateTime startDateTime =
+                fromDate != null
+                        ? fromDate.atStartOfDay()
+                        : null;
+
+        LocalDateTime endDateTimeExclusive =
+                toDate != null
+                        ? toDate.plusDays(1).atStartOfDay()
+                        : null;
+
+        logger.info(
+                "Calculating transaction analytics. Date range: {} to {}",
+                fromDate,
+                toDate
+        );
+
+        Object[] rawResult =
+                transactionRepository.getTransactionAnalyticsAggregation(
+                        email,
+                        TransactionStatus.SUCCESS,
+                        TransactionStatus.FAILED,
+                        TransactionType.CREDIT,
+                        TransactionType.DEBIT,
+                        TransactionType.TRANSFER,
+                        startDateTime,
+                        endDateTimeExclusive
+                );
+
+        Object[] result = normalizeResult(rawResult);
+
+        long totalTransactions =
+                getLongValue(result, 0);
+
+        long successfulTransactions =
+                getLongValue(result, 1);
+
+        long failedTransactions =
+                getLongValue(result, 2);
+
+        BigDecimal totalIncome =
+                getDecimalValue(result, 3);
+
+        BigDecimal totalExpense =
+                getDecimalValue(result, 4);
+
+        BigDecimal totalTransfer =
+                getDecimalValue(result, 5);
+
+        BigDecimal averageTransaction =
+                getDecimalValue(result, 6);
+
+        BigDecimal largestTransaction =
+                getDecimalValue(result, 7);
 
         BigDecimal savings =
                 totalIncome.subtract(totalExpense);
 
-        // ========================================================
-        // SAVINGS RATIO
-        // ========================================================
+        BigDecimal savingsRatio = BigDecimal.ZERO;
 
-        BigDecimal savingsRatio =
-                BigDecimal.ZERO;
+        if (totalIncome.compareTo(BigDecimal.ZERO) > 0) {
 
-        if (totalIncome.compareTo(
-                BigDecimal.ZERO) > 0) {
-
-            savingsRatio =
-                    savings
-                            .multiply(
-                                    new BigDecimal("100")
-                            )
-                            .divide(
-                                    totalIncome,
-                                    2,
-                                    RoundingMode.HALF_UP
-                            );
+            savingsRatio = savings
+                    .multiply(BigDecimal.valueOf(100))
+                    .divide(
+                            totalIncome,
+                            2,
+                            RoundingMode.HALF_UP
+                    );
         }
 
-        // ========================================================
-        // AVERAGE TRANSACTION
-        // ========================================================
-
-        BigDecimal averageTransaction =
-                BigDecimal.ZERO;
-
-        if (successfulTransactions > 0) {
-
-            averageTransaction =
-                    totalTransactionAmount
-                            .divide(
-                                    BigDecimal.valueOf(
-                                            successfulTransactions
-                                    ),
-                                    2,
-                                    RoundingMode.HALF_UP
-                            );
-        }
-
-        // ========================================================
-        // RESPONSE
-        // ========================================================
+        logger.info(
+                "Transaction analytics completed. Total: {}, Successful: {}, Failed: {}",
+                totalTransactions,
+                successfulTransactions,
+                failedTransactions
+        );
 
         return new TransactionAnalyticsResponse(
                 totalTransactions,
@@ -212,5 +152,70 @@ public class TransactionAnalyticsService {
                 savings,
                 savingsRatio
         );
+    }
+
+    /**
+     * Handles both a normal aggregate result and a single-column
+     * wrapper containing the aggregate Object[].
+     */
+    private Object[] normalizeResult(Object[] result) {
+
+        if (result == null) {
+            return new Object[0];
+        }
+
+        if (result.length == 1
+                && result[0] instanceof Object[]) {
+
+            return (Object[]) result[0];
+        }
+
+        return result;
+    }
+
+    private long getLongValue(
+            Object[] result,
+            int index) {
+
+        if (result == null
+                || index < 0
+                || index >= result.length
+                || result[index] == null) {
+
+            return 0L;
+        }
+
+        Object value = result[index];
+
+        if (value instanceof Number) {
+            return ((Number) value).longValue();
+        }
+
+        return Long.parseLong(value.toString());
+    }
+
+    private BigDecimal getDecimalValue(
+            Object[] result,
+            int index) {
+
+        if (result == null
+                || index < 0
+                || index >= result.length
+                || result[index] == null) {
+
+            return BigDecimal.ZERO;
+        }
+
+        Object value = result[index];
+
+        if (value instanceof BigDecimal) {
+            return (BigDecimal) value;
+        }
+
+        if (value instanceof Number) {
+            return new BigDecimal(value.toString());
+        }
+
+        return new BigDecimal(value.toString());
     }
 }

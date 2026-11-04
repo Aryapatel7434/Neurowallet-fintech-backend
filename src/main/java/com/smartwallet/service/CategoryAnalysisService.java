@@ -1,20 +1,19 @@
+
 package com.smartwallet.service;
 
 import com.smartwallet.dto.CategorySpendingResponse;
-import com.smartwallet.model.Transaction;
 import com.smartwallet.model.TransactionStatus;
-import com.smartwallet.model.TransactionCategory;
 import com.smartwallet.model.TransactionType;
 import com.smartwallet.repository.TransactionRepository;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.EnumMap;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CategoryAnalysisService {
@@ -23,130 +22,131 @@ public class CategoryAnalysisService {
 
     public CategoryAnalysisService(
             TransactionRepository transactionRepository) {
-
-        this.transactionRepository =
-                transactionRepository;
+        this.transactionRepository = transactionRepository;
     }
 
-    public List<CategorySpendingResponse>
-            getCategorySpending(String email) {
+    @Transactional(readOnly = true)
+    public List<CategorySpendingResponse> getCategorySpending(
+            String email) {
+        return getCategorySpending(email, null, null);
+    }
 
-        List<Transaction> transactions =
-                transactionRepository
-                        .findBySenderEmailOrReceiverEmail(
-                                email,
-                                email
-                        );
+    @Transactional(readOnly = true)
+    public List<CategorySpendingResponse> getCategorySpending(
+            String email,
+            LocalDate fromDate,
+            LocalDate toDate) {
 
-        Map<TransactionCategory, BigDecimal>
-                categoryTotals =
-                new EnumMap<>(
-                        TransactionCategory.class
+        validateDateRange(fromDate, toDate);
+
+        LocalDateTime startDateTime =
+                fromDate != null
+                        ? fromDate.atStartOfDay()
+                        : null;
+
+        LocalDateTime endDateTimeExclusive =
+                toDate != null
+                        ? toDate.plusDays(1).atStartOfDay()
+                        : null;
+
+        List<Object[]> results =
+                transactionRepository.getAnalyticsCategorySpending(
+                        email,
+                        TransactionStatus.SUCCESS,
+                        List.of(
+                                TransactionType.DEBIT,
+                                TransactionType.TRANSFER
+                        ),
+                        startDateTime,
+                        endDateTimeExclusive
                 );
 
-        BigDecimal totalExpense =
-                BigDecimal.ZERO;
-
-        for (Transaction transaction : transactions) {
-
-            if (transaction == null
-                    || transaction.getAmount() == null
-                    || transaction.getStatus() == null
-                    || transaction.getType() == null
-                    || transaction.getCategory() == null) {
-
-                continue;
-            }
-
-            if (transaction.getStatus()
-                    != TransactionStatus.SUCCESS) {
-
-                continue;
-            }
-
-            /*
-             * Only money sent by the authenticated user
-             * is treated as spending.
-             */
-            if (transaction.getType()
-                    != TransactionType.DEBIT
-                    && transaction.getType()
-                    != TransactionType.TRANSFER) {
-
-                continue;
-            }
-
-            if (!email.equals(
-                    transaction.getSenderEmail())) {
-
-                continue;
-            }
-
-            BigDecimal amount =
-                    transaction.getAmount().abs();
-
-            TransactionCategory category =
-                    transaction.getCategory();
-
-            categoryTotals.put(
-                    category,
-                    categoryTotals.getOrDefault(
-                            category,
-                            BigDecimal.ZERO
-                    ).add(amount)
-            );
-
-            totalExpense =
-                    totalExpense.add(amount);
+        if (results == null || results.isEmpty()) {
+            return List.of();
         }
 
-        List<CategorySpendingResponse> response =
-                new ArrayList<>();
+        BigDecimal totalSpending = BigDecimal.ZERO;
 
-        for (Map.Entry<TransactionCategory, BigDecimal> entry
-                : categoryTotals.entrySet()) {
+        for (Object[] row : results) {
+            if (row != null
+                    && row.length > 1
+                    && row[1] != null) {
 
-            BigDecimal amount =
-                    entry.getValue();
+                totalSpending = totalSpending.add(
+                        toBigDecimal(row[1])
+                );
+            }
+        }
 
-            double percentage = 0.0;
+        // FIX: Use an effectively final variable inside the lambda.
+        final BigDecimal calculatedTotalSpending = totalSpending;
 
-            if (totalExpense.compareTo(
-                    BigDecimal.ZERO) > 0) {
+        return results.stream()
+                .filter(row -> row != null && row.length > 1)
+                .map(row -> {
 
-                percentage =
-                        amount
-                                .multiply(
-                                        new BigDecimal("100")
-                                )
+                    String category =
+                            row[0] != null
+                                    ? row[0].toString()
+                                    : "UNCATEGORIZED";
+
+                    BigDecimal amount =
+                            toBigDecimal(row[1]);
+
+                    double percentage = 0.0;
+
+                    if (calculatedTotalSpending.compareTo(
+                            BigDecimal.ZERO) > 0) {
+
+                        percentage = amount
+                                .multiply(new BigDecimal("100"))
                                 .divide(
-                                        totalExpense,
+                                        calculatedTotalSpending,
                                         2,
                                         RoundingMode.HALF_UP
                                 )
                                 .doubleValue();
-            }
+                    }
 
-            response.add(
-                    new CategorySpendingResponse(
-                            entry.getKey().name(),
+                    return new CategorySpendingResponse(
+                            category,
                             amount,
                             percentage
-                    )
+                    );
+                })
+                .toList();
+    }
+
+    private void validateDateRange(
+            LocalDate fromDate,
+            LocalDate toDate) {
+
+        if (fromDate != null
+                && toDate != null
+                && fromDate.isAfter(toDate)) {
+
+            throw new IllegalArgumentException(
+                    "From date cannot be after to date."
+            );
+        }
+    }
+
+    private BigDecimal toBigDecimal(Object value) {
+
+        if (value == null) {
+            return BigDecimal.ZERO;
+        }
+
+        if (value instanceof BigDecimal) {
+            return (BigDecimal) value;
+        }
+
+        if (value instanceof Number) {
+            return BigDecimal.valueOf(
+                    ((Number) value).doubleValue()
             );
         }
 
-        /*
-         * Highest spending category first.
-         */
-        response.sort(
-                (a, b) ->
-                        b.getAmount()
-                                .compareTo(
-                                        a.getAmount()
-                                )
-        );
-
-        return response;
+        return new BigDecimal(value.toString());
     }
 }
