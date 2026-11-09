@@ -14,6 +14,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
+import com.smartwallet.exception.UnauthorizedException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -244,4 +246,26 @@ handleResponseStatusException(
 
     return new ResponseEntity<>(response, status);
 }
+
+    // ============================================================
+    // UNAUTHORIZED
+    // ============================================================
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUnauthorized(
+            UnauthorizedException ex) {
+
+        ApiResponse<Void> response =
+                new ApiResponse<>(
+                        false,
+                        ex.getMessage(),
+                        null
+                );
+
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.UNAUTHORIZED
+        );
+    }
+
 }

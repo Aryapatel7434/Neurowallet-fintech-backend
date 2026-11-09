@@ -1,8 +1,10 @@
 
 package com.smartwallet.security;
 
+import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -20,9 +22,18 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
+    private final List<String> allowedOrigins;
 
-    public SecurityConfig(JwtFilter jwtFilter) {
+    public SecurityConfig(
+            JwtFilter jwtFilter,
+            @Value("${app.cors.allowed-origins:http://localhost:3000,http://localhost:3001}")
+            String allowedOrigins) {
+
         this.jwtFilter = jwtFilter;
+        this.allowedOrigins = Arrays.stream(allowedOrigins.split(","))
+                .map(String::trim)
+                .filter(origin -> !origin.isEmpty())
+                .toList();
     }
 
     @Bean
@@ -66,19 +77,13 @@ public class SecurityConfig {
                 ).permitAll()
 
                 // Registration
-                .requestMatchers(
-                    "/api/users/register"
-                ).permitAll()
+                .requestMatchers("/api/users/register").permitAll()
 
                 // OTP
-                .requestMatchers(
-                    "/api/otp/**"
-                ).permitAll()
+                .requestMatchers("/api/otp/**").permitAll()
 
                 // Audit APIs
-                .requestMatchers(
-                    "/api/audit/**"
-                ).authenticated()
+                .requestMatchers("/api/audit/**").authenticated()
 
                 // Actuator
                 .requestMatchers(
@@ -86,9 +91,8 @@ public class SecurityConfig {
                     "/actuator/info"
                 ).permitAll()
 
-                .requestMatchers(
-                    "/actuator/metrics/**"
-                ).hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/actuator/metrics/**")
+                    .hasAuthority("ROLE_ADMIN")
 
                 // Swagger / OpenAPI
                 .requestMatchers(
@@ -98,29 +102,20 @@ public class SecurityConfig {
                 ).permitAll()
 
                 // Current user's profile
-                .requestMatchers(
-                    "/api/users/me"
-                ).authenticated()
+                .requestMatchers("/api/users/me").authenticated()
 
                 // Protected wallet APIs
-                .requestMatchers(
-                    "/api/wallet/**"
-                ).authenticated()
+                .requestMatchers("/api/wallet/**").authenticated()
 
                 // Protected transaction APIs
-                .requestMatchers(
-                    "/api/transactions/**"
-                ).authenticated()
+                .requestMatchers("/api/transactions/**").authenticated()
 
                 // Protected dashboard APIs
-                .requestMatchers(
-                    "/api/dashboard/**"
-                ).authenticated()
+                .requestMatchers("/api/dashboard/**").authenticated()
 
                 // Admin-only user listing
-                .requestMatchers(
-                    "/api/users"
-                ).hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/api/users")
+                    .hasAuthority("ROLE_ADMIN")
 
                 // All remaining endpoints require authentication
                 .anyRequest().authenticated()
@@ -140,13 +135,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowCredentials(true);
-
-       configuration.setAllowedOrigins(
-    List.of(
-        "http://localhost:3000",
-        "http://localhost:3001"
-    )
-);
+        configuration.setAllowedOrigins(allowedOrigins);
 
         configuration.setAllowedMethods(
             List.of(
@@ -175,10 +164,7 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source =
             new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration(
-            "/**",
-            configuration
-        );
+        source.registerCorsConfiguration("/**", configuration);
 
         return source;
     }

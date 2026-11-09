@@ -1,7 +1,9 @@
+
 package com.smartwallet.service;
 
 import com.smartwallet.dto.AuthResponse;
 import com.smartwallet.dto.LoginRequest;
+import com.smartwallet.exception.UnauthorizedException;
 import com.smartwallet.model.RefreshToken;
 import com.smartwallet.model.User;
 import com.smartwallet.repository.UserRepository;
@@ -13,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuthService {
@@ -53,193 +56,151 @@ public class AuthService {
 
         logger.info("Login request received");
 
-        // --------------------------------------------------------
         // Check login attempt lock
-        // --------------------------------------------------------
-
         if (loginAttemptService.isBlocked(email)) {
 
-            logger.warn(
-                    "Login blocked due to too many failed attempts"
-            );
+            logger.warn("Login blocked due to too many failed attempts");
 
-            auditService.log(
-                    email,
-                    "LOGIN",
-                    "BLOCKED"
-            );
+            auditService.log(email, "LOGIN", "BLOCKED");
 
-            throw new RuntimeException(
+            throw new UnauthorizedException(
                     "Account temporarily locked due to too many failed login attempts"
             );
         }
 
-        // --------------------------------------------------------
         // Find user
-        // --------------------------------------------------------
-
-        User user =
-                userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);
 
         if (user == null) {
 
-            logger.warn(
-                    "Login failed. Invalid credentials"
-            );
+            logger.warn("Login failed. Invalid credentials");
 
             loginAttemptService.loginFailed(email);
+            auditService.log(email, "LOGIN", "FAILED");
 
-            auditService.log(
-                    email,
-                    "LOGIN",
-                    "FAILED"
-            );
-
-            throw new RuntimeException(
-                    "Invalid email"
+            throw new UnauthorizedException(
+                    "Invalid email or password"
             );
         }
 
-        // --------------------------------------------------------
         // Verify password
-        // --------------------------------------------------------
-
-        boolean passwordMatch =
-                passwordEncoder.matches(
-                        request.getPassword(),
-                        user.getPassword()
-                );
+        boolean passwordMatch = passwordEncoder.matches(
+                request.getPassword(),
+                user.getPassword()
+        );
 
         if (!passwordMatch) {
 
-            logger.warn(
-                    "Login failed. Invalid credentials"
-            );
+            logger.warn("Login failed. Invalid credentials");
 
             loginAttemptService.loginFailed(email);
+            auditService.log(email, "LOGIN", "FAILED");
 
-            auditService.log(
-                    email,
-                    "LOGIN",
-                    "FAILED"
-            );
-
-            throw new RuntimeException(
-                    "Invalid password"
+            throw new UnauthorizedException(
+                    "Invalid email or password"
             );
         }
 
-        // --------------------------------------------------------
         // Successful login
-        // --------------------------------------------------------
-
         loginAttemptService.loginSucceeded(email);
+        auditService.log(email, "LOGIN", "SUCCESS");
 
-        auditService.log(
-                email,
-                "LOGIN",
-                "SUCCESS"
-        );
+        logger.info("Login successful");
 
-        logger.info(
-                "Login successful"
-        );
-
-        // --------------------------------------------------------
         // Generate access token
-        // --------------------------------------------------------
+        String accessToken = jwtUtil.generateToken(
+                user.getEmail(),
+                user.getRole()
+        );
 
-        String accessToken =
-                jwtUtil.generateToken(
-                        user.getEmail(),
-                        user.getRole()
-                );
-
-        // --------------------------------------------------------
         // Generate refresh token
-        // --------------------------------------------------------
-
         RefreshToken refreshToken =
                 refreshTokenService.createRefreshToken(
                         user.getEmail()
                 );
 
-        // --------------------------------------------------------
         // Return authentication response
-        // --------------------------------------------------------
-
-      return new AuthResponse(
-        accessToken,
-        refreshToken.getToken(),
-        user.getEmail(),
-        user.getName(),
-        user.getRole()
-);
+        return new AuthResponse(
+                accessToken,
+                refreshToken.getToken(),
+                user.getEmail(),
+                user.getName(),
+                user.getRole()
+        );
     }
 
     // ============================================================
-    // REFRESH ACCESS TOKEN
+    // REFRESH ACCESS TOKEN WITH ATOMIC TOKEN ROTATION
     // ============================================================
 
-    public AuthResponse refreshToken(
-            String refreshTokenValue) {
+    @Transactional
+    public AuthResponse refreshToken(String refreshTokenValue) {
 
-        RefreshToken refreshToken =
+        // 1. Validate existing refresh token
+        RefreshToken oldRefreshToken =
                 refreshTokenService.validateRefreshToken(
                         refreshTokenValue
                 );
 
-        if (refreshToken == null) {
+        if (oldRefreshToken == null) {
 
-            logger.warn(
-                    "Refresh token validation failed"
-            );
+            logger.warn("Refresh token validation failed");
 
-            throw new RuntimeException(
-                    "Invalid Refresh Token"
+            throw new UnauthorizedException(
+                    "Invalid or expired refresh token"
             );
         }
 
-        // --------------------------------------------------------
-        // Find user associated with refresh token
-        // --------------------------------------------------------
-
-        User user =
-                userRepository.findByEmail(
-                        refreshToken.getEmail()
-                );
+        // 2. Find associated user
+        User user = userRepository.findByEmail(
+                oldRefreshToken.getEmail()
+        );
 
         if (user == null) {
 
-            logger.warn(
-                    "Refresh token belongs to a non-existent user"
-            );
+            logger.warn("Refresh token user not found");
 
-            throw new RuntimeException(
-                    "User not found"
+            throw new UnauthorizedException(
+                    "Invalid refresh token"
             );
         }
 
-        // --------------------------------------------------------
-        // Generate new access token
-        // --------------------------------------------------------
-
-        String accessToken =
-                jwtUtil.generateToken(
-                        user.getEmail(),
-                        user.getRole()
+        // 3. Revoke old refresh token
+        int deletedRecords =
+                refreshTokenService.revokeRefreshToken(
+                        oldRefreshToken.getToken()
                 );
 
-        // --------------------------------------------------------
-        // Return authentication response
-        // --------------------------------------------------------
+        if (deletedRecords != 1) {
 
+            logger.warn("Refresh token revocation failed");
+
+            throw new UnauthorizedException(
+                    "Refresh token could not be revoked"
+            );
+        }
+
+        // 4. Generate new access token
+        String newAccessToken = jwtUtil.generateToken(
+                user.getEmail(),
+                user.getRole()
+        );
+
+        // 5. Generate replacement refresh token
+        RefreshToken newRefreshToken =
+                refreshTokenService.createRefreshToken(
+                        user.getEmail()
+                );
+
+        logger.info("Refresh token rotated successfully");
+
+        // 6. Return new authentication response
         return new AuthResponse(
-        accessToken,
-        refreshToken.getToken(),
-        user.getEmail(),
-        user.getName(),
-        user.getRole()
-);
+                newAccessToken,
+                newRefreshToken.getToken(),
+                user.getEmail(),
+                user.getName(),
+                user.getRole()
+        );
     }
 }

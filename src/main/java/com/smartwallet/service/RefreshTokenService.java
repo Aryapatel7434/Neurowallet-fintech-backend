@@ -67,13 +67,15 @@ public class RefreshTokenService {
         return refreshToken;
     }
 
-    @Transactional
-    public void revokeRefreshToken(String token) {
 
-        if (token == null || token.isBlank()) {
-            return;
-        }
+@Transactional
+public int revokeRefreshToken(String token) {
 
-        refreshTokenRepository.deleteByToken(token);
+    if (token == null || token.isBlank()) {
+        return 0;
     }
+
+    return refreshTokenRepository.deleteByToken(token);
+}
+
 }
