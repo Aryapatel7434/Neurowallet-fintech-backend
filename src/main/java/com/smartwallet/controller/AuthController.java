@@ -60,17 +60,17 @@ public class AuthController {
         return "Logged out successfully.";
     }
 
-    @PostMapping("/forgot-password")
-    public String forgotPassword(
-            @RequestBody ForgotPasswordRequest request)
-            throws MessagingException {
+ @PostMapping("/forgot-password")
+public String forgotPassword(
+        @RequestBody ForgotPasswordRequest request)
+        throws MessagingException {
 
-        passwordResetService.generateResetToken(
-                request.getEmail()
-        );
+    passwordResetService.generateResetToken(
+            request.getEmail().trim().toLowerCase()
+    );
 
-        return "Password reset email sent successfully.";
-    }
+    return "If an account exists for this email, a password reset link will be sent.";
+}
 
     @PostMapping("/reset-password")
     public String resetPassword(

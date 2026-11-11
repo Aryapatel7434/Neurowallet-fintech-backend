@@ -4,7 +4,11 @@ package com.smartwallet.service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -12,6 +16,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
+
+    private static final Logger log =
+            LoggerFactory.getLogger(EmailService.class);
 
     private final JavaMailSender mailSender;
     private final String frontendUrl;
@@ -36,6 +43,7 @@ public class EmailService {
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setTo(toEmail);
+        message.setFrom(senderEmail);
         message.setSubject("NeuroWallet OTP Verification");
 
         message.setText(
@@ -43,24 +51,44 @@ public class EmailService {
                 "\n\nOTP is valid for 5 minutes."
         );
 
-        mailSender.send(message);
+        try {
+
+            log.info("Attempting OTP email delivery.");
+
+            mailSender.send(message);
+
+            log.info("OTP email accepted by SMTP server.");
+
+        } catch (MailException e) {
+
+            log.error("OTP email delivery failed: {}", e.getMessage());
+
+            throw e;
+        }
     }
 
     // ==========================================
     // PASSWORD RESET EMAIL
     // ==========================================
 
-    public void sendPasswordResetEmail(String toEmail, String token) {
+    public void sendPasswordResetEmail(
+            String toEmail,
+            String token) {
 
         try {
 
             String resetLink = frontendUrl.replaceAll("/+$", "")
                     + "/reset-password?token=" + token;
 
-            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessage message =
+                    mailSender.createMimeMessage();
 
             MimeMessageHelper helper =
-                    new MimeMessageHelper(message, true, "UTF-8");
+                    new MimeMessageHelper(
+                            message,
+                            true,
+                            "UTF-8"
+                    );
 
             helper.setTo(toEmail);
             helper.setFrom(senderEmail);
@@ -73,8 +101,10 @@ public class EmailService {
             String html =
                     "<html>" +
                     "<body style='margin:0;padding:0;background:#f5f7fb;font-family:Arial,sans-serif;'>" +
+
                     "<table width='100%' cellpadding='0' cellspacing='0'>" +
                     "<tr><td align='center'>" +
+
                     "<table width='620' cellpadding='0' cellspacing='0' style='background:#ffffff;border-radius:12px;margin:40px 0;overflow:hidden;border:1px solid #e5e7eb;'>" +
 
                     "<tr style='background:#6d5efc;'>" +
@@ -83,6 +113,7 @@ public class EmailService {
                     "</td></tr>" +
 
                     "<tr><td style='padding:35px;'>" +
+
                     "<h2 style='margin-top:0;color:#111827;'>Password Reset Request</h2>" +
 
                     "<p style='color:#4b5563;font-size:16px;'>" +
@@ -94,6 +125,7 @@ public class EmailService {
                     "</p>" +
 
                     "<p style='text-align:center;margin:35px 0;'>" +
+
                     "<a href='" + resetLink + "' style='background:#6d5efc;color:#ffffff;text-decoration:none;padding:15px 30px;border-radius:8px;font-size:16px;font-weight:bold;'>" +
                     "Reset Password" +
                     "</a></p>" +
@@ -113,18 +145,38 @@ public class EmailService {
                     "This is an automated email. Please do not reply." +
                     "</p>" +
 
-                    "</td></tr></table></td></tr></table></body></html>";
+                    "</td></tr></table>" +
+                    "</td></tr></table>" +
+                    "</body></html>";
 
             helper.setText(html, true);
 
+            log.info("Attempting password reset email delivery through Gmail SMTP.");
+
             mailSender.send(message);
+
+            log.info("Password reset email accepted by SMTP server.");
 
         } catch (MessagingException e) {
 
-            throw new RuntimeException(
-                    "Unable to send password reset email",
+            log.error(
+                    "Password reset email message creation failed.",
                     e
             );
+
+            throw new RuntimeException(
+                    "Unable to create password reset email",
+                    e
+            );
+
+        } catch (MailException e) {
+
+            log.error(
+                    "Gmail SMTP delivery failed: {}",
+                    e.getMessage()
+            );
+
+            throw e;
         }
     }
 }
